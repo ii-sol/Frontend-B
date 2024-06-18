@@ -3,12 +3,23 @@ import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import DishwashingImg from "~/assets/img/Mission/dishwashing.svg";
 
 import Header from "~/components/common/Header";
 import MissionCard from "../../components/Mission/MissionCard";
 import RequestCard from "../../components/Mission/RequestCard";
+
+const sliderSettings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
 const Mission = () => {
   const navigate = useNavigate();
@@ -19,6 +30,10 @@ const Mission = () => {
 
   const handleReceiveRequestClick = () => {
     navigate("/mission/request/receive/detail");
+  };
+
+  const handleSendRequestClick = () => {
+    navigate("/mission/request/send/detail");
   };
 
   const handleHistoryClick = () => {
@@ -34,8 +49,26 @@ const Mission = () => {
       <S.Container>
         <Header left={"<"} onLeftClick={handleLeftClick} title={"미션"} />
         {/* TODO: dday = due_date - craete_date */}
-        {/* <RequestCard status="send" name="엄마" content="심부름 다녀오기" dday="3" onClick={handleSendRequestClick} /> */}
-        <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" onClick={handleReceiveRequestClick} />
+        <div tw="w-full rounded-2xl p-2">
+          <Slider {...sliderSettings}>
+            {/* {requests
+                .filter((request) => request.status === 1)
+                .map((request) => (
+                  <RequestCard
+                    key={request.id}
+                    status={request.status}
+                    name={request.parentName}
+                    title={request.title}
+                    dday={calculateDday(request.createDate)}
+                    onClick={() => handleRequestProgress(request.id)}
+                  />
+                ))} */}
+            <RequestCard status="send" name="아들" content="심부름 다녀오기" dday="3" onClick={handleSendRequestClick} />
+            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" inClick={handleReceiveRequestClick} />
+            <RequestCard status="send" name="아들" content="심부름 다녀오기" dday="3" onClick={handleSendRequestClick} />
+          </Slider>
+        </div>
+
         <Menu>
           <S.Phrase>진행 중</S.Phrase>
           <S.HistoryLink onClick={handleHistoryClick}>지난 미션 &gt;</S.HistoryLink>
