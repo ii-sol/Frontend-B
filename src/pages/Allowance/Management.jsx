@@ -8,7 +8,7 @@ import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";
 import RegularAllowanceCard from "~/components/Allowance/RegularAllowanceCard";
 
-const AllowanceManagement = () => {
+const Management = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
@@ -39,7 +39,7 @@ const AllowanceManagement = () => {
   );
 };
 
-export default AllowanceManagement;
+export default Management;
 
 const Menu = styled.div`
   ${tw`
