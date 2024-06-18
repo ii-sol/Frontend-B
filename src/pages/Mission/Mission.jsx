@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 
 import DishwashingImg from "~/assets/img/Mission/dishwashing.svg";
 
 import Header from "~/components/common/Header";
-import MissionCard from "../../../components/Mission/MissionCard";
-import RequestCard from "../../../components/Mission/RequestCard";
+import MissionCard from "../../components/Mission/MissionCard";
+import RequestCard from "../../components/Mission/RequestCard";
 
 const Mission = () => {
   const navigate = useNavigate();
@@ -18,15 +18,15 @@ const Mission = () => {
   };
 
   const handleReceiveRequestClick = () => {
-    navigate("/parent/mission/request/receive/detail");
+    navigate("/mission/request/receive/detail");
   };
 
   const handleHistoryClick = () => {
-    navigate("/parent/mission/history");
+    navigate("/mission/history");
   };
 
   const handleRequestClick = () => {
-    navigate("/parent/mission/create");
+    navigate("/mission/create");
   };
 
   return (

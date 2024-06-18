@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setContent, setPrice, setDueDate, setInitialState } from "../../../store/reducers/Mission/mission";
+import { setContent, setPrice, setDueDate, setInitialState } from "../../store/reducers/Mission/mission";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 import { BottomSheet } from "react-spring-bottom-sheet";
 
 import Header from "~/components/common/Header";
-import Message from "../../../components/common/Message";
+import Message from "../../components/common/Message";
 
-import DueDateBottomSheet from "../../../components/Mission/DueDateBottomSheet";
-import { normalizeNumber } from "../../../utils/NormalizeNumber";
+import DueDateBottomSheet from "../../components/Mission/DueDateBottomSheet";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 const missionOptions = [
   { label: "집안일 돕기", status: 0 },
@@ -41,13 +41,13 @@ const CreateMission = () => {
   const filteredMissions = selectedOption ? missionList.filter((mission) => mission.type === selectedOption.status) : missionList;
 
   const handleLeftClick = () => {
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   const handleRightClick = () => {
     if (window.confirm("정말 취소하시겠습니까?")) {
       dispatch(setInitialState());
-      navigate("/parent/mission");
+      navigate("/mission");
     }
   };
 
@@ -80,7 +80,7 @@ const CreateMission = () => {
 
   const handleNext = () => {
     if (requestData.dueDate && requestData.content && requestData.price) {
-      navigate("/parent/mission/complete");
+      navigate("/mission/create/complete");
     } else {
       alert("미션, 금액, 완료일을 모두 입력해주세요!");
     }
