@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import tw from "twin.macro";
 
 export const RowDiv = styled.div`
   display: flex;
@@ -26,7 +27,6 @@ export const BottomBtn = styled.button`
   color: #154b9b;
   font-size: 20px;
   border-radius: 15px;
-  backdrop-filter: blur(4px);
 `;
 
 export const BottomBtn2 = styled.button`
@@ -43,7 +43,6 @@ export const BottomBtn2 = styled.button`
 export const BuyBtn = styled.button`
   border-radius: 15px;
   background: ${(props) => props.$background};
-  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
   display: flex;
   width: 140px;
   height: 48px;
@@ -64,10 +63,115 @@ export const Badge = styled.div`
   border-radius: 5px;
   background: ${(props) => props.$back};
   color: ${(props) => props.$font};
+  font-weight: 600;
 `;
 
 export const CenterDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const VirticalCreateCard = styled.button`
+  width: 148px;
+  height: 232px;
+  border-radius: 20px;
+  background: rgba(151, 178, 221, 0.4);
+  font-size: 16px;
+  font-weight: 500;
+  align-items: center;
+  box-shadow: 0px 0px 15px 0px rgba(151, 178, 221, 0.4);
+`;
+
+export const Phrase = styled.div`
+  ${tw`text-lg
+  font-bold
+  justify-center
+  my-2
+  justify-self-start`}
+`;
+
+export const Question = styled.div`
+  ${tw`flex
+  text-xl
+  font-bold
+  justify-center
+  m-5`}
+`;
+
+export const HistoryLink = styled.div`
+  ${tw`text-sm
+  justify-self-end`}
+`;
+
+export const CardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+`;
+
+export const FormWrapper = styled.div`
+  ${tw`flex
+  flex-col
+  w-full
+  gap-5
+  rounded-[15px]
+  h-full
+  relative`}
+  height: calc(100% - 60px);
+`;
+
+export const StepWrapper = styled.div`
+  ${tw`flex flex-col gap-4 flex-grow`}
+`;
+
+export const ButtonWrapper = styled.div`
+  ${tw`flex
+  justify-between
+  mt-4`}
+`;
+
+export const CompleteCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  background: #e9f2ff;
+  font-size: 25px;
+  font-weight: 500;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+`;
+
+export const BottomBtnWrapper = styled.div`
+  ${tw`flex justify-center gap-7`}
+`;
+
+export const acceptBtn = styled.button`
+  border-radius: 15px;
+  background: #CDE1FF;
+  display: flex;
+  width: 113px;
+  height: 48px
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #154B9B;
+  font-size: 20px;
+  padding:8px;
+`;
+
+export const rejectBtn = styled.button`
+  border-radius: 15px;
+  background:#FFD9CD;
+  display: flex;
+  width: 113px;
+  height: 48px
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #9B1D15;
+  font-size: 20px;
+  padding:8px;
 `;

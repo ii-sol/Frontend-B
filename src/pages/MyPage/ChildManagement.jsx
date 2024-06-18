@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
+import { FiEdit2 } from "react-icons/fi";
+import { FiSave } from "react-icons/fi";
+
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import Header from "~/components/common/Header";
-import ChildProfile from "~/components/MyPage/parent/ChildProfile";
+import ChildProfile from "~/components/MyPage/ChildProfile";
 
 const ChildManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -41,8 +45,17 @@ const ChildManagement = () => {
   };
 
   const handleInputChange = (e) => {
-    // TODO: 예외처리
     const { name, value } = e.target;
+    if (name === "interestRate") {
+      if (!/^\d*\.?\d*$/.test(value)) {
+        return;
+      }
+    } else {
+      if (!/^\d*$/.test(value)) {
+        return;
+      }
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -59,21 +72,11 @@ const ChildManagement = () => {
           <S.Phrase>아이 관리</S.Phrase>
           {isEditing ? (
             <SaveButton onClick={handleSaveClick}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12.5L9 16.5L19 6.5" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <FiSave tw="w-[18px] h-[18px]" />
             </SaveButton>
           ) : (
             <EditButton onClick={handleEditClick}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M20 8.23992L7.24 20.9999H3V16.7599L15.76 3.99992C16.3225 3.43812 17.085 3.12256 17.88 3.12256C18.675 3.12256 19.4375 3.43812 20 3.99992V3.99992C20.5618 4.56242 20.8774 5.32492 20.8774 6.11992C20.8774 6.91492 20.5618 7.67742 20 8.23992Z"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <FiEdit2 tw="w-[18px] h-[18px]" />
             </EditButton>
           )}
         </Management>
@@ -83,16 +86,20 @@ const ChildManagement = () => {
             {isEditing ? <DetailInput type="text" name="interestRate" value={formData.interestRate} onChange={handleInputChange} /> : <DetailValue>{formData.interestRate} %</DetailValue>}
           </DetailItem>
           <DetailItem>
-            <DetailLabel>투자상환액</DetailLabel>
+            <DetailLabel>투자상한액</DetailLabel>
             {isEditing ? (
               <DetailInput type="text" name="investmentRepayment" value={formData.investmentRepayment} onChange={handleInputChange} />
             ) : (
-              <DetailValue>{formData.investmentRepayment} 원</DetailValue>
+              <DetailValue>{formData.investmentRepayment === 0 ? "" : normalizeNumber(formData.investmentRepayment)} 원</DetailValue>
             )}
           </DetailItem>
           <DetailItem>
-            <DetailLabel>대출상환액</DetailLabel>
-            {isEditing ? <DetailInput type="text" name="loanRepayment" value={formData.loanRepayment} onChange={handleInputChange} /> : <DetailValue>{formData.loanRepayment} 원</DetailValue>}
+            <DetailLabel>대출상한액</DetailLabel>
+            {isEditing ? (
+              <DetailInput type="text" name="loanRepayment" value={formData.loanRepayment} onChange={handleInputChange} />
+            ) : (
+              <DetailValue>{formData.loanRepayment === 0 ? "" : normalizeNumber(formData.loanRepayment)} 원</DetailValue>
+            )}
           </DetailItem>
         </ManagementDetails>
         <DeleteButton onClick={handleDeleteClick}>아이 삭제</DeleteButton>
@@ -106,7 +113,6 @@ export default ChildManagement;
 const Management = styled.div`
   ${tw`
   flex
-  mb-2
   items-center
   justify-between
   `}
@@ -146,10 +152,12 @@ const DetailValue = styled.span`
 
 const DetailInput = styled.input`
   ${tw`
+  w-1/2
   border
   rounded
   p-1
   `}
+  font-size: 18px;
 `;
 
 const EditButton = styled.button`

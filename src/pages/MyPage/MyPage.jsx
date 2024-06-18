@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 
 import Header from "~/components/common/Header";
-import Profile from "../../../components/MyPage/parent/Profile";
+import Profile from "~/components/MyPage/Profile";
 
 import CharacterImage1 from "~/assets/img/common/character/character_sol.svg";
 import CharacterImage2 from "~/assets/img/common/character/character_lay.svg";
