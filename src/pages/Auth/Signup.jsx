@@ -7,8 +7,6 @@ import Button from "~/components/common/Button";
 import ChatBubble from "~/components/Auth/ChatBubble";
 import Input from "~/components/Auth/Input";
 
-import ChildImage from "~/assets/img/Auth/child.svg";
-import ParentImage from "~/assets/img/Auth/parent.svg";
 import CompleteImage from "~/assets/img/Auth/complete.svg";
 
 const Signup = () => {
@@ -17,8 +15,8 @@ const Signup = () => {
     name: "",
     phoneNum: "",
     accountInfo: "",
+    confirmAccountInfo: "",
     birthDate: "",
-    role: "",
   });
   const [showconfirmAccountInfo, setShowconfirmAccountInfo] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,24 +28,9 @@ const Signup = () => {
       setShowconfirmAccountInfo(true);
     }
 
-    // if (e.target.name === "birthDate") {
-    //   const formattedValue = e.target.value.replaceAll("-", "");
-    //   setUserData({
-    //     ...userData,
-    //     [e.target.name]: formattedValue,
-    //   });
-    // } else {
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
-    });
-    // }
-  };
-
-  const handleRoleChange = (role) => {
-    setUserData({
-      ...userData,
-      role: role,
     });
   };
 
@@ -81,20 +64,7 @@ const Signup = () => {
   };
 
   const handleSubmit = () => {
-    let error = "";
-    if (step === 4 && !userData.role) {
-      error = "역할을 선택해주세요.";
-    }
-
-    if (error) {
-      if (step === 4 && !userData.role) {
-        setErrorMessage(error);
-      }
-    } else {
-      console.log(userData);
-      // TODO: 폼 제출 로직 추가
-      setStep(5);
-    }
+    setStep(4);
   };
 
   const handleLoginRedirect = () => {
@@ -155,26 +125,6 @@ const Signup = () => {
         )}
         {step === 4 && (
           <StepWrapper tw="justify-center mb-40">
-            <Phrase>어떤 서비스를 이용하고 싶으신가요?</Phrase>
-            <ButtonGroup>
-              <RoleWrapper>
-                <RoleButton role="아이" onClick={() => handleRoleChange(2)}>
-                  <img src={ChildImage} alt="아이" />
-                </RoleButton>
-                아이
-              </RoleWrapper>
-              <RoleWrapper>
-                <RoleButton role="부모" onClick={() => handleRoleChange(1)}>
-                  <img src={ParentImage} alt="부모" />
-                </RoleButton>
-                부모
-              </RoleWrapper>
-            </ButtonGroup>
-            <ErrorWrapper>{errorMessage && <div tw="text-red-500 text-sm">{errorMessage}</div>}</ErrorWrapper>
-          </StepWrapper>
-        )}
-        {step === 5 && (
-          <StepWrapper tw="justify-center mb-40">
             <CompleteWrapper>
               <img src={CompleteImage} alt="완료" />
               <Phrase>가입 완료!</Phrase>
@@ -183,16 +133,16 @@ const Signup = () => {
         )}
 
         <ButtonWrapper>
-          {step < 4 ? (
+          {step < 3 ? (
             <Button onClick={handleNext} text="다음">
               다음
             </Button>
-          ) : step === 4 ? (
+          ) : step === 3 ? (
             <Button onClick={handleSubmit} text="제출">
               제출
             </Button>
           ) : (
-            step === 5 && (
+            step === 4 && (
               <Button onClick={handleLoginRedirect} text="로그인 하러 가기">
                 로그인 하러 가기
               </Button>
@@ -245,41 +195,12 @@ const ButtonWrapper = styled.div`
   mt-4`}
 `;
 
-const ButtonGroup = tw.div`
-  flex
-  gap-9
-  justify-center
-`;
-
-const RoleWrapper = tw.div`
-  flex
-  flex-col
-  gap-2
-  items-center
-  justify-center
-`;
-
-const RoleButton = styled.button`
-  ${tw`w-28 h-[120px] rounded-[15px]`}
-  ${({ role }) => (role === "아이" ? tw`bg-[#FFCE70] opacity-50` : tw`bg-[#70D4FF] opacity-50`)}
-  &:hover {
-    ${tw`opacity-80`}
-  }
-`;
-
 const CompleteWrapper = tw.div`
   flex
   flex-col
   gap-2
   items-center
   justify-center
-`;
-
-const ErrorWrapper = tw.div`
-  flex
-  flex-col
-  items-center
-  mt-5
 `;
 
 const ErrorMessage = tw.div`

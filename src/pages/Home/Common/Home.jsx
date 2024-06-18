@@ -50,11 +50,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 100px 30px 0px 30px;
-  height: ${screen.height < 700
-    ? "123vh"
-    : screen.height < 800
-    ? "115vh"
-    : "100vh"};
+  height: ${screen.height < 700 ? "123vh" : screen.height < 800 ? "115vh" : "100vh"};
   /* height: 100vh; */
   width: 100vw;
   background-color: #b6dcff;
