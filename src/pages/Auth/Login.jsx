@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "twin.macro";
 
-import Button from "~/components/common/Button";
+import Button from "../../components/common/Button";
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -52,13 +52,13 @@ const Login = () => {
 
 export default Login;
 
-const Layout = tw.div`
-  flex 
+const Layout = styled.div`
+  ${tw`flex 
   flex-col 
   items-center 
   justify-center 
-  h-screen
-  gap-4
+  gap-4`}
+  height: calc(100vh - 60px);
 `;
 
 const LoginForm = styled.div`
