@@ -9,7 +9,7 @@ const MissionHistory = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   return (

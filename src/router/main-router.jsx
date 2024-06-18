@@ -19,6 +19,13 @@ import AllowanceManagement from "../pages/Allowance/Management.jsx";
 import AllowanceRegistration from "../pages/Allowance/Registration.jsx";
 import AllowanceHistory from "../pages/Allowance/History.jsx";
 
+import Mission from "../pages/Mission/Mission.jsx";
+import CreateMission from "../pages/Mission/CreateMission.jsx";
+import CreateMissionComplete from "../pages/Mission/CreateMissionComplete.jsx";
+import MissionReceiveDetail from "../pages/Mission/ReceivedDetail.jsx";
+import MissionReceivedComplete from "../pages/Mission/ReceivedComplete.jsx";
+import MissionHistory from "../pages/Mission/MissionHistory.jsx";
+
 const MainRouter = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +51,27 @@ const MainRouter = createBrowserRouter([
           { path: "management", element: <AllowanceManagement /> },
           { path: "registration", element: <AllowanceRegistration /> },
           { path: "history", element: <AllowanceHistory /> },
+        ],
+      },
+      {
+        path: "mission",
+        children: [
+          { path: "", element: <Mission /> },
+          { path: "history", element: <MissionHistory /> },
+          {
+            path: "create",
+            children: [
+              { path: "", element: <CreateMission /> },
+              { path: "complete", element: <CreateMissionComplete /> },
+            ],
+          },
+          {
+            path: "request/receive",
+            children: [
+              { path: "detail", element: <MissionReceiveDetail /> },
+              { path: "complete", element: <MissionReceivedComplete /> },
+            ],
+          },
         ],
       },
     ],

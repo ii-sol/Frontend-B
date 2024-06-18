@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setInitialState } from "../../../store/reducers/Mission/mission";
+import { setInitialState } from "../../store/reducers/Mission/mission";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 
 import Header from "~/components/common/Header";
 
 import CompleteImage from "~/assets/img/common/complete.svg";
 
-const MissionRequestComplete = () => {
+const ReceivedComplete = () => {
   const location = useLocation();
   const { status } = location.state || {};
 
@@ -28,12 +28,12 @@ const MissionRequestComplete = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   const handleNext = () => {
     dispatch(setInitialState());
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   return (
@@ -64,7 +64,7 @@ const MissionRequestComplete = () => {
   );
 };
 
-export default MissionRequestComplete;
+export default ReceivedComplete;
 
 const Img = styled.img`
   width: 40%;

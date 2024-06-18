@@ -2,30 +2,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 
-import { normalizeNumber } from "../../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import MissionRequestImage from "~/assets/img/Mission/missionRequest.svg";
 
 import Header from "~/components/common/Header";
 
-const MissionReceiveDetail = () => {
+const ReceivedDetail = () => {
   const [status, setStatus] = useState(null);
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   const handleReject = () => {
     setStatus("거절");
-    navigate("/parent/mission/request/receive/complete", { state: { status: "거절" } });
+    navigate("/mission/request/receive/complete", { state: { status: "거절" } });
   };
 
   const handleAccept = () => {
     setStatus("수락");
-    navigate("/parent/mission/request/receive/complete", { state: { status: "수락" } });
+    navigate("/mission/request/receive/complete", { state: { status: "수락" } });
   };
 
   return (
@@ -54,7 +54,7 @@ const MissionReceiveDetail = () => {
   );
 };
 
-export default MissionReceiveDetail;
+export default ReceivedDetail;
 
 const CompleteContainer = styled.div`
   ${tw`flex

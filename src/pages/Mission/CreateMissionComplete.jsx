@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setInitialState } from "../../../store/reducers/Mission/mission";
+import { setInitialState } from "../../store/reducers/Mission/mission";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import * as S from "../../../styles/GlobalStyles";
+import * as S from "../../styles/GlobalStyles";
 
 import Header from "~/components/common/Header";
-import { normalizeNumber } from "../../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import CompleteImage from "~/assets/img/common/complete.svg";
 
@@ -26,12 +26,12 @@ const CreateMissionComplete = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   const handleNext = () => {
     dispatch(setInitialState());
-    navigate("/parent/mission");
+    navigate("/mission");
   };
 
   return (
