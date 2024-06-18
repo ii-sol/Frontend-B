@@ -13,6 +13,10 @@ import Login from "../pages/Auth/Login";
 import MyPage from "../pages/MyPage/MyPage";
 import ChildManagement from "../pages/MyPage/ChildManagement";
 
+import AllowanceManagement from "../pages/Allowance/AllowanceManagement";
+import AllowanceRegistration from "../pages/Allowance/AllowanceRegistration";
+import AllowanceHistory from "../pages/Allowance/AllowanceHistory";
+
 const MainRouter = createBrowserRouter([
   {
     path: "/",
@@ -25,7 +29,22 @@ const MainRouter = createBrowserRouter([
         path: "mypage",
         children: [
           { path: "", element: <MyPage /> },
-          { path: "child", element: <ChildManagement /> },
+          { path: ":id", element: <ChildManagement /> },
+        ],
+      },
+      // {
+      //   path: "account",
+      //   children: [{
+
+      //   }
+      //   ],
+      // },
+      {
+        path: "allowance",
+        children: [
+          { path: "management", element: <AllowanceManagement /> },
+          { path: "registration", element: <AllowanceRegistration /> },
+          { path: "history", element: <AllowanceHistory /> },
         ],
       },
     ],
