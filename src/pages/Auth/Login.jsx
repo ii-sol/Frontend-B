@@ -25,7 +25,7 @@ const Login = () => {
         <LoginWrapper>
           <div>전화번호</div>
         </LoginWrapper>
-        <Input type="text" name="phoneNum" value={phoneNum} onChange={handlePhoneChange} placeholder="전화번호를 입력해주세요" maxlength="13" />
+        <Input type="text" name="phoneNum" value={phoneNum} onChange={handlePhoneChange} placeholder="전화번호를 입력해주세요" maxLength="13" />
         <LoginWrapper>
           <div>비밀번호</div>
         </LoginWrapper>
