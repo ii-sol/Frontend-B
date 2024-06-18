@@ -20,7 +20,7 @@ const Filter = () => {
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
-    } else if (["/allowance/history", "/parent/account-history"].includes(location.pathname)) {
+    } else if (location.pathname === "/account/history") {
       const newOptions = [
         { label: "전체", status: 0 },
         { label: "나간 돈", status: 1 },
@@ -28,11 +28,11 @@ const Filter = () => {
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
-    } else if (location.pathname === "/allowance/history-parent") {
+    } else if (location.pathname === "/allowance/history") {
       const newOptions = [{ label: "전체", status: 0 }];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
-    } else if (["/allowance/irregular/history", "/mission/history", "/parent/mission/history"].includes(location.pathname)) {
+    } else if (location.pathname === "/mission/history") {
       const newOptions = [
         { label: "전체", status: 0 },
         { label: "완료", status: 1 },

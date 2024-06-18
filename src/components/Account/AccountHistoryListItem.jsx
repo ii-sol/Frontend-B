@@ -1,27 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 
-import Filter from "~/components/common/Filter";
-import HistoryListItem from "~/components/Allowance/HistoryListItem";
+import HistoryListItem from "~/components/Account/HistoryListItem";
 
 import EmptyImage from "~/assets/img/common/empty.svg";
 
-const HistoryList = ({ data, filterOptions, emptyStateText, renderItem }) => {
-  const [sortType, setSortType] = useState("전체");
+const data = [
+  {
+    "id": 1,
+    "senderAccountNum": "123-456-7890",
+    "senderName": "박지민",
+    "recieverAccountNum": "987-654-3210",
+    "recieverName": "양은수",
+    "content": "용돈 조르기",
+    "amount": 50000,
+    "balance": "250000",
+    "createdDate": "2024-05-10",
+  },
+  {
+    "id": 2,
+    "senderAccountNum": "123-456-7890",
+    "senderName": "박지민",
+    "recieverAccountNum": "987-654-3210",
+    "recieverName": "양은수",
+    "content": "돈 보내기",
+    "amount": -30000,
+    "balance": "220000",
+    "createdDate": "2024-06-01",
+  },
+  {
+    "id": 3,
+    "senderAccountNum": "123-456-7890",
+    "senderName": "박지민",
+    "recieverAccountNum": "987-654-3210",
+    "recieverName": "양은수",
+    "content": "결제",
+    "amount": -5000,
+    "balance": "215000",
+    "createdDate": "2024-06-05",
+  },
+  {
+    "id": 4,
+    "senderAccountNum": "123-456-7890",
+    "senderName": "박지민",
+    "recieverAccountNum": "987-654-3210",
+    "recieverName": "양은수",
+    "content": "대출금",
+    "amount": -50000,
+    "balance": "233000",
+    "createdDate": "2024-06-10",
+  },
+];
 
-  const onChangeSortType = (status) => {
-    setSortType(status);
-  };
-
-  const getSortedData = () => {
-    const filteredData = sortType === "전체" ? data : data.filter((item) => item.status === sortType);
-
-    return filteredData.sort((a, b) => {
-      return new Date(b.createdDate) - new Date(a.createdDate);
-    });
-  };
-
+const AccountHistoryListItem = () => {
   const groupDataByDate = (data) => {
     return data.reduce((acc, item) => {
       const date = item.createdDate.split("T")[0];
@@ -33,24 +65,20 @@ const HistoryList = ({ data, filterOptions, emptyStateText, renderItem }) => {
     }, {});
   };
 
-  const sortedData = getSortedData();
-  const groupedData = groupDataByDate(sortedData);
+  const groupedData = groupDataByDate(data);
   const sortedGroupedData = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
 
   return (
     <Container>
-      <Filter options={filterOptions} selectedOption={sortType} onChangeOption={onChangeSortType}></Filter>
       <List>
         {sortedGroupedData.length === 0 ? (
           <EmptyState>
             <Img src={EmptyImage} alt="No data" />
-            <EmptyText>{emptyStateText}</EmptyText>
+            <EmptyText>용돈 내역이 없어요</EmptyText>
           </EmptyState>
-        ) : renderItem ? (
-          <CardContainer>{sortedData.map((item) => renderItem(item))}</CardContainer>
         ) : (
-          sortedGroupedData.map((date) => (
-            <DateGroup key={date}>
+          sortedGroupedData.map((date, index) => (
+            <DateGroup key={index}>
               <DateArea>{date}</DateArea>
               <Hr />
               {groupedData[date].map((item) => (
@@ -64,11 +92,9 @@ const HistoryList = ({ data, filterOptions, emptyStateText, renderItem }) => {
   );
 };
 
-export default HistoryList;
+export default AccountHistoryListItem;
 
-const Container = styled.div`
-  ${tw`flex flex-col w-full gap-4`}
-`;
+const Container = styled.div``;
 
 const List = styled.ul`
   ${tw`list-none p-0`}

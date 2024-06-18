@@ -4,14 +4,16 @@ import { styled } from "styled-components";
 
 import Filter from "./Filter";
 import { useLocation } from "react-router-dom";
+
 import AllowanceHistory from "../../Allowance/HistoryListItem";
+import AccountHistory from "../../Account/AccountHistoryListItem";
 
 const HistoryList = () => {
   const location = useLocation();
   return (
     <Container>
       <Filter></Filter>
-      <List>{location.pathname === "/allowance/history" ? <AllowanceHistory /> : <></>}</List>
+      <List>{location.pathname === "/account/history" ? <AccountHistory /> : location.pathname === "/allowance/history" ? <AllowanceHistory /> : <></>}</List>
     </Container>
   );
 };

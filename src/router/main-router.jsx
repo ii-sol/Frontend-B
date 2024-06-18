@@ -13,9 +13,11 @@ import Login from "../pages/Auth/Login";
 import MyPage from "../pages/MyPage/MyPage";
 import ChildManagement from "../pages/MyPage/ChildManagement";
 
-import AllowanceManagement from "../pages/Allowance/AllowanceManagement";
-import AllowanceRegistration from "../pages/Allowance/AllowanceRegistration";
-import AllowanceHistory from "../pages/Allowance/AllowanceHistory";
+import AccountHistory from "../pages/Account/History.jsx";
+
+import AllowanceManagement from "../pages/Allowance/Management.jsx";
+import AllowanceRegistration from "../pages/Allowance/Registration.jsx";
+import AllowanceHistory from "../pages/Allowance/History.jsx";
 
 const MainRouter = createBrowserRouter([
   {
@@ -32,13 +34,10 @@ const MainRouter = createBrowserRouter([
           { path: ":id", element: <ChildManagement /> },
         ],
       },
-      // {
-      //   path: "account",
-      //   children: [{
-
-      //   }
-      //   ],
-      // },
+      {
+        path: "account",
+        children: [{ path: "history", element: <AccountHistory /> }],
+      },
       {
         path: "allowance",
         children: [

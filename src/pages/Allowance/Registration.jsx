@@ -8,7 +8,7 @@ import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import Header from "~/components/common/Header";
 
-const AllowanceRegistration = () => {
+const Registration = () => {
   const [step, setStep] = useState(0);
   const [amount, setAmount] = useState("");
   const [period, setPeriod] = useState("");
@@ -94,7 +94,7 @@ const AllowanceRegistration = () => {
   );
 };
 
-export default AllowanceRegistration;
+export default Registration;
 
 const StepWrapper = styled.div`
   ${tw`flex flex-col gap-10`}
