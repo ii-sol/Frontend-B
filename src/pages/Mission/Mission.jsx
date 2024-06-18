@@ -32,10 +32,6 @@ const Mission = () => {
     navigate("/mission/request/receive/detail");
   };
 
-  const handleSendRequestClick = () => {
-    navigate("/mission/request/send/detail");
-  };
-
   const handleHistoryClick = () => {
     navigate("/mission/history");
   };
@@ -63,9 +59,10 @@ const Mission = () => {
                     onClick={() => handleRequestProgress(request.id)}
                   />
                 ))} */}
-            <RequestCard status="send" name="아들" content="심부름 다녀오기" dday="3" onClick={handleSendRequestClick} />
-            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" inClick={handleReceiveRequestClick} />
-            <RequestCard status="send" name="아들" content="심부름 다녀오기" dday="3" onClick={handleSendRequestClick} />
+
+            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" onClick={handleReceiveRequestClick} />
+            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" onClick={handleReceiveRequestClick} />
+            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" onClick={handleReceiveRequestClick} />
           </Slider>
         </div>
 
