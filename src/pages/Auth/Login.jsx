@@ -6,16 +6,29 @@ import tw from "twin.macro";
 import Button from "~/components/common/Button";
 
 const Login = () => {
-  const [phoneNum, setPhoneNum] = useState("");
+  const [userData, setUserData] = useState({
+    phoneNum: "",
+    accountInfo: "",
+  });
 
-  const login = () => {
+  const handleLoginClick = () => {
     // TODO: 로그인 하기
-    console.log("로그인");
+    console.log(userData);
   };
 
   const handlePhoneChange = (e) => {
     const formattedValue = e.target.value.replace(/[^0-9]/g, "").replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
-    setPhoneNum(formattedValue);
+    setUserData({
+      ...userData,
+      phoneNum: formattedValue,
+    });
+  };
+
+  const handleAccountInfoChange = (e) => {
+    setUserData({
+      ...userData,
+      accountInfo: e.target.value,
+    });
   };
 
   return (
@@ -25,14 +38,14 @@ const Login = () => {
         <LoginWrapper>
           <div>전화번호</div>
         </LoginWrapper>
-        <Input type="text" name="phoneNum" value={phoneNum} onChange={handlePhoneChange} placeholder="전화번호를 입력해주세요" maxLength="13" />
+        <Input type="text" name="phoneNum" value={userData.phoneNum} onChange={handlePhoneChange} placeholder="전화번호를 입력해주세요" maxLength="13" />
         <LoginWrapper>
           <div>비밀번호</div>
         </LoginWrapper>
-        <Input type="password" name="accountInfo" placeholder="비밀번호를 입력해주세요"></Input>
+        <Input type="password" name="accountInfo" value={userData.accountInfo} onChange={handleAccountInfoChange} placeholder="비밀번호를 입력해주세요"></Input>
       </LoginForm>
       <StyledLink to="/signup">회원이 아니신가요?</StyledLink>
-      <Button text="로그인" onClick={login}></Button>
+      <Button text="로그인" onClick={handleLoginClick}></Button>
     </Layout>
   );
 };
