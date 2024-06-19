@@ -6,7 +6,7 @@ import * as S from "../../styles/GlobalStyles";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
 
-import MissionRequestImage from "~/assets/img/Mission/missionRequest.svg";
+import MissionRequestImage from "~/assets/img/common/sdamSol.svg";
 
 import Header from "~/components/common/Header";
 

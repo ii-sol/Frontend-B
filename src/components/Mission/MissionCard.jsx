@@ -4,7 +4,9 @@ import { styled } from "styled-components";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
 
-const MissionCard = ({ onClick, status, dday, mission, allowance, img }) => {
+import MissionImage from "~/assets/img/common/happySol.svg";
+
+const MissionCard = ({ onClick, status, dday, mission, allowance }) => {
   return (
     <Container onClick={onClick}>
       <Content>
@@ -13,7 +15,7 @@ const MissionCard = ({ onClick, status, dday, mission, allowance, img }) => {
         <Mission>{mission}</Mission>
         <Allowance>{normalizeNumber(allowance)}원</Allowance>
       </Content>
-      <Img src={img} alt="아이콘" />
+      <Img src={MissionImage} alt="아이콘" />
     </Container>
   );
 };

@@ -5,18 +5,18 @@ import * as S from "../../styles/GlobalStyles";
 
 import MissionCard from "./MissionCard";
 
-import DishwashingImg from "~/assets/img/Mission/dishwashing.svg";
+import MissionImage from "~/assets/img/common/happySol.svg";
 import EmptyImage from "~/assets/img/common/empty.svg";
 
 const MissionHistoryListItem = () => {
   const data = [
-    { id: 1, status: "완료", mission: "설거지 하기", allowance: 1000, img: DishwashingImg, createdDate: "2024-05-31" },
-    { id: 2, status: "취소", mission: "설거지 하기", allowance: 1000, img: DishwashingImg, createdDate: "2024-06-04" },
-    { id: 3, status: "취소", mission: "설거지 하기", allowance: 5000, img: DishwashingImg, createdDate: "2024-06-11" },
+    { id: 1, status: "완료", mission: "설거지 하기", allowance: 1000, createdDate: "2024-05-31" },
+    { id: 2, status: "취소", mission: "설거지 하기", allowance: 1000, createdDate: "2024-06-04" },
+    { id: 3, status: "취소", mission: "설거지 하기", allowance: 5000, createdDate: "2024-06-11" },
   ];
 
   const renderItem = (item) => {
-    return <MissionCard key={item.id} status={item.status} mission={item.mission} allowance={item.allowance} img={item.img} />;
+    return <MissionCard key={item.id} status={item.status} mission={item.mission} allowance={item.allowance} img={MissionImage} />;
   };
 
   return (

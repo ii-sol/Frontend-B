@@ -6,20 +6,19 @@ import * as S from "../../styles/GlobalStyles";
 import RequestCardP from "~/components/Allowance/RequestCardP";
 import RegularAllowanceHistoryCard from "~/components/Allowance/RegularAllowanceHistoryCard";
 
-import PleaseImg from "~/assets/img/Allowance/please.svg";
-import HeartImg from "~/assets/img/Allowance/heart.svg";
+import CardImg from "~/assets/img/Allowance/allowanceRequest.svg";
 import EmptyImage from "~/assets/img/common/empty.svg";
 
 const HistoryListItem = () => {
   const data = [
-    { id: 1, status: "조르기", allowance: 1000, img: PleaseImg, message: "과자 먹고 싶어요", createdDate: "2024-05-31" },
+    { id: 1, status: "조르기", allowance: 1000, message: "과자 먹고 싶어요", createdDate: "2024-05-31" },
     { id: 2, status: "정기용돈", allowance: 100000, createdDate: "2024-06-04" },
-    { id: 3, status: "조르기", allowance: 5000, img: HeartImg, message: "준비물 사야 해요", createdDate: "2024-06-11" },
+    { id: 3, status: "조르기", allowance: 5000, message: "준비물 사야 해요", createdDate: "2024-06-11" },
   ];
 
   const renderItem = (item) => {
     if (item.status === "조르기") {
-      return <RequestCardP key={item.id} allowance={item.allowance} img={item.img} message={item.message} />;
+      return <RequestCardP key={item.id} allowance={item.allowance} img={CardImg} message={item.message} />;
     } else if (item.status === "정기용돈") {
       return <RegularAllowanceHistoryCard key={item.id} allowance={item.allowance} />;
     }

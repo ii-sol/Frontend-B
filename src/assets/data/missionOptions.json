@@ -1,0 +1,7 @@
+[
+  { "label": "집안일 돕기", "status": 0 },
+  { "label": "공부하기", "status": 1 },
+  { "label": "습관 기르기", "status": 2 },
+  { "label": "튼튼한 몸", "status": 3 },
+  { "label": "펫 돌보기", "status": 4 }
+]
