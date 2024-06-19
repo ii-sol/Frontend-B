@@ -8,7 +8,7 @@ import * as S from "../../styles/GlobalStyles";
 import ChatBubble from "~/components/Auth/ChatBubble";
 import Input from "~/components/Auth/Input";
 
-import CompleteImage from "~/assets/img/Auth/complete.svg";
+import CompleteImage from "~/assets/img/common/complete.svg";
 
 const Signup = () => {
   const [step, setStep] = useState(0);

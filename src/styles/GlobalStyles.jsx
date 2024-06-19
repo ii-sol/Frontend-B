@@ -107,7 +107,7 @@ export const HistoryLink = styled.div`
 export const CardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
+  gap: 20px;
 `;
 
 export const FormWrapper = styled.div`

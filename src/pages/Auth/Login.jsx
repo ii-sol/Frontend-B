@@ -68,7 +68,7 @@ const LoginForm = styled.div`
   width: 100%;
   height: 248px;
   padding: 20px;
-  background-color: #f4f9ff;
+  background-color: #e9f2ff;
   border-radius: 15px;
 `;
 
