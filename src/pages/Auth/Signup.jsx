@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 
-import Button from "~/components/common/Button";
+import * as S from "../../styles/GlobalStyles";
+
 import ChatBubble from "~/components/Auth/ChatBubble";
 import Input from "~/components/Auth/Input";
 
-import CompleteImage from "~/assets/img/Auth/complete.svg";
+import CompleteImage from "~/assets/img/common/complete.svg";
 
 const Signup = () => {
   const [step, setStep] = useState(0);
@@ -134,18 +135,18 @@ const Signup = () => {
 
         <ButtonWrapper>
           {step < 3 ? (
-            <Button onClick={handleNext} text="다음">
+            <S.BottomBtn onClick={handleNext} text="다음">
               다음
-            </Button>
+            </S.BottomBtn>
           ) : step === 3 ? (
-            <Button onClick={handleSubmit} text="제출">
+            <S.BottomBtn onClick={handleSubmit} text="제출">
               제출
-            </Button>
+            </S.BottomBtn>
           ) : (
             step === 4 && (
-              <Button onClick={handleLoginRedirect} text="로그인 하러 가기">
+              <S.BottomBtn onClick={handleLoginRedirect} text="로그인 하러 가기">
                 로그인 하러 가기
-              </Button>
+              </S.BottomBtn>
             )
           )}
         </ButtonWrapper>
@@ -156,10 +157,10 @@ const Signup = () => {
 
 export default Signup;
 
-const Container = tw.div`
-  flex
-  justify-center
-  h-screen
+const Container = styled.div`
+  ${tw`flex
+  justify-center`}
+  height: calc(100vh - 60px);
 `;
 
 const FormWrapper = styled.div`
