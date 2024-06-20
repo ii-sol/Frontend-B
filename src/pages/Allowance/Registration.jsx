@@ -18,7 +18,7 @@ const Registration = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/allowance/management");
+    navigate("/allowance");
   };
 
   const handleRightClick = () => {
