@@ -113,7 +113,7 @@ const ActionButton = styled.button`
     bg-white
     rounded-lg
     text-sm
-    font-semibold
+    font-extrabold
     shadow-md
     px-4
     py-2
