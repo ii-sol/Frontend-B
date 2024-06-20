@@ -110,9 +110,9 @@ const CreateMission = () => {
         </MissionOptionWrapper>
         <S.CardContainer tw="m-1">
           {filteredMissions.map((mission) => (
-            <MissionCard key={mission.id} onClick={() => handleMissionCardClick(mission.content)} specialCard={mission.id === 8 || mission.id === 20}>
+            <MissionCard key={mission.id} onClick={() => handleMissionCardClick(mission.content)}>
               <MissionContent>{mission.content}</MissionContent>
-              <MissionImage src={mission.img} alt={mission.content} specialImage={mission.id === 8 || mission.id === 20} />
+              <MissionImage src={mission.img} alt={mission.content} special={mission.id === 8 || mission.id === 20 ? "true" : undefined} />
             </MissionCard>
           ))}
         </S.CardContainer>
@@ -233,7 +233,7 @@ const MissionImage = styled.img`
   position: absolute;
   right: 10px;
   bottom: 10px;
-  width: ${({ specialImage }) => (specialImage ? "auto" : "40%")};
-  height: ${({ specialImage }) => (specialImage ? "55%" : "auto")};
+  width: ${({ special }) => (special ? "auto" : "40%")};
+  height: ${({ special }) => (special ? "55%" : "auto")};
   object-fit: cover;
 `;
