@@ -26,6 +26,15 @@ import MissionReceiveDetail from "../pages/Mission/ReceivedDetail.jsx";
 import MissionReceivedComplete from "../pages/Mission/ReceivedComplete.jsx";
 import MissionHistory from "../pages/Mission/MissionHistory.jsx";
 
+import Main from "../pages/Loan/Main";
+import LoanHistory from "../pages/Loan/LoanHistory";
+import LoanDetail from "../pages/Loan/DetailRequest.jsx";
+import LoanDetailOnGoing from "../pages/Loan/DetailAccept.jsx";
+import SelectAccount from "../pages/Account/SelectAccount.jsx";
+import AccountMoney from "../pages/Account/Money.jsx";
+import Send from "../pages/Account/Send.jsx";
+import SendMoneyComplete from "../pages/Account/SendComplete.jsx";
+
 const MainRouter = createBrowserRouter([
   {
     path: "/",
@@ -48,7 +57,7 @@ const MainRouter = createBrowserRouter([
       {
         path: "allowance",
         children: [
-          { path: "management", element: <AllowanceManagement /> },
+          { path: "", element: <AllowanceManagement /> },
           { path: "registration", element: <AllowanceRegistration /> },
           { path: "history", element: <AllowanceHistory /> },
         ],
@@ -72,6 +81,36 @@ const MainRouter = createBrowserRouter([
               { path: "complete", element: <MissionReceivedComplete /> },
             ],
           },
+        ],
+      },
+      {
+        path: "/account",
+        children: [
+          {
+            path: "select",
+            element: <SelectAccount />,
+          },
+          {
+            path: "money",
+            element: <AccountMoney />,
+          },
+          {
+            path: "send",
+            element: <Send />,
+          },
+          {
+            path: "complete",
+            element: <SendMoneyComplete />,
+          },
+        ],
+      },
+      {
+        path: "/loan",
+        children: [
+          { path: "main", element: <Main /> },
+          { path: "history", element: <LoanHistory /> },
+          { path: "detail/:loanId", element: <LoanDetail /> },
+          { path: "detailOnGoing/:loanId", element: <LoanDetailOnGoing /> },
         ],
       },
     ],

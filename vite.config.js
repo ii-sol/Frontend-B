@@ -9,6 +9,15 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8082",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   resolve: {
     alias: [
       { find: "~/assets", replacement: "/src/assets" },
@@ -16,7 +25,6 @@ export default defineConfig({
       { find: "~/routers", replacement: "/src/routers" },
       { find: "~/pages", replacement: "/src/pages" },
       { find: "~/store", replacement: "/src/store" },
-      { find: "~/utils", replacement: "/src/utils" },
     ],
   },
 });

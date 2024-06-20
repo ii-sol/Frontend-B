@@ -40,6 +40,14 @@ const Filter = () => {
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
+    } else if (location.pathname === "/loan/history") {
+      const newOptions = [
+        { label: "전체", status: 0 },
+        { label: "완료", status: 4 },
+        { label: "취소", status: 5 },
+      ];
+      setOptions(newOptions);
+      setSelectedOption(newOptions[0]);
     } else {
     }
   }, [location.pathname]);
@@ -52,7 +60,11 @@ const Filter = () => {
   return (
     <Container>
       {options.map((option) => (
-        <Button key={option.status} selected={selectedOption?.status === option.status} onClick={() => handleOptionClick(option)}>
+        <Button
+          key={option.status}
+          selected={selectedOption?.status === option.status}
+          onClick={() => handleOptionClick(option)}
+        >
           {option.label}
         </Button>
       ))}

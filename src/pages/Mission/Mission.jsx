@@ -72,6 +72,7 @@ const Mission = () => {
           <RegisterButton onClick={handleRequestClick}>
             <span tw="text-[#346BAC]">미션</span>요청하기
           </RegisterButton>
+          <MissionCard status="6" mission="설거지하기" allowance="10000" />
           <MissionCard dday="3" mission="설거지하기" allowance="10000" />
           <MissionCard dday="0" mission="설거지하기" allowance="10000" />
           <MissionCard dday="7" mission="설거지하기" allowance="10000" />
