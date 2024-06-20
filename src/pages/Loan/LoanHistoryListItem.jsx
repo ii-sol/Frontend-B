@@ -44,7 +44,7 @@ const LoanHistoryListItem = () => {
   }, [status, year, month]);
 
   const handleProgress = (loanId) => {
-    navigate(`/loan/detail/${loanId}`);
+    navigate(`/loan/detailOnGoing/${loanId}`);
   };
 
   const renderItem = (item) => (
