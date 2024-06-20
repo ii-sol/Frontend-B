@@ -57,7 +57,7 @@ const MainRouter = createBrowserRouter([
       {
         path: "allowance",
         children: [
-          { path: "management", element: <AllowanceManagement /> },
+          { path: "", element: <AllowanceManagement /> },
           { path: "registration", element: <AllowanceRegistration /> },
           { path: "history", element: <AllowanceHistory /> },
         ],

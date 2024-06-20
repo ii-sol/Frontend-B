@@ -9,7 +9,7 @@ const History = () => {
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
-    navigate("/allowance/management");
+    navigate("/allowance");
   };
 
   return (
