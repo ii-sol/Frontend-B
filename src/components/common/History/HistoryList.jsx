@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import AllowanceHistory from "../../Allowance/HistoryListItem";
 import AccountHistory from "../../Account/AccountHistoryListItem";
 import MissionHistory from "../../Mission/MissionHistoryListItem";
+import LoanHistoryListItem from "../../../pages/Loan/LoanHistoryListItem";
 
 const HistoryList = () => {
   const location = useLocation();
@@ -21,6 +22,8 @@ const HistoryList = () => {
           <AllowanceHistory />
         ) : location.pathname === "/mission/history" ? (
           <MissionHistory />
+        ) : location.pathname === "/loan/history" ? (
+          <LoanHistoryListItem />
         ) : (
           <></>
         )}
