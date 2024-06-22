@@ -4,12 +4,13 @@ import Slider from "react-slick";
 import tw from "twin.macro";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoanCard from "../../components/Loan/LoanCard.jsx";
 import RequestCard from "../../components/Loan/RequestCard.jsx";
 import Header from "../../components/common/Header.jsx";
 import { styled } from "styled-components";
+import EmptyImage from "~/assets/img/common/empty.svg";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -86,7 +87,13 @@ const Main = () => {
   return (
     <>
       <div tw="flex flex-col h-screen">
-        <Header left={<MdArrowBackIos />} title={"빌려주기"} onLeftClick={handleLeftClick} />
+        <Header
+          left={<MdArrowBackIos />}
+          title={"빌려주기"}
+          onLeftClick={handleLeftClick}
+          right={"신뢰도"}
+          onRightClick={() => navigate("/loan/credit")}
+        />
 
         <main tw="flex flex-col flex-1 justify-start space-y-4 mt-1">
           {/* Credit Score */}
@@ -124,20 +131,29 @@ const Main = () => {
             </button>
           </div>
           {/* Loan History */}
-          <div tw="grid grid-cols-2 gap-5 w-full">
-            {loans
-              .filter((loan) => loan.status === 3)
-              .map((loan) => (
-                <LoanCard
-                  key={loan.id}
-                  amount={loan.amount}
-                  period={`${formatDate(loan.createDate)} ~ ${formatDate(loan.dueDate)}`}
-                  title={loan.title}
-                  totalAmount={loan.balance}
-                  onClick={() => handleProgress(loan.id)}
-                />
-              ))}
-          </div>
+          {loans.length === 0 ? (
+            <EmptyState>
+              <Img src={EmptyImage} alt="No data" />
+              <EmptyText>대출 신청 내역이 없어요</EmptyText>
+            </EmptyState>
+          ) : (
+            <div tw="grid grid-cols-2 gap-5 w-full">
+              {loans
+                .filter((loan) => loan.status === 3)
+                .map((loan) => (
+                  <LoanCard
+                    key={loan.id}
+                    amount={loan.amount}
+                    period={`${formatDate(loan.createDate)} ~ ${formatDate(
+                      loan.dueDate
+                    )}`}
+                    title={loan.title}
+                    totalAmount={loan.balance}
+                    onClick={() => handleProgress(loan.id)}
+                  />
+                ))}
+            </div>
+          )}
         </main>
       </div>
     </>
@@ -164,6 +180,18 @@ const Container = styled.div`
   .slick-next.slick-disabled:before {
     opacity: 0.2;
   }
+`;
+
+const EmptyState = styled.div`
+  ${tw`flex flex-col items-center justify-center h-full`}
+`;
+
+const Img = styled.img`
+  ${tw`w-40 h-40`}
+`;
+
+const EmptyText = styled.p`
+  ${tw`mt-4 text-lg text-gray-500`}
 `;
 
 const Card = styled.div`

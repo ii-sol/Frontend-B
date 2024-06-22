@@ -34,6 +34,7 @@ import SelectAccount from "../pages/Account/SelectAccount.jsx";
 import AccountMoney from "../pages/Account/Money.jsx";
 import Send from "../pages/Account/Send.jsx";
 import SendMoneyComplete from "../pages/Account/SendComplete.jsx";
+import CreditScoreInfo from "../pages/Loan/Credit.jsx";
 
 const MainRouter = createBrowserRouter([
   {
@@ -111,6 +112,7 @@ const MainRouter = createBrowserRouter([
           { path: "history", element: <LoanHistory /> },
           { path: "detail/:loanId", element: <LoanDetail /> },
           { path: "detailOnGoing/:loanId", element: <LoanDetailOnGoing /> },
+          { path: "credit", element: <CreditScoreInfo /> },
         ],
       },
     ],
