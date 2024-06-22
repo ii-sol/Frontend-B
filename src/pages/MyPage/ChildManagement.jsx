@@ -8,7 +8,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { FiSave } from "react-icons/fi";
 import { deleteChild } from "../../services/user";
 import removeChildFromFamily from "../../store/reducers/common/family";
-import { fetchChildManagementInfo } from "../../services/user";
+import { fetchChildManagementInfo, updateChildManagementInfo } from "../../services/user";
 import { setFormData } from "../../store/reducers/common/management";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
@@ -57,22 +57,30 @@ const ChildManagement = () => {
     }
   };
 
-  const handleSaveClick = () => {
-    if (isEditing) {
+  const handleSaveClick = async () => {
+    try {
+      const newData = {
+        childSn: childSn,
+        baseRate: formData.baseRate,
+        investLimit: formData.investLimit,
+        loanLimit: formData.loanLimit,
+      };
+      await updateChildManagementInfo(accessToken, newData);
       setIsEditing(false);
-      // TODO: 저장 로직 추가
+      alert("정보가 업데이트 되었습니다.");
+    } catch (error) {
+      console.error("Failed to update child management info:", error);
     }
-    9;
   };
 
   const handleDeleteClick = async () => {
     try {
       await deleteChild(childSn, accessToken);
       dispatch(removeChildFromFamily(id));
-      alert("아이 삭제 완료");
+      alert("아이가 삭제에 성공했습니다.");
     } catch (error) {
       console.error("아이 삭제 실패", error);
-      alert("아이 삭제 실패");
+      alert("아이 삭제에 실패했습니다.");
     }
   };
 
@@ -88,10 +96,12 @@ const ChildManagement = () => {
       }
     }
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    dispatch(
+      setFormData({
+        ...formData,
+        [name]: value,
+      })
+    );
   };
 
   return (

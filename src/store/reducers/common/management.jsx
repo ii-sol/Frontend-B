@@ -13,12 +13,7 @@ const managementSlice = createSlice({
   initialState: initialState,
   reducers: {
     setFormData(state, action) {
-      const { baseRate, investLimit, loanLimit } = action.payload;
-      state.formData = {
-        baseRate,
-        investLimit,
-        loanLimit,
-      };
+      state.formData = { ...state.formData, ...action.payload };
     },
   },
 });

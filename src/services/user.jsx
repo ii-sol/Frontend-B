@@ -93,3 +93,17 @@ export const fetchChildManagementInfo = async (childSn, accessToken) => {
     throw error;
   }
 };
+
+export const updateChildManagementInfo = async (accessToken, newData) => {
+  try {
+    const response = await baseInstance.put(`/users/child-manage`, newData, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+
+    return response.data.response;
+  } catch (error) {
+    throw error;
+  }
+};
