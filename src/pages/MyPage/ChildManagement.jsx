@@ -7,7 +7,9 @@ import * as S from "../../styles/GlobalStyles";
 import { FiEdit2 } from "react-icons/fi";
 import { FiSave } from "react-icons/fi";
 import { deleteChild } from "../../services/user";
-import { removeChildFromFamily } from "../../store/reducers/common/family";
+import removeChildFromFamily from "../../store/reducers/common/family";
+import { fetchChildManagementInfo } from "../../services/user";
+import { setFormData } from "../../store/reducers/common/management";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
 
@@ -17,11 +19,6 @@ import ChildProfile from "~/components/MyPage/ChildProfile";
 const ChildManagement = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    interestRate: "",
-    investmentRepayment: 0,
-    loanRepayment: 0,
-  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +26,26 @@ const ChildManagement = () => {
   const childInfo = useSelector((state) => state.family.familyInfo[id]);
   const childSn = childInfo.sn;
   const accessToken = useSelector((state) => state.user.accessToken);
+  const formData = useSelector((state) => state.management.formData);
+
+  useEffect(() => {
+    const fetchChildManagement = async () => {
+      try {
+        const data = await fetchChildManagementInfo(childSn, accessToken);
+        dispatch(
+          setFormData({
+            baseRate: data.baseRate,
+            investLimit: data.investLimit,
+            loanLimit: data.loanLimit,
+          })
+        );
+      } catch (error) {
+        console.error("Failed to fetch child management info:", error);
+      }
+    };
+
+    fetchChildManagement();
+  }, [childSn, accessToken, dispatch]);
 
   const handleLeftClick = () => {
     navigate("/mypage");
@@ -61,7 +78,7 @@ const ChildManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "interestRate") {
+    if (name === "baseRate") {
       if (!/^\d*\.?\d*$/.test(value)) {
         return;
       }
@@ -98,23 +115,19 @@ const ChildManagement = () => {
         <ManagementDetails>
           <DetailItem>
             <DetailLabel>기준금리</DetailLabel>
-            {isEditing ? <DetailInput type="text" name="interestRate" value={formData.interestRate} onChange={handleInputChange} /> : <DetailValue>{formData.interestRate} %</DetailValue>}
+            {isEditing ? <DetailInput type="text" name="baseRate" value={formData.baseRate} onChange={handleInputChange} /> : <DetailValue>{formData.baseRate} %</DetailValue>}
           </DetailItem>
           <DetailItem>
             <DetailLabel>투자상한액</DetailLabel>
             {isEditing ? (
-              <DetailInput type="text" name="investmentRepayment" value={formData.investmentRepayment} onChange={handleInputChange} />
+              <DetailInput type="text" name="investLimit" value={formData.investLimit} onChange={handleInputChange} />
             ) : (
-              <DetailValue>{formData.investmentRepayment === 0 ? "" : normalizeNumber(formData.investmentRepayment)} 원</DetailValue>
+              <DetailValue>{normalizeNumber(formData.investLimit)} 원</DetailValue>
             )}
           </DetailItem>
           <DetailItem>
             <DetailLabel>대출상한액</DetailLabel>
-            {isEditing ? (
-              <DetailInput type="text" name="loanRepayment" value={formData.loanRepayment} onChange={handleInputChange} />
-            ) : (
-              <DetailValue>{formData.loanRepayment === 0 ? "" : normalizeNumber(formData.loanRepayment)} 원</DetailValue>
-            )}
+            {isEditing ? <DetailInput type="text" name="loanLimit" value={formData.loanLimit} onChange={handleInputChange} /> : <DetailValue>{normalizeNumber(formData.loanLimit)} 원</DetailValue>}
           </DetailItem>
         </ManagementDetails>
         <DeleteButton onClick={handleDeleteClick}>아이 삭제</DeleteButton>

@@ -79,3 +79,17 @@ export const deleteChild = async (accessToken, childSn) => {
     throw error;
   }
 };
+
+export const fetchChildManagementInfo = async (childSn, accessToken) => {
+  try {
+    const response = await baseInstance.get(`/users/child-manage/${childSn}`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+
+    return response.data.response;
+  } catch (error) {
+    throw error;
+  }
+};

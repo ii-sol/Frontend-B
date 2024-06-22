@@ -8,6 +8,7 @@ import historyReducer from "./reducers/common/history";
 import missionReducer from "./reducers/Mission/mission";
 import userReducer from "./reducers/Auth/user";
 import familyReducer from "./reducers/common/family";
+import managementReducer from "./reducers/common/management";
 
 const rootPersistConfig = {
   key: "root",
@@ -22,6 +23,7 @@ const rootReducer = persistReducer(
     mission: missionReducer,
     user: userReducer,
     family: familyReducer,
+    management: managementReducer,
   })
 );
 
