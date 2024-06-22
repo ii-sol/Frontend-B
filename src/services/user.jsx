@@ -66,3 +66,16 @@ export const updateUserInfo = async (accessToken, newData) => {
     throw error;
   }
 };
+
+export const deleteChild = async (accessToken, childSn) => {
+  try {
+    const response = await baseInstance.delete(`/users/${childSn}`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+    return response.data.response;
+  } catch (error) {
+    throw error;
+  }
+};

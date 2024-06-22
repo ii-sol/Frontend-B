@@ -7,6 +7,7 @@ import logger from "redux-logger";
 import historyReducer from "./reducers/common/history";
 import missionReducer from "./reducers/Mission/mission";
 import userReducer from "./reducers/Auth/user";
+import familyReducer from "./reducers/common/family";
 
 const rootPersistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ const rootReducer = persistReducer(
     history: historyReducer,
     mission: missionReducer,
     user: userReducer,
+    family: familyReducer,
   })
 );
 

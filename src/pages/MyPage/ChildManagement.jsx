@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { FiEdit2 } from "react-icons/fi";
 import { FiSave } from "react-icons/fi";
+import { deleteChild } from "../../services/user";
+import { removeChildFromFamily } from "../../store/reducers/common/family";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
 
@@ -12,14 +15,20 @@ import Header from "~/components/common/Header";
 import ChildProfile from "~/components/MyPage/ChildProfile";
 
 const ChildManagement = () => {
+  const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     interestRate: "",
-    investmentRepayment: "",
-    loanRepayment: "",
+    investmentRepayment: 0,
+    loanRepayment: 0,
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const childInfo = useSelector((state) => state.family.familyInfo[id]);
+  const childSn = childInfo.sn;
+  const accessToken = useSelector((state) => state.user.accessToken);
 
   const handleLeftClick = () => {
     navigate("/mypage");
@@ -39,9 +48,15 @@ const ChildManagement = () => {
     9;
   };
 
-  const handleDeleteClick = () => {
-    // TODO: 삭제 로직 추가
-    alert("아이 삭제 완료");
+  const handleDeleteClick = async () => {
+    try {
+      await deleteChild(childSn, accessToken);
+      dispatch(removeChildFromFamily(id));
+      alert("아이 삭제 완료");
+    } catch (error) {
+      console.error("아이 삭제 실패", error);
+      alert("아이 삭제 실패");
+    }
   };
 
   const handleInputChange = (e) => {
@@ -67,7 +82,7 @@ const ChildManagement = () => {
       <Header onLeftClick={handleLeftClick} title={"아이 관리"} right={""} />
 
       <S.StepWrapper>
-        <ChildProfile />
+        {childInfo ? <ChildProfile childInfo={childInfo} /> : <LoadingPlaceholder>Loading...</LoadingPlaceholder>}
         <Management>
           <S.Phrase>아이 관리</S.Phrase>
           {isEditing ? (
@@ -188,4 +203,13 @@ const DeleteButton = styled.button`
   color: #ff5959;
   font-size: 18px;
   font-weight: 700;
+`;
+
+const LoadingPlaceholder = styled.div`
+  ${tw`
+    flex
+    items-center
+    justify-center
+    h-full
+  `}
 `;
