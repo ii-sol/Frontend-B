@@ -77,8 +77,8 @@ const MyPage = () => {
     navigate("/");
   };
 
-  const handleChildClick = () => {
-    navigate("/mypage/child"); // TODO: 해당하는 아이의 상세 페이지로
+  const handleChildClick = (id) => {
+    navigate(`/mypage/${id}`);
   };
 
   return (
@@ -91,7 +91,7 @@ const MyPage = () => {
         </Management>
         <MemberGrid>
           {profiles.map((profile) => (
-            <ProfileWrapper key={profile.id} onClick={handleChildClick}>
+            <ProfileWrapper key={profile.id} onClick={() => handleChildClick(profile.id)}>
               <ProfileImage src={profile.src} />
               <ProfileName>{profile.name}</ProfileName>
             </ProfileWrapper>
