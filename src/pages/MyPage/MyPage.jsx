@@ -1,30 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
+import { fetchUserInfo } from "../../services/user";
+import { useSelector } from "react-redux";
 import * as S from "../../styles/GlobalStyles";
 
 import Header from "~/components/common/Header";
 import Profile from "~/components/MyPage/Profile";
 
-import CharacterImage1 from "~/assets/img/common/character/character_sol.svg";
-import CharacterImage2 from "~/assets/img/common/character/character_lay.svg";
-import CharacterImage3 from "~/assets/img/common/character/character_moli.svg";
-import CharacterImage4 from "~/assets/img/common/character/character_lulu.svg";
 import CustomerServiceImage from "~/assets/img/MyPage/service.svg";
 import FAQImage from "~/assets/img/MyPage/faq.svg";
 
-const initialProfiles = [
-  { id: 1, src: CharacterImage1, name: "딸" },
-  { id: 2, src: CharacterImage2, name: "아들" },
-  // { id: 3, src: CharacterImage3 },
-  // { id: 4, src: CharacterImage4 },
+import Profile1 from "~/assets/img/common/character/character_sol.svg";
+import Profile2 from "~/assets/img/common/character/character_moli.svg";
+import Profile3 from "~/assets/img/common/character/character_rino.svg";
+import Profile4 from "~/assets/img/common/character/character_shoo.svg";
+import Profile5 from "~/assets/img/common/character/character_doremi.svg";
+import Profile6 from "~/assets/img/common/character/character_lulu.svg";
+import Profile7 from "~/assets/img/common/character/character_pli.svg";
+import Profile8 from "~/assets/img/common/character/character_lay.svg";
+
+const availableProfiles = [
+  { id: 1, src: Profile1 },
+  { id: 2, src: Profile2 },
+  { id: 3, src: Profile3 },
+  { id: 4, src: Profile4 },
+  { id: 5, src: Profile5 },
+  { id: 6, src: Profile6 },
+  { id: 7, src: Profile7 },
+  { id: 8, src: Profile8 },
 ];
 
 const MyPage = () => {
-  const [profiles, setProfiles] = useState(initialProfiles);
+  const [userInfo, setUserInfo] = useState(null);
+  const [profiles, setProfiles] = useState([]);
 
   const navigate = useNavigate();
+
+  const sn = useSelector((state) => state.user.userInfo.sn);
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await fetchUserInfo(sn, accessToken);
+        setUserInfo(data);
+        if (familyInfo) {
+          const familyProfiles = await Promise.all(
+            familyInfo.map(async (member, index) => {
+              const memberInfo = await fetchUserInfo(member.sn, accessToken);
+              const selectedProfile = availableProfiles.find((profile) => profile.id === memberInfo.profileId);
+              const profileImageSrc = selectedProfile ? selectedProfile.src : Profile1;
+              return {
+                id: index,
+                sn: member.sn,
+                src: profileImageSrc,
+                name: member.name,
+              };
+            })
+          );
+          setProfiles(familyProfiles);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (sn && accessToken) {
+      fetchUserData();
+    }
+  }, [sn, accessToken, familyInfo]);
 
   const handleLeftClick = () => {
     navigate("/");
@@ -36,9 +83,9 @@ const MyPage = () => {
 
   return (
     <S.Container>
-      <Header left={"<"} onLeftClick={handleLeftClick} title={"마이페이지"} right={""} />
+      <Header onLeftClick={handleLeftClick} title={"마이페이지"} right={""} />
       <S.StepWrapper>
-        <Profile />
+        {userInfo ? <Profile userInfo={userInfo} /> : <LoadingPlaceholder>Loading...</LoadingPlaceholder>}
         <Management>
           <S.Phrase>연결 관리</S.Phrase>
         </Management>
@@ -121,4 +168,13 @@ const Menu = styled.div`
     w-14
     `}
   }
+`;
+
+const LoadingPlaceholder = styled.div`
+  ${tw`
+    flex
+    items-center
+    justify-center
+    h-full
+  `}
 `;

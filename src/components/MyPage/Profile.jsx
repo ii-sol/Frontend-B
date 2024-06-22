@@ -2,17 +2,41 @@ import React, { useState } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import { FiEdit2 } from "react-icons/fi";
+import { updateUserInfo } from "../../services/user";
+import { useSelector } from "react-redux";
 
-import CharacterImage from "~/assets/img/common/character/character_pli.svg";
+import Profile1 from "~/assets/img/common/character/character_sol.svg";
+import Profile2 from "~/assets/img/common/character/character_moli.svg";
+import Profile3 from "~/assets/img/common/character/character_rino.svg";
+import Profile4 from "~/assets/img/common/character/character_shoo.svg";
+import Profile5 from "~/assets/img/common/character/character_doremi.svg";
+import Profile6 from "~/assets/img/common/character/character_lulu.svg";
+import Profile7 from "~/assets/img/common/character/character_pli.svg";
+import Profile8 from "~/assets/img/common/character/character_lay.svg";
 
-const Profile = () => {
+const profiles = [
+  { id: 1, src: Profile1 },
+  { id: 2, src: Profile2 },
+  { id: 3, src: Profile3 },
+  { id: 4, src: Profile4 },
+  { id: 5, src: Profile5 },
+  { id: 6, src: Profile6 },
+  { id: 7, src: Profile7 },
+  { id: 8, src: Profile8 },
+];
+
+const Profile = ({ userInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const initialBirthDate = new Date(userInfo.birthDate);
+  const initialBirthDateString = initialBirthDate.toISOString().slice(0, 10);
   const [profileData, setProfileData] = useState({
-    name: "이름",
-    birth: "2000.00.00",
-    phone: "010-0000-0000",
-    credibility: "매우높음",
+    name: userInfo.name,
+    birthDate: initialBirthDateString,
+    phoneNum: userInfo.phoneNum,
+    profileId: userInfo.profileId,
   });
+
+  const accessToken = useSelector((state) => state.user.accessToken);
 
   const handleEditClick = () => {
     if (isEditing === false) {
@@ -28,20 +52,26 @@ const Profile = () => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const isValidName = /^[\uAC00-\uD7A3]{2,5}$/.test(profileData.name); // 2~5글자의 한글 이름인지 체크하는 정규 표현식
-    const isValidPhone = profileData.phone.length === 13;
-    const isValidBirth = profileData.birth.length === 10;
+    const isValidPhone = profileData.phoneNum.length === 13;
+    const isValidBirth = profileData.birthDate.length === 10;
 
     if (isValidName && isValidPhone && isValidBirth) {
-      setProfileData(profileData);
-      console.log(profileData);
-      alert("정보가 업데이트 되었습니다.");
+      try {
+        await updateUserInfo(accessToken, profileData);
+        alert("정보가 업데이트 되었습니다.");
+      } catch (error) {
+        console.error(error);
+      }
       setIsEditing(false);
     } else {
       alert("잘못된 입력입니다.");
     }
   };
+
+  const selectedProfile = profiles.find((profile) => profile.id === profileData.profileId);
+  const profileImageSrc = selectedProfile ? selectedProfile.src : Profile1;
 
   return (
     <Container>
@@ -49,11 +79,13 @@ const Profile = () => {
         <FiEdit2 tw="w-[24px] h-[24px]" />
       </EditButton>
       <ProfileWrapper>
-        <ProfileImage src={CharacterImage} alt="프로필 이미지" />
+        <ProfileImage src={profileImageSrc} alt="profile" />
         <InfoWrapper>
           <Info>이름: {isEditing ? <Input type="text" name="name" value={profileData.name} onChange={handleChange} /> : <span>{profileData.name}</span>}</Info>
-          <Info>생일: {isEditing ? <Input type="text" name="birth" value={profileData.birth} onChange={handleChange} /> : <span>{profileData.birth}</span>}</Info>
-          <Info tw="flex-col gap-0">전화번호: {isEditing ? <Input tw="w-[93%]" type="text" name="phone" value={profileData.phone} onChange={handleChange} /> : <span>{profileData.phone}</span>}</Info>
+          <Info>생일: {isEditing ? <Input type="text" name="birthDate" value={profileData.birthDate} onChange={handleChange} /> : <span>{profileData.birthDate}</span>}</Info>
+          <Info tw="flex-col gap-0">
+            전화번호: {isEditing ? <Input tw="w-[93%]" type="text" name="phoneNum" value={profileData.phoneNum} onChange={handleChange} /> : <span>{profileData.phoneNum}</span>}
+          </Info>
         </InfoWrapper>
         {isEditing && <SaveButton onClick={handleSave}>저장</SaveButton>}
       </ProfileWrapper>
