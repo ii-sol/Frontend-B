@@ -24,7 +24,7 @@ const Home = () => {
           프디아님
         </div>
         <S.RowDiv style={{ gap: "20px" }}>
-          <img src={mypage} style={{ width: "42px" }} />
+          <img src={mypage} style={{ width: "42px" }} onClick={() => navigate("/mypage")} />
           <img src={alert} style={{ width: "42px" }} />
         </S.RowDiv>
       </Wrapper>

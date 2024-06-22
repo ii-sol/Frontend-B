@@ -48,7 +48,7 @@ const MainRouter = createBrowserRouter([
         path: "mypage",
         children: [
           { path: "", element: <MyPage /> },
-          { path: ":id", element: <ChildManagement /> },
+          { path: "child/:id", element: <ChildManagement /> },
         ],
       },
       {

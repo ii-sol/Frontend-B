@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
+import { join, checkPhoneNum } from "../../services/user";
 
 import * as S from "../../styles/GlobalStyles";
 
 import ChatBubble from "~/components/Auth/ChatBubble";
 import Input from "~/components/Auth/Input";
+import Profile from "../../components/Auth/Profile";
 
 import CompleteImage from "~/assets/img/common/complete.svg";
 
@@ -16,9 +18,10 @@ const Signup = () => {
     name: "",
     phoneNum: "",
     accountInfo: "",
-    confirmAccountInfo: "",
     birthDate: "",
+    profileId: 0,
   });
+  const [confirmAccountInfo, setConfirmAccountInfo] = useState("");
   const [showconfirmAccountInfo, setShowconfirmAccountInfo] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -27,25 +30,33 @@ const Signup = () => {
   const handleChange = (e) => {
     if (e.target.name === "confirmAccountInfo") {
       setShowconfirmAccountInfo(true);
+      setConfirmAccountInfo(e.target.value);
+    } else {
+      setUserData({
+        ...userData,
+        [e.target.name]: e.target.value,
+      });
     }
-
-    setUserData({
-      ...userData,
-      [e.target.name]: e.target.value,
-    });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     let error = "";
     if (step === 0 && !isNameValid(userData.name)) {
       error = "이름은 2~5글자 이내의 한글로 입력해주세요.";
-    } else if (step === 1 && !isPhoneNumValid(userData.phoneNum)) {
-      // TODO: 이미 존재하는 전화번호인지도 확인
-      error = "전화번호는 010-XXXX-XXXX 형식으로 입력해주세요.";
+    } else if (step === 1) {
+      if (!isPhoneNumValid(userData.phoneNum)) {
+        error = "전화번호는 010-XXXX-XXXX 형식으로 입력해주세요.";
+      } else {
+        try {
+          await checkPhoneNum(userData.phoneNum);
+        } catch (err) {
+          error = "이미 가입된 전화번호입니다.";
+        }
+      }
     } else if (step === 2) {
       if (!isPasswordValid(userData.accountInfo)) {
         error = "비밀번호는 6자리 숫자로 입력해주세요.";
-      } else if (showconfirmAccountInfo && userData.accountInfo !== userData.confirmAccountInfo) {
+      } else if (showconfirmAccountInfo && userData.accountInfo !== confirmAccountInfo) {
         error = "비밀번호가 일치하지 않습니다.";
       }
     } else if (step === 3 && !isBirthDateValid(userData.birthDate)) {
@@ -64,8 +75,24 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = () => {
-    setStep(4);
+  const handleSubmit = async () => {
+    if (userData.profileId === 0) {
+      alert("프로필 이미지를 선택해주세요.");
+    } else {
+      try {
+        await join(userData);
+        setStep(5);
+      } catch (error) {
+        setErrorMessage(error);
+      }
+    }
+  };
+
+  const handleProfileSelect = (id) => {
+    setUserData({
+      ...userData,
+      profileId: id,
+    });
   };
 
   const handleLoginRedirect = () => {
@@ -108,7 +135,7 @@ const Signup = () => {
               <div tw="flex flex-col">
                 <ChatBubble text="비밀번호를 한 번 더 알려주세요!" />
                 <RightAlignedDiv>
-                  <Input type="password" name="confirmAccountInfo" value={userData.confirmAccountInfo} onChange={handleChange} />
+                  <Input type="password" name="confirmAccountInfo" value={confirmAccountInfo} onChange={handleChange} />
                 </RightAlignedDiv>
               </div>
             )}
@@ -125,6 +152,15 @@ const Signup = () => {
           </StepWrapper>
         )}
         {step === 4 && (
+          <StepWrapper>
+            <CompleteWrapper>
+              <S.Question>프로필을 선택해주세요!</S.Question>
+              <Profile selectedProfileId={userData.profileId} onSelectProfile={handleProfileSelect} />
+              {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </CompleteWrapper>
+          </StepWrapper>
+        )}
+        {step === 5 && (
           <StepWrapper tw="justify-center mb-40">
             <CompleteWrapper>
               <img src={CompleteImage} alt="완료" />
@@ -134,16 +170,16 @@ const Signup = () => {
         )}
 
         <ButtonWrapper>
-          {step < 3 ? (
+          {step < 4 ? (
             <S.BottomBtn onClick={handleNext} text="다음">
               다음
             </S.BottomBtn>
-          ) : step === 3 ? (
+          ) : step === 4 ? (
             <S.BottomBtn onClick={handleSubmit} text="제출">
               제출
             </S.BottomBtn>
           ) : (
-            step === 4 && (
+            step === 5 && (
               <S.BottomBtn onClick={handleLoginRedirect} text="로그인 하러 가기">
                 로그인 하러 가기
               </S.BottomBtn>
@@ -196,12 +232,13 @@ const ButtonWrapper = styled.div`
   mt-4`}
 `;
 
-const CompleteWrapper = tw.div`
-  flex
+const CompleteWrapper = styled.div`
+  ${tw`flex
   flex-col
   gap-2
   items-center
-  justify-center
+  justify-center`}
+  height: calc(100vh - 200px)
 `;
 
 const ErrorMessage = tw.div`

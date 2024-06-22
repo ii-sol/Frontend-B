@@ -62,29 +62,22 @@ const DueDateBottomSheet = ({ requestData, dispatch, open, onDismiss }) => {
   };
 
   return (
-    <StyledBottomSheet open={open} onDismiss={onDismiss}>
-      <DatePickerWrapper>
-        <DatePicker {...datePickerProps} inline />
-      </DatePickerWrapper>
+    <BottomSheet open={open} onDismiss={onDismiss}>
+      <div style={{ height: "52vh", padding: "10px 30px 30px 30px" }}>
+        <DatePickerWrapper>
+          <DatePicker {...datePickerProps} inline />
+        </DatePickerWrapper>
 
-      <NoDueDate $noDueDateSelected={noDueDateSelected} onClick={handleNoDueDate}>
-        ✓ 완료일 없이 미션 요청하기
-      </NoDueDate>
-      <SaveButton onClick={handleSave}>확인</SaveButton>
-    </StyledBottomSheet>
+        <NoDueDate $noDueDateSelected={noDueDateSelected} onClick={handleNoDueDate}>
+          ✓ 완료일 없이 미션 요청하기
+        </NoDueDate>
+        <SaveButton onClick={handleSave}>확인</SaveButton>
+      </div>
+    </BottomSheet>
   );
 };
 
 export default DueDateBottomSheet;
-
-const StyledBottomSheet = styled(BottomSheet)`
-  font-family: "Pretendard Variable";
-  & > div {
-    height: 55%;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-`;
 
 const DatePickerWrapper = styled.div`
   flex: 1;

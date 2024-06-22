@@ -49,6 +49,7 @@ const Container = styled.div`
   border-radius: 20px;
   box-shadow: 0px 0px 15px 0px rgba(151, 178, 221, 0.4);
   cursor: pointer;
+  background-color: white;
 `;
 
 const Content = styled.div`
@@ -113,7 +114,7 @@ const ActionButton = styled.button`
     bg-white
     rounded-lg
     text-sm
-    font-semibold
+    font-extrabold
     shadow-md
     px-4
     py-2
