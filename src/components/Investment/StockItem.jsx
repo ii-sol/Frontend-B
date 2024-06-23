@@ -1,62 +1,41 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { ThemeProvider, styled } from "styled-components";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { onTouchStart, onTouchEnd } from "../../utils/touchDeleteHandler.jsx";
 
-const StockItem = ({ stock, setOpen, setSelectedStockId }) => {
+const StockItem = ({ stock, setOpen, onClick }) => {
   const ref = useRef();
-  let startX;
-
-  const onTouchMove = (e) => {
-    const touch = e.touches[0];
-    const moveX = touch.clientX;
-
-    if (startX - moveX > 30) {
-      ref.current.style.transform = "translateX(-55px)";
-      setTimeout(() => {
-        if (ref.current) ref.current.style.transform = "translateX(0px)";
-      }, 2500);
-    } else {
-      ref.current.style.transform = "translateX(0px)";
-    }
-  };
-
-  const onTouchStart = (e) => {
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    ref.current.addEventListener("touchmove", onTouchMove, { passive: true });
-  };
-
-  const onTouchEnd = () =>
-    ref.current.removeEventListener("touchmove", onTouchMove);
+  const [startX, setStartX] = useState(0);
 
   const handleClick = () => {
+    onClick();
     setOpen(true);
-    setSelectedStockId(stock.id);
   };
 
   const theme = {
     stock,
   };
+
   return (
     <ThemeProvider theme={theme}>
       <RowDiv>
+        <DeleteDiv>
+          <FaRegTrashAlt size="30" />
+        </DeleteDiv>
         <Wrapper
           ref={ref}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
+          onTouchStart={(e) => onTouchStart(e, ref, setStartX)}
+          onTouchEnd={() => onTouchEnd(ref)}
           onClick={handleClick}
         >
           <StockDiv>
-            <StockName>{stock.title}</StockName>
+            <StockName>{stock.name}</StockName>
           </StockDiv>
           <HoldingDiv>
             <CurrentPrice>{stock.price}</CurrentPrice>
             <ChangeRate>{stock.change}</ChangeRate>
           </HoldingDiv>
         </Wrapper>
-        <DeleteDiv>
-          <FaRegTrashAlt size="30" />
-        </DeleteDiv>
       </RowDiv>
     </ThemeProvider>
   );
@@ -82,6 +61,7 @@ const Wrapper = styled.div`
   margin-bottom: 10px;
   flex: 1 0 100%;
   transition: transform 800ms;
+  transform: translateX(0px);
 `;
 
 const StockDiv = styled.div`
@@ -116,11 +96,11 @@ const HoldingDiv = styled.div`
 const DeleteDiv = styled.div`
   position: absolute;
   right: 0px;
-  top: 25px;
+  top: 45%;
+  transform: translateY(-50%);
   text-align: left;
   min-width: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: -999;
 `;

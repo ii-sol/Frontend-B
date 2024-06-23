@@ -5,53 +5,44 @@ import { styled } from "styled-components";
 import PortfolioDonut from "../../components/Investment/PortfolioDonut";
 import PortfolioList from "../../components/Investment/PortfolioList";
 import * as S from "../../styles/GlobalStyles";
+import RequestCard from "../../components/Investment/RequestCard";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const InvestMain = () => {
   const [isDonut, setIsDonut] = useState(true);
   const [height, setHeight] = useState(0);
-  const [selectedPage, setSelectedPage] = useState(1);
 
   const toggleShow = () => {
     setIsDonut(!isDonut);
+  };
+
+  const sliderSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
   };
 
   return (
     <S.Container>
       <Header />
       <CenterWrapper>
-        <RowDiv>
-          <SelectBtn
-            $isSelected={selectedPage === 1}
-            onClick={() => setSelectedPage(1)}
-          >
-            ●
-          </SelectBtn>
-          <SelectBtn
-            $isSelected={selectedPage === 2}
-            onClick={() => setSelectedPage(2)}
-          >
-            ●
-          </SelectBtn>
-        </RowDiv>
-        {selectedPage === 1 ? (
-          <Page>
-            <Account accountNum={2} />
-            {isDonut ? (
-              <PortfolioDonut toggleShow={toggleShow} setHeight={setHeight} />
-            ) : (
-              <PortfolioList toggleShow={toggleShow} height={height} />
-            )}
-          </Page>
-        ) : (
-          <Page>
-            <Account accountNum={3} />
-            {isDonut ? (
-              <PortfolioDonut toggleShow={toggleShow} setHeight={setHeight} />
-            ) : (
-              <PortfolioList toggleShow={toggleShow} height={height} />
-            )}
-          </Page>
-        )}
+        <Slider {...sliderSettings}>
+          <RequestCard />
+          <RequestCard />
+        </Slider>
+        <Page>
+          <Account accountNum={1} />
+          {isDonut ? (
+            <PortfolioDonut toggleShow={toggleShow} setHeight={setHeight} />
+          ) : (
+            <PortfolioList toggleShow={toggleShow} height={height} />
+          )}
+        </Page>
       </CenterWrapper>
     </S.Container>
   );
@@ -63,19 +54,24 @@ const CenterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-`;
 
-const RowDiv = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+  .slick-prev:before,
+  .slick-next:before {
+    font-family: "slick";
+    font-size: 20px;
+    line-height: 1;
 
-const SelectBtn = styled.button`
-  color: ${(props) => (props.$isSelected ? "black" : "#afafaf")};
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
+    opacity: 0.75;
+    color: #97b2dd;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .slick-prev.slick-disabled:before,
+  .slick-next.slick-disabled:before {
+    opacity: 0.2;
+  }
 `;
 
 const Page = styled.div`

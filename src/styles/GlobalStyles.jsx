@@ -150,28 +150,28 @@ export const BottomBtnWrapper = styled.div`
 
 export const acceptBtn = styled.button`
   border-radius: 15px;
-  background: #CDE1FF;
+  background: #cde1ff;
   display: flex;
   width: 113px;
-  height: 48px
+  height: 48px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #154B9B;
+  color: #154b9b;
   font-size: 20px;
-  padding:8px;
+  padding: 8px;
 `;
 
 export const rejectBtn = styled.button`
   border-radius: 15px;
-  background:#FFD9CD;
+  background: #ffd9cd;
   display: flex;
   width: 113px;
-  height: 48px
+  height: 48px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #9B1D15;
+  color: #9b1d15;
   font-size: 20px;
-  padding:8px;
+  padding: 8px;
 `;

@@ -40,13 +40,9 @@ export const checkPhoneNum = async (phoneNum) => {
   }
 };
 
-export const fetchUserInfo = async (sn, accessToken) => {
+export const fetchUserInfo = async (sn) => {
   try {
-    const response = await baseInstance.get(`/users/${sn}`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    });
+    const response = await baseInstance.get(`/users/${sn}`, {});
 
     return response.data.response;
   } catch (error) {
