@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
-import { fetchRegularAllowance, fetchAllowanceRequest } from "../../services/allowance";
+import { fetchRegularAllowance, fetchAllowanceRequest, createDecision } from "../../services/allowance";
+import { format, differenceInDays } from "date-fns";
 
 import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";
@@ -56,6 +57,14 @@ const Management = () => {
     navigate("/allowance/history");
   };
 
+  const handleDecisionClick = async (id, accept) => {
+    try {
+      await createDecision(id, accept);
+    } catch (error) {
+      console.error("Error accept allowance request:", error);
+    }
+  };
+
   return (
     <S.Container>
       <Header onLeftClick={handleLeftClick} title={"용돈"} right={""} />
@@ -76,7 +85,7 @@ const Management = () => {
       ) : (
         <S.CardContainer>
           {requestList.map((request, index) => (
-            <RequestCard key={index} dday={calculateDday(request.createDate)} allowance={request.amount} message={request.content} />
+            <RequestCard key={index} id={request.id} dday={calculateDday(request.createDate)} allowance={request.amount} message={request.content} onClick={handleDecisionClick} />
           ))}
         </S.CardContainer>
       )}

@@ -16,7 +16,21 @@ export const fetchRegularAllowance = async (csn) => {
 
 export const fetchAllowanceRequest = async (csn) => {
   try {
-    const response = await baseInstance.get(`/allowances/temporal?csn=${csn}`);
+    const response = await baseInstance.get(`/allowance/history/temporal/${csn}`);
+
+    if (response.data.success) {
+      return response.data.response;
+    } else {
+      return response.data.error.message;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createDecision = async (id, accept) => {
+  try {
+    const response = await baseInstance.post(`/allowances/temporal?temporalAllowanceId=${id}&accept=${accept}`);
 
     if (response.data.success) {
       return response.data.response;
