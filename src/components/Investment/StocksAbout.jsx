@@ -1,17 +1,20 @@
 import React from "react";
-import * as S from "../../styles/GlobalStyles";
 import { styled } from "styled-components";
+import { useSelector } from "react-redux";
 
+// TODO: 보유잔고, 주문 가능 수량(잔고 / price)
 const StocksAbout = () => {
+  const name = useSelector((state) => state.invest.name);
+  const price = useSelector((state) => state.invest.price);
   return (
     <Container>
       <RowDiv>
         <InfoDiv>종목</InfoDiv>
-        <InfoDiv>LG</InfoDiv>
+        <InfoDiv>{name}</InfoDiv>
       </RowDiv>
       <RowDiv>
         <InfoDiv>시장가</InfoDiv>
-        <InfoDiv>80,000원</InfoDiv>
+        <InfoDiv>{price}원</InfoDiv>
       </RowDiv>
       <RowDiv>
         <InfoDiv>보유잔고</InfoDiv>
@@ -34,6 +37,7 @@ const Container = styled.div`
   border: 1px solid #cde1ff;
   padding: 20px;
   border-radius: 5px;
+  background-color: white;
 `;
 
 const RowDiv = styled.div`

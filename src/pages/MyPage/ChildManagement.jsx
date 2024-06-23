@@ -11,7 +11,7 @@ import removeChildFromFamily from "../../store/reducers/common/family";
 import { fetchChildManagementInfo, updateChildManagementInfo } from "../../services/user";
 import { setFormData } from "../../store/reducers/common/management";
 
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import Header from "~/components/common/Header";
 import ChildProfile from "~/components/MyPage/ChildProfile";

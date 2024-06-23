@@ -29,14 +29,18 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const data = await fetchUserInfo(sn, accessToken);
+        const data = await fetchUserInfo(sn);
         setUserInfo(data);
         if (familyInfo) {
           const familyProfiles = await Promise.all(
             familyInfo.map(async (member, index) => {
-              const memberInfo = await fetchUserInfo(member.sn, accessToken);
-              const selectedProfile = availableProfiles.find((profile) => profile.id === memberInfo.profileId);
-              const profileImageSrc = selectedProfile ? selectedProfile.src : profiles[0].src;
+              const memberInfo = await fetchUserInfo(member.sn);
+              const selectedProfile = availableProfiles.find(
+                (profile) => profile.id === memberInfo.profileId
+              );
+              const profileImageSrc = selectedProfile
+                ? selectedProfile.src
+                : profiles[0].src;
               return {
                 id: index,
                 sn: member.sn,
@@ -56,10 +60,10 @@ const MyPage = () => {
       }
     };
 
-    if (sn && accessToken) {
+    if (sn) {
       fetchUserData();
     }
-  }, [sn, accessToken, familyInfo]);
+  }, [sn, familyInfo]);
 
   const handleLeftClick = () => {
     navigate("/");
@@ -73,13 +77,20 @@ const MyPage = () => {
     <S.Container>
       <Header onLeftClick={handleLeftClick} title={"마이페이지"} right={""} />
       <S.StepWrapper>
-        {userInfo ? <Profile userInfo={userInfo} /> : <LoadingPlaceholder>Loading...</LoadingPlaceholder>}
+        {userInfo ? (
+          <Profile userInfo={userInfo} />
+        ) : (
+          <LoadingPlaceholder>Loading...</LoadingPlaceholder>
+        )}
         <Management>
           <S.Phrase>연결 관리</S.Phrase>
         </Management>
         <MemberGrid>
           {profiles.map((profile) => (
-            <ProfileWrapper key={profile.id} onClick={() => handleChildClick(profile.id)}>
+            <ProfileWrapper
+              key={profile.id}
+              onClick={() => handleChildClick(profile.id)}
+            >
               <ProfileImage src={profile.src} />
               <ProfileName>{profile.name}</ProfileName>
             </ProfileWrapper>
