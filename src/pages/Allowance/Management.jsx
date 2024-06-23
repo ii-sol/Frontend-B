@@ -26,10 +26,12 @@ const Management = () => {
   const [requestList, setRequestList] = useState([]);
   const navigate = useNavigate();
 
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+
   useEffect(() => {
     const fetchRegular = async () => {
       try {
-        const regularAllowance = await fetchRegularAllowance(7730362896);
+        const regularAllowance = await fetchRegularAllowance(selectedChildSn);
         setRegularAllowance(regularAllowance);
       } catch (error) {
         console.error("Error fetching regular allowance:", error);
@@ -38,7 +40,7 @@ const Management = () => {
 
     const fetchIrregular = async () => {
       try {
-        const allowanceRequest = await fetchAllowanceRequest(7730362896);
+        const allowanceRequest = await fetchAllowanceRequest(selectedChildSn);
         setRequestList(allowanceRequest);
       } catch (error) {
         console.error("Error fetching regular allowance:", error);

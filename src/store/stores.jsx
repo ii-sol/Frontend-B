@@ -9,6 +9,7 @@ import missionReducer from "./reducers/Mission/mission";
 import userReducer from "./reducers/Auth/user";
 import familyReducer from "./reducers/common/family";
 import managementReducer from "./reducers/common/management";
+import allowanceReducer from "./reducers/Allowance/allowance";
 
 const rootPersistConfig = {
   key: "root",
@@ -24,6 +25,7 @@ const rootReducer = persistReducer(
     user: userReducer,
     family: familyReducer,
     management: managementReducer,
+    allowance: allowanceReducer,
   })
 );
 
