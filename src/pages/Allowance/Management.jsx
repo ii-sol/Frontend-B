@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
+import { fetchRegularAllowance } from "../../services/allowance";
 
 import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";
 import RegularAllowanceCard from "~/components/Allowance/RegularAllowanceCard";
 
 const Management = () => {
+  const [regularAllowance, setRegularAllowance] = useState(null);
+  const [requestList, setRequestList] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRegular = async () => {
+      try {
+        const regularAllowance = await fetchRegularAllowance(7730362896);
+        setRegularAllowance(regularAllowance);
+      } catch (error) {
+        console.error("Error fetching regular allowance:", error);
+      }
+    };
+
+    fetchRegular();
+  }, []);
 
   const handleLeftClick = () => {
     navigate("/");
@@ -26,7 +42,7 @@ const Management = () => {
         <S.Phrase>정기용돈</S.Phrase>
         <S.HistoryLink onClick={handleHistoryClick}>지난 용돈 &gt;</S.HistoryLink>
       </Menu>
-      <RegularAllowanceCard period="1개월" allowance="100000" startDate={"2024.05.12"} endDate={"2024.06.12"} role={"parent"} />
+      <RegularAllowanceCard regularAllowance={regularAllowance} />
       <Menu>
         <S.Phrase>용돈 조르기</S.Phrase>
       </Menu>

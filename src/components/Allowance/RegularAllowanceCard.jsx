@@ -5,14 +5,14 @@ import { styled } from "styled-components";
 
 import { normalizeNumber } from "../../utils/NormalizeNumber";
 
-const RegularAllowanceCard = ({ period, allowance, startDate, endDate }) => {
+const RegularAllowanceCard = ({ regularAllowance }) => {
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
     navigate("/allowance/registration");
   };
 
-  if (!allowance) {
+  if (!regularAllowance || regularAllowance.length === 0) {
     return (
       <RegisterButton onClick={handleRegisterClick}>
         <span tw="text-[#346BAC]">정기용돈</span>등록하기
@@ -23,10 +23,10 @@ const RegularAllowanceCard = ({ period, allowance, startDate, endDate }) => {
   return (
     <Container>
       <Content>
-        <PeriodTag status={period}>{period}</PeriodTag>
-        <Allowance>{normalizeNumber(allowance)}원</Allowance>
+        <PeriodTag status={regularAllowance.period}>{regularAllowance.period}</PeriodTag>
+        <Allowance>{normalizeNumber(regularAllowance.amount)}원</Allowance>
         <Period>
-          {startDate}~{endDate}
+          {regularAllowance.createDate}~{regularAllowance.dueDate}
         </Period>
       </Content>
       <ButtonWrapper>
