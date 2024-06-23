@@ -37,7 +37,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 400px;
   height: ${(props) => props.$height}px;
-  background-color: #f4f9ff;
+  background-color: #ebf5ff;
   border-radius: 15px;
 `;
 

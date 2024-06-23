@@ -31,7 +31,9 @@ const KeypadInput = ({ displayedNumber, setDisplayedNumber, initialPrice }) => {
   return (
     <InputContainer>
       <Img src={CoinImage} alt="코인" />
-      <Amount $displayedNumber={displayedNumber}>{normalizeNumber(displayedNumber)} 원</Amount>
+      <Amount $displayedNumber={displayedNumber}>
+        {normalizeNumber(displayedNumber)} 원
+      </Amount>
       <Keypad onNumberClick={handleNumberClick} onBackspace={handleBackspace} />
     </InputContainer>
   );
@@ -51,7 +53,10 @@ const Img = styled.img`
 `;
 
 const Amount = styled.div`
-  width: ${(props) => (props.$displayedNumber && props.$displayedNumber.length > 0 ? "auto" : "123px")};
+  width: ${(props) =>
+    props.$displayedNumber && props.$displayedNumber.length > 0
+      ? "auto"
+      : "123px"};
   height: 49px;
   background: #f5f5f5;
   padding: 10px;

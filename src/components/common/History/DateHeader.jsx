@@ -75,7 +75,7 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   height: 45px;
-  background: #f4f9ff;
+  background: #f0f7ff;
   padding: 10px;
   border-radius: 15px;
   justify-content: space-between;

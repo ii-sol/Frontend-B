@@ -15,12 +15,21 @@ const Filter = () => {
     if (location.pathname === "/invest/history") {
       const newOptions = [
         { label: "전체", status: 0 },
-        { label: "투자", status: 1 },
-        { label: "종목", status: 2 },
+        { label: "수락", status: 1 },
+        { label: "거절", status: 2 },
+        { label: "대기", status: 3 },
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
-    } else if (location.pathname === "/account/history") {
+    } else if (location.pathname === "/invest/tradehistory") {
+      const newOptions = [
+        { label: "전체", status: 0 },
+        { label: "구매", status: 1 },
+        { label: "판매", status: 2 },
+      ];
+      setOptions(newOptions);
+      setSelectedOption(newOptions[0]);
+    } else if (location.pathname === "/allowance/history") {
       const newOptions = [
         { label: "전체", status: 0 },
         { label: "나간 돈", status: 1 },
@@ -28,8 +37,20 @@ const Filter = () => {
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
-    } else if (location.pathname === "/allowance/history") {
-      const newOptions = [{ label: "전체", status: 0 }];
+    } else if (location.pathname === "/allowance/history-parent") {
+      const newOptions = [
+        { label: "전체", status: 0 },
+        { label: "조르기", status: 1 },
+        { label: "정기용돈", status: 2 },
+      ];
+      setOptions(newOptions);
+      setSelectedOption(newOptions[0]);
+    } else if (location.pathname === "/allowance/irregular/history") {
+      const newOptions = [
+        { label: "전체", status: 0 },
+        { label: "완료", status: 1 },
+        { label: "취소", status: 2 },
+      ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
     } else if (location.pathname === "/mission/history") {
@@ -79,9 +100,11 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  ${tw`px-4 py-2 rounded-[5px] font-bold border-none`}
+  ${tw`px-3.5 py-1.5 rounded-[5px] border-none`}
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
 
   ${({ selected }) => selected && tw`bg-[#154B9B] text-[#FFFFFF]`}
-  ${({ selected }) => !selected && tw`bg-[#F4F9FF] text-[#949494]`}
+  ${({ selected }) => !selected && tw`bg-[#FFFFFF] text-[#949494]`}
+  font-size:15px;
+  font-weight: 400;
 `;

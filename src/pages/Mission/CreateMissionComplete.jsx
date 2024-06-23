@@ -45,11 +45,14 @@ const CreateMissionComplete = () => {
             <S.CompleteCard tw="text-[20px]">
               <div>{requestData.parentName}님에게</div>
               <div>{requestData.content}를 요청했습니다.</div>
-              <div tw="text-[#154B9B]">{normalizeNumber(requestData.price)}원</div>
+              <div tw="text-[#154B9B]">
+                {normalizeNumber(requestData.price)}원
+              </div>
               <div>미션 완료일 : {requestData.dueDate}</div>
             </S.CompleteCard>
             <div tw="text-xs">
-              <span tw="text-[#154B9B]">{formattedDate}</span>까지 응답하지 않으면 취소돼요.
+              <span tw="text-[#154B9B]">{formattedDate}</span>까지 응답하지
+              않으면 취소돼요.
             </div>
           </CompleteContainer>
         </S.StepWrapper>

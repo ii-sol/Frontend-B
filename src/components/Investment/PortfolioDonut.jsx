@@ -95,7 +95,9 @@ const Container = styled.div`
   width: 100%;
   max-width: 400px;
   height: 100%;
-  background-color: #f4f9ff;
+  background-color: #ebf5ff;
+  /* box-shadow: 0 0 5px #c1ccff; */
+  /* box-shadow: 0px 0px 5px 0px #c8ddff; */
   border-radius: 15px;
 `;
 

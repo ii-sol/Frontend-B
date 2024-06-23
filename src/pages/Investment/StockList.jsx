@@ -5,17 +5,11 @@ import { styled } from "styled-components";
 import search from "../../assets/img/Invest/search.svg";
 import filledStar from "../../assets/img/Invest/filledStar.svg";
 import blankStar from "../../assets/img/Invest/blankStar.svg";
+import { useDispatch } from "react-redux";
+import { setCode } from "../../store/reducers/Invest/invest";
 
-import { BottomSheet } from "react-spring-bottom-sheet";
-import "react-spring-bottom-sheet/dist/style.css";
-import StocksDetail from "../../components/Investment/StocksDetail";
-
-const StockList = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedStockId, setSelectedStockId] = useState(null);
-  const handleDismiss = () => {
-    setOpen(false);
-  };
+const StockListParent = () => {
+  const dispatch = useDispatch();
 
   const searchResults = [
     {
@@ -166,15 +160,14 @@ const StockList = () => {
       <S.CenterDiv>
         <SearchWrapper>
           <Img src={search} />
-          <SearchInput />
+          <SearchInput placeholder="종목 이름" />
         </SearchWrapper>
         <SearchResults>
           {searchResults?.map((result) => (
             <SearchResult
               key={result.id}
               onClick={() => {
-                setOpen(true);
-                setSelectedStockId(result.code);
+                dispatch(setCode(result.code));
               }}
             >
               <StockDiv>
@@ -193,15 +186,12 @@ const StockList = () => {
             </SearchResult>
           ))}
         </SearchResults>
-        <BottomSheet open={open} onDismiss={handleDismiss}>
-          <StocksDetail selectedStockId={selectedStockId} type="searchDetail" />
-        </BottomSheet>
       </S.CenterDiv>
     </S.Container>
   );
 };
 
-export default StockList;
+export default StockListParent;
 
 const SearchWrapper = styled.label`
   position: relative;
@@ -210,7 +200,7 @@ const SearchWrapper = styled.label`
   padding: 10px;
   height: 50px;
   background-color: #f3f3f3;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   margin-top: 10px;
 `;
 
@@ -236,8 +226,8 @@ const SearchResults = styled.ul`
   overflow: auto;
   padding-bottom: 5px;
 
-  background-color: white;
-  margin-top: 20px;
+  background-color: #fafcff;
+  /* margin-top: 20px; */
 
   &::-webkit-scrollbar {
     display: none;
@@ -253,12 +243,12 @@ const SearchResult = styled.li`
   min-height: 60px;
 
   cursor: pointer;
-  &:hover {
+  /* &:hover {
     background-color: #f0f0f0;
-  }
+  } */
 
-  &:nth-child(odd) {
-    background-color: #f5faff;
+  &:nth-child(even) {
+    background-color: #e9f2ff99;
   }
 `;
 

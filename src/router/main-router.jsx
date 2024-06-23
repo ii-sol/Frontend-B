@@ -9,6 +9,7 @@ import InsideLayout from "../pages/layout/InsideLayout";
 
 import Signup from "../pages/Auth/Signup";
 import Login from "../pages/Auth/Login";
+import Notification from "../pages/Notification/Notification";
 
 import MyPage from "../pages/MyPage/MyPage";
 import ChildManagement from "../pages/MyPage/ChildManagement";
@@ -37,6 +38,12 @@ import Send from "../pages/Account/Send.jsx";
 import SendMoneyComplete from "../pages/Account/SendComplete.jsx";
 import CreditScoreInfo from "../pages/Loan/Credit.jsx";
 
+import InvestMain from "../pages/Investment/InvestMain";
+import InvestHistory from "../pages/Investment/InvestHistory";
+import SuggestionDetail from "../pages/Investment/SuggestionDetail";
+import TradeHistory from "../pages/Investment/TradeHistory";
+import StockList from "../pages/Investment/StockList";
+
 const MainRouter = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +52,7 @@ const MainRouter = createBrowserRouter([
       { path: "", element: <Home /> },
       { path: "signup", element: <Signup /> },
       { path: "login", element: <Login /> },
+      { path: "notification", element: <Notification /> },
       {
         path: "mypage",
         children: [
@@ -105,6 +113,16 @@ const MainRouter = createBrowserRouter([
             path: "complete",
             element: <SendMoneyComplete />,
           },
+        ],
+      },
+      {
+        path: "invest",
+        children: [
+          { path: "", element: <InvestMain /> },
+          { path: "stocklist", element: <StockList /> },
+          { path: "history", element: <InvestHistory /> },
+          { path: "history/:id", element: <SuggestionDetail /> },
+          { path: "tradehistory", element: <TradeHistory /> },
         ],
       },
       {
