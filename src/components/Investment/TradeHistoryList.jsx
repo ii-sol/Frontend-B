@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { useSelector } from "react-redux";
 import EmptyImage from "~/assets/img/common/empty.svg";
-import { normalizeNumber } from "../../utils/normalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 import { groupDataByDate } from "../../utils/groupDataByDate";
 
 const TradeHistoryList = () => {

@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 
-import { normalizeNumber } from "../../utils/normalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 const RequestCardParent = ({ dday, allowance, message }) => {
   // TODO: dday 계산 로직

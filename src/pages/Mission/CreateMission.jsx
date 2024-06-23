@@ -14,7 +14,7 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 
 import Header from "~/components/common/Header";
 import DueDateBottomSheet from "../../components/Mission/DueDateBottomSheet";
-import { normalizeNumber } from "../../utils/normalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import missionOptions from "~/assets/data/missionOptions.json";
 import { missionList } from "~/assets/data/missionList.jsx";
@@ -128,16 +128,29 @@ const CreateMission = () => {
           <S.Question>미션함</S.Question>
           <MissionOptionWrapper>
             {missionOptions.map((option) => (
-              <MissionOption key={option.status} selected={selectedOption?.status === option.status} onClick={() => handleOptionClick(option)}>
+              <MissionOption
+                key={option.status}
+                selected={selectedOption?.status === option.status}
+                onClick={() => handleOptionClick(option)}
+              >
                 {option.label}
               </MissionOption>
             ))}
           </MissionOptionWrapper>
           <S.CardContainer tw="m-1">
             {filteredMissions.map((mission) => (
-              <MissionCard key={mission.id} onClick={() => handleMissionCardClick(mission.content)}>
+              <MissionCard
+                key={mission.id}
+                onClick={() => handleMissionCardClick(mission.content)}
+              >
                 <MissionContent>{mission.content}</MissionContent>
-                <MissionImage src={mission.img} alt={mission.content} special={mission.id === 8 || mission.id === 20 ? "true" : undefined} />
+                <MissionImage
+                  src={mission.img}
+                  alt={mission.content}
+                  special={
+                    mission.id === 8 || mission.id === 20 ? "true" : undefined
+                  }
+                />
               </MissionCard>
             ))}
           </S.CardContainer>

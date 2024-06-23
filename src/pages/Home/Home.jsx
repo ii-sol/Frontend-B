@@ -27,7 +27,7 @@ import Profile7 from "~/assets/img/common/character/character_pli.svg";
 import Profile8 from "~/assets/img/common/character/character_lay.svg";
 import { setSelectedChildSn } from "../../store/reducers/Auth/user";
 import { fetchChildInfo } from "../../services/home";
-import { normalizeNumber } from "../../utils/normalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 const Home = () => {
   const dispatch = useDispatch();

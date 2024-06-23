@@ -7,7 +7,7 @@ import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 
 import Header from "~/components/common/Header";
-import { normalizeNumber } from "../../utils/normalizeNumber";
+import { normalizeNumber } from "../../utils/NormalizeNumber";
 
 import CompleteImage from "~/assets/img/common/complete.svg";
 
