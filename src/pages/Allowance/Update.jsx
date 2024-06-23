@@ -4,14 +4,14 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchUserInfo } from "../../services/user";
-import { updateRegularAllowance } from "../../services/allowance";
+import { createRegularAllowance } from "../../services/allowance";
 import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import Header from "~/components/common/Header";
 
-const Registration = () => {
+const Update = () => {
   const [step, setStep] = useState(0);
   const [amount, setAmount] = useState("");
   const [period, setPeriod] = useState("");
@@ -83,16 +83,15 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
-      await updateRegularAllowance(allowanceId, {
-        //TODO: allowanceId 어떻게 가져옴?
+      await createRegularAllowance(selectedChildSn, {
         amount: parseInt(amount),
         period: parseInt(period),
       });
-      alert("정기 용돈이 성공적으로 등록되었습니다.");
+      alert("정기 용돈이 성공적으로 변경되었습니다.");
       navigate("/allowance");
     } catch (error) {
       console.error("Error creating regular allowance:", error);
-      alert("정기 용돈 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      alert("정기 용돈 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -122,7 +121,6 @@ const Registration = () => {
       {step === 1 && (
         <CompleteContainer>
           <ResultWrapper>
-            <ResultPhrase>{childName} 님에게</ResultPhrase>
             <ResultPhrase>
               <span tw="text-blue-800">{normalizeNumber(amount)}원</span>을
             </ResultPhrase>
@@ -141,7 +139,7 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Update;
 
 const StepWrapper = styled.div`
   ${tw`flex flex-col gap-10`}

@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchRegularAllowance, fetchAllowanceRequest, createDecision } from "../../services/allowance";
 import { format, differenceInDays } from "date-fns";
+import { useSelector } from "react-redux";
 
 import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";

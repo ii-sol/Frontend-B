@@ -9,7 +9,7 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 
 import Header from "~/components/common/Header";
 import DueDateBottomSheet from "../../components/Mission/DueDateBottomSheet";
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import missionOptions from "~/assets/data/missionOptions.json";
 import { missionList } from "~/assets/data/missionList.jsx";

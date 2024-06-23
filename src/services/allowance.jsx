@@ -2,7 +2,7 @@ import { baseInstance } from "./api";
 
 export const fetchRegularAllowance = async (csn) => {
   try {
-    const response = await baseInstance.get(`/allowances/monthly?csn=${csn}`);
+    const response = await baseInstance.get(`/allowance/monthly?csn=${csn}`);
 
     if (response.data.success) {
       return response.data.response;
@@ -30,7 +30,7 @@ export const fetchAllowanceRequest = async (csn) => {
 
 export const createDecision = async (id, accept) => {
   try {
-    const response = await baseInstance.post(`/allowances/temporal?temporalAllowanceId=${id}&accept=${accept}`);
+    const response = await baseInstance.post(`/allowance/temporal?temporalAllowanceId=${id}&accept=${accept}`);
 
     if (response.data.success) {
       return response.data.response;
@@ -44,7 +44,49 @@ export const createDecision = async (id, accept) => {
 
 export const fetchAllowanceHistory = async (year, month, csn) => {
   try {
-    const response = await baseInstance.get(`/allowances/history?year=${year}&month=${month}?csn=${csn}`);
+    const response = await baseInstance.get(`/allowance/history?year=${year}&month=${month}?csn=${csn}`);
+
+    if (response.data.success) {
+      return response.data.response;
+    } else {
+      return response.data.error.message;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createRegularAllowance = async (csn, data) => {
+  try {
+    const response = await baseInstance.post(`/allowance/regular/${csn}`, data);
+
+    if (response.data.success) {
+      return response.data.response;
+    } else {
+      return response.data.error.message;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateRegularAllowance = async (allowanceId, data) => {
+  try {
+    const response = await baseInstance.post(`/allowance/regular/${allowanceId}`, data);
+
+    if (response.data.success) {
+      return response.data.response;
+    } else {
+      return response.data.error.message;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteRegularAllowance = async (allowanceId) => {
+  try {
+    const response = await baseInstance.delete(`/allowance/monthly/${allowanceId}`);
 
     if (response.data.success) {
       return response.data.response;

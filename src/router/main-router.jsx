@@ -18,6 +18,7 @@ import AccountHistory from "../pages/Account/History.jsx";
 import AllowanceManagement from "../pages/Allowance/Management.jsx";
 import AllowanceRegistration from "../pages/Allowance/Registration.jsx";
 import AllowanceHistory from "../pages/Allowance/History.jsx";
+import AllowanceUpdate from "../pages/Allowance/Update.jsx";
 
 import Mission from "../pages/Mission/Mission.jsx";
 import CreateMission from "../pages/Mission/CreateMission.jsx";
@@ -60,6 +61,7 @@ const MainRouter = createBrowserRouter([
         children: [
           { path: "", element: <AllowanceManagement /> },
           { path: "registration", element: <AllowanceRegistration /> },
+          { path: "update", element: <AllowanceUpdate /> },
           { path: "history", element: <AllowanceHistory /> },
         ],
       },

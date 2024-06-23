@@ -2,14 +2,30 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
+import { deleteRegularAllowance } from "../../services/allowance";
 
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 const RegularAllowanceCard = ({ regularAllowance }) => {
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
     navigate("/allowance/registration");
+  };
+
+  const handleUpdateClick = () => {
+    navigate("/allowance/update");
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await deleteRegularAllowance(allowanceId); //TODO: allowanceId 어떻게 가져옴?
+      alert("정기 용돈이 성공적으로 삭제되었습니다.");
+      navigate("/allowance");
+    } catch (error) {
+      console.error("Error creating regular allowance:", error);
+      alert("정기 용돈 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   if (!regularAllowance || regularAllowance.length === 0) {
@@ -30,8 +46,8 @@ const RegularAllowanceCard = ({ regularAllowance }) => {
         </Period>
       </Content>
       <ButtonWrapper>
-        <Button onClick={handleRegisterClick}>변경하기</Button>
-        <Button>해지하기</Button>
+        <Button onClick={handleUpdateClick}>변경하기</Button>
+        <Button onClick={handleDeleteClick}>해지하기</Button>
       </ButtonWrapper>
     </Container>
   );

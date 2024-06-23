@@ -3,7 +3,7 @@ import tw from "twin.macro";
 import { styled } from "styled-components";
 
 import Keypad from "../common/Keypad";
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import CoinImage from "~/assets/img/Allowance/coin.svg";
 
