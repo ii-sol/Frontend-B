@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import Header from "../../components/common/Header";
 import { MdArrowBackIos } from "react-icons/md";
+import { baseInstance } from "../../services/api.jsx";
 
 const LoanDetail = () => {
   const { loanId } = useParams();
@@ -57,12 +58,12 @@ const LoanDetail = () => {
   };
 
   useEffect(() => {
+    const baseUrl = `/loan/detail/${loanId}`;
+
     if (loanId !== undefined) {
       const fetchLoanDetail = async () => {
         try {
-          const response = await axios.get(
-            `http://localhost:8082/loan/detail/${loanId}`
-          );
+          const response = await baseInstance.get(baseUrl);
           const data = response.data.response;
 
           console.log(data);
@@ -86,10 +87,9 @@ const LoanDetail = () => {
   }, [loanId]);
 
   const handleClickAccept = async () => {
+    const acceptBaseUrl = `/loan/accept?loanId=${loanId}`;
     try {
-      const res = await axios.post(
-        `http://localhost:8082/loan/accept?loanId=${loanId}`
-      );
+      const res = await baseInstance.post(acceptBaseUrl);
       navigate("/loan/main");
     } catch (error) {
       console.error("Failed to send Accept", error);
@@ -97,10 +97,9 @@ const LoanDetail = () => {
   };
 
   const handleClickRefuse = async () => {
+    const refuseBaseUrl = `/loan/refuse?loanId=${loanId}`;
     try {
-      const res = await axios.post(
-        `http://localhost:8082/loan/refuse?loanId=${loanId}`
-      );
+      const res = await baseInstance.post(refuseBaseUrl);
       navigate("/loan/main");
     } catch (error) {
       console.error("Failed to send Accept", error);

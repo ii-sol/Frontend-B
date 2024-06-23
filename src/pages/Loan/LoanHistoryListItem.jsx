@@ -5,7 +5,8 @@ import * as S from "../../styles/GlobalStyles";
 import EmptyImage from "~/assets/img/common/empty.svg";
 import LoanHistoryCard from "../../components/Loan/LoanHistoryCard";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { baseInstance } from "../../services/api.jsx";
 
 const LoanHistoryListItem = () => {
   const [data, setData] = useState([]);
@@ -13,10 +14,13 @@ const LoanHistoryListItem = () => {
   const year = useSelector((state) => state.history.year);
   const month = useSelector((state) => state.history.month);
   const navigate = useNavigate();
+
   useEffect(() => {
-    fetch("http://localhost:8082/loan")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchLoanData = async () => {
+      try {
+        const response = await baseInstance.get("/loan");
+        const data = response.data;
+
         if (data.success) {
           // Filter data by status
           const filteredByStatus = data.response.filter(
@@ -37,10 +41,12 @@ const LoanHistoryListItem = () => {
         } else {
           console.error("Failed to fetch data:", data.error);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
+      }
+    };
+
+    fetchLoanData();
   }, [status, year, month]);
 
   const handleProgress = (loanId) => {

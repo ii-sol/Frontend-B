@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import Header from "../../components/common/Header";
 import { MdArrowBackIos } from "react-icons/md";
+import { baseInstance } from "../../services/api.jsx";
 
 const LoanDetailHistory = () => {
   const { loanId } = useParams();
@@ -57,12 +58,12 @@ const LoanDetailHistory = () => {
   };
 
   useEffect(() => {
+    const baseUrl = `/loan/detail/${loanId}`;
+
     if (loanId !== undefined) {
       const fetchLoanDetail = async () => {
         try {
-          const response = await axios.get(
-            `http://localhost:8082/loan/detail/${loanId}`
-          );
+          const response = await baseInstance.get(baseUrl);
           const data = response.data.response;
 
           console.log(data);

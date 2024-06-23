@@ -11,9 +11,9 @@ const RequestCard = ({ status, name, title, dday, onClick }) => {
   };
   return (
     <Container onClick={onClick}>
-      <Img src={status === 2 ? SendIcon : ReceiveIcon} alt="Message Icon" />
+      <Img src={ReceiveIcon} alt="Message Icon" />
       <Content>
-        <Name>{status === 2 ? `To. ${name}` : `From. ${name}`}</Name>
+        <Name>{`From. ${name}`}</Name>
         <Title>{title}</Title>
       </Content>
       <StatusWrapper>
