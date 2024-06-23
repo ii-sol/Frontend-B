@@ -3,11 +3,22 @@ import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
-import { fetchRegularAllowance } from "../../services/allowance";
+import { fetchRegularAllowance, fetchAllowanceRequest } from "../../services/allowance";
 
 import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";
 import RegularAllowanceCard from "~/components/Allowance/RegularAllowanceCard";
+import EmptyImage from "~/assets/img/common/empty.svg";
+
+const calculateDday = (createDate) => {
+  const threeDaysLater = new Date(createDate);
+  threeDaysLater.setDate(threeDaysLater.getDate() + 3); // createDate에서 3일 후의 날짜
+
+  const today = new Date();
+  const dday = differenceInDays(threeDaysLater, today); // 오늘 날짜와 endDate 사이의 일 수 차이 계산
+
+  return dday;
+};
 
 const Management = () => {
   const [regularAllowance, setRegularAllowance] = useState(null);
@@ -24,7 +35,17 @@ const Management = () => {
       }
     };
 
+    const fetchIrregular = async () => {
+      try {
+        const allowanceRequest = await fetchAllowanceRequest(7730362896);
+        setRequestList(allowanceRequest);
+      } catch (error) {
+        console.error("Error fetching regular allowance:", error);
+      }
+    };
+
     fetchRegular();
+    fetchIrregular();
   }, []);
 
   const handleLeftClick = () => {
@@ -46,11 +67,19 @@ const Management = () => {
       <Menu>
         <S.Phrase>용돈 조르기</S.Phrase>
       </Menu>
-      <S.CardContainer>
-        <RequestCard dday={"0"} allowance={1000} message={"과자 먹고 싶어요"} />
-        <RequestCard dday={"3"} allowance={3000} message={"준비물 사야 해요"} />
-        <RequestCard dday={"5"} allowance={1000} message={"과자 먹고 싶어요"} />
-      </S.CardContainer>
+
+      {requestList.length === 0 ? (
+        <EmptyState>
+          <Img src={EmptyImage} alt="No data" />
+          <EmptyText>용돈 조르기 내역이 없어요</EmptyText>
+        </EmptyState>
+      ) : (
+        <S.CardContainer>
+          {requestList.map((request, index) => (
+            <RequestCard key={index} dday={calculateDday(request.createDate)} allowance={request.amount} message={request.content} />
+          ))}
+        </S.CardContainer>
+      )}
     </S.Container>
   );
 };
@@ -64,4 +93,17 @@ const Menu = styled.div`
   items-center
   `}
   grid-template-columns: auto auto;
+`;
+
+const EmptyState = styled.div`
+  ${tw`flex flex-col items-center justify-center h-full mt-20`}
+`;
+
+const Img = styled.img`
+  ${tw`h-auto mb-4`}
+  width: 40%
+`;
+
+const EmptyText = styled.div`
+  ${tw`text-2xl`}
 `;
