@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setContent, setPrice, setDueDate, setInitialState } from "../../store/reducers/Mission/mission";
+import { setContent, setPrice, setParentSn, setChildSn, setInitialState } from "../../store/reducers/Mission/mission";
+import { createMissionRequest } from "../../services/mission";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
@@ -20,8 +21,16 @@ const CreateMission = () => {
   const [selectedOption, setSelectedOption] = useState(missionOptions[0]);
   const navigate = useNavigate();
 
+  const csn = useSelector((state) => state.user.selectedChildSn);
+  const psn = useSelector((state) => state.user.userInfo.sn);
+
   const requestData = useSelector((state) => state.mission);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setChildSn(csn));
+    dispatch(setParentSn(psn));
+  }, []);
 
   const filteredMissions = selectedOption ? missionList.filter((mission) => mission.type === selectedOption.status) : missionList;
 
@@ -63,9 +72,14 @@ const CreateMission = () => {
     dispatch(setPrice(value));
   };
 
-  const handleNext = () => {
+  const handleSubmit = async () => {
     if (requestData.dueDate && requestData.content && requestData.price) {
-      navigate("/mission/create/complete");
+      try {
+        await createMissionRequest(requestData);
+        navigate("/mission/create/complete");
+      } catch (error) {
+        console.error("Error creating mission request:", error);
+      }
     } else {
       alert("미션, 금액, 완료일을 모두 입력해주세요!");
     }
@@ -96,7 +110,7 @@ const CreateMission = () => {
             </StyledWrapper>
           </StyledInputWrapper>
         </div>
-        <S.BottomBtn onClick={handleNext}>다음</S.BottomBtn>
+        <S.BottomBtn onClick={handleSubmit}>요청하기</S.BottomBtn>
       </StepWrapper>
 
       <BottomSheet open={openMissionList} onDismiss={handleDismissMissionList}>

@@ -21,7 +21,7 @@ const DueDateBottomSheet = ({ requestData, dispatch, open, onDismiss }) => {
       dispatch(setDueDate(selectedDate.toLocaleDateString()));
       onDismiss();
     } else if (noDueDateSelected) {
-      dispatch(setDueDate("완료일 없음"));
+      dispatch(setDueDate(""));
       onDismiss();
     } else {
       dispatch(setDueDate(""));
@@ -32,7 +32,7 @@ const DueDateBottomSheet = ({ requestData, dispatch, open, onDismiss }) => {
   const handleNoDueDate = () => {
     setSelectedDate("");
     if (!noDueDateSelected) {
-      dispatch(setDueDate("완료일 없음"));
+      dispatch(setDueDate(""));
       setNoDueDateSelected(true);
     } else {
       dispatch(setDueDate(""));
