@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setInitialState } from "../../store/reducers/Mission/mission";
+import { fetchUserInfo } from "../../services/user";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
@@ -13,17 +14,41 @@ import CompleteImage from "~/assets/img/common/complete.svg";
 
 const CreateMissionComplete = () => {
   const requestData = useSelector((state) => state.mission);
+  const [childName, setChildName] = useState("");
   const dispatch = useDispatch();
 
   const today = new Date();
-  const dueDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
+  const dueDate = new Date(requestData.dueDate);
+  const threeDaysFromNow = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
 
-  const year = dueDate.getFullYear();
-  const month = (dueDate.getMonth() + 1).toString().padStart(2, "0");
-  const day = dueDate.getDate().toString().padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}`;
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  };
+
+  let formattedDate;
+  if (dueDate - today <= 2 * 24 * 60 * 60 * 1000) {
+    formattedDate = formatDate(dueDate);
+  } else {
+    formattedDate = formatDate(threeDaysFromNow);
+  }
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo(requestData.childSn);
+        setChildName(userInfo.name);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchInfo();
+  }, [requestData.childSn]);
 
   const handleLeftClick = () => {
     navigate("/mission");
@@ -43,10 +68,10 @@ const CreateMissionComplete = () => {
             <Img src={CompleteImage} alt="complete" />
             <S.Question>미션 요청 완료</S.Question>
             <S.CompleteCard tw="text-[20px]">
-              <div>{requestData.parentName}님에게</div>
-              <div>{requestData.content}를 요청했습니다.</div>
+              <div>{childName} 님에게</div>
+              <div>"{requestData.content}"를 요청했습니다.</div>
               <div tw="text-[#154B9B]">{normalizeNumber(requestData.price)}원</div>
-              <div>미션 완료일 : {requestData.dueDate}</div>
+              <div>미션 완료일 : {isNaN(dueDate) ? "완료일 없음" : formatDate(dueDate)}</div>
             </S.CompleteCard>
             <div tw="text-xs">
               <span tw="text-[#154B9B]">{formattedDate}</span>까지 응답하지 않으면 취소돼요.

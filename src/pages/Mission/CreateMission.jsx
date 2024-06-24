@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setContent, setPrice, setParentSn, setChildSn, setInitialState } from "../../store/reducers/Mission/mission";
+import { setContent, setPrice, setParentSn, setChildSn, setDueDate, setInitialState } from "../../store/reducers/Mission/mission";
 import { createMissionRequest } from "../../services/mission";
 import tw from "twin.macro";
 import { styled } from "styled-components";
@@ -23,8 +23,9 @@ const CreateMission = () => {
 
   const csn = useSelector((state) => state.user.selectedChildSn);
   const psn = useSelector((state) => state.user.userInfo.sn);
-
+  const familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
   const requestData = useSelector((state) => state.mission);
+  const requestDueDate = requestData.dueDate;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,8 +75,19 @@ const CreateMission = () => {
 
   const handleSubmit = async () => {
     if (requestData.dueDate && requestData.content && requestData.price) {
+      if (typeof requestDueDate === "string") {
+        if (requestDueDate === "완료일 없음") {
+          dispatch(setDueDate(""));
+        } else {
+          const [year, month, day] = requestDueDate.split(". ").map((part) => parseInt(part));
+          const dueDate = new Date(year, month - 1, day, 23, 59, 59).getTime();
+          dispatch(setDueDate(dueDate));
+        }
+      }
+
       try {
-        await createMissionRequest(requestData);
+        const data = { childSn: requestData.childSn, parentsSn: requestData.parentSn, dueDate: requestData.dueDate, price: requestData.price, content: requestData.content };
+        await createMissionRequest(data);
         navigate("/mission/create/complete");
       } catch (error) {
         console.error("Error creating mission request:", error);
