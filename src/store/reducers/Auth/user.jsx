@@ -38,9 +38,13 @@ const userSlice = createSlice({
     setSelectedChildSn(state, action) {
       state.selectedChildSn = action.payload;
     },
+    removeChild(state, action) {
+      const snToRemove = action.payload;
+      state.userInfo.familyInfo = state.userInfo.familyInfo.filter((member) => member.sn !== snToRemove);
+    },
   },
 });
 
-export const { loginSuccess, logout, setSelectedChildSn } = userSlice.actions;
+export const { loginSuccess, logout, setSelectedChildSn, removeChild } = userSlice.actions;
 
 export default userSlice.reducer;

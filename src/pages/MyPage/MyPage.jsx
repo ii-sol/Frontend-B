@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import { fetchUserInfo } from "../../services/user";
 import { useSelector, useDispatch } from "react-redux";
 import * as S from "../../styles/GlobalStyles";
-import { setFamilyInfo } from "../../store/reducers/common/family";
+import { setChildInfo } from "../../store/reducers/common/family";
 
 import Header from "~/components/common/Header";
 import Profile from "~/components/MyPage/Profile";
@@ -23,8 +23,8 @@ const MyPage = () => {
   const dispatch = useDispatch();
 
   const sn = useSelector((state) => state.user.userInfo.sn);
-  const accessToken = useSelector((state) => state.user.accessToken);
   const familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
+  const childInfo = useSelector((state) => state.family.childInfo);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,12 +35,8 @@ const MyPage = () => {
           const familyProfiles = await Promise.all(
             familyInfo.map(async (member, index) => {
               const memberInfo = await fetchUserInfo(member.sn);
-              const selectedProfile = availableProfiles.find(
-                (profile) => profile.id === memberInfo.profileId
-              );
-              const profileImageSrc = selectedProfile
-                ? selectedProfile.src
-                : profiles[0].src;
+              const selectedProfile = availableProfiles.find((profile) => profile.id === memberInfo.profileId);
+              const profileImageSrc = selectedProfile ? selectedProfile.src : profiles[0].src;
               return {
                 id: index,
                 sn: member.sn,
@@ -53,7 +49,7 @@ const MyPage = () => {
             })
           );
           setProfiles(familyProfiles);
-          dispatch(setFamilyInfo(familyProfiles));
+          dispatch(setChildInfo(familyProfiles));
         }
       } catch (error) {
         console.error(error);
@@ -77,20 +73,13 @@ const MyPage = () => {
     <S.Container>
       <Header onLeftClick={handleLeftClick} title={"마이페이지"} right={""} />
       <S.StepWrapper>
-        {userInfo ? (
-          <Profile userInfo={userInfo} />
-        ) : (
-          <LoadingPlaceholder>Loading...</LoadingPlaceholder>
-        )}
+        {userInfo ? <Profile userInfo={userInfo} /> : <LoadingPlaceholder>Loading...</LoadingPlaceholder>}
         <Management>
           <S.Phrase>연결 관리</S.Phrase>
         </Management>
         <MemberGrid>
           {profiles.map((profile) => (
-            <ProfileWrapper
-              key={profile.id}
-              onClick={() => handleChildClick(profile.id)}
-            >
+            <ProfileWrapper key={profile.id} onClick={() => handleChildClick(profile.id)}>
               <ProfileImage src={profile.src} />
               <ProfileName>{profile.name}</ProfileName>
             </ProfileWrapper>

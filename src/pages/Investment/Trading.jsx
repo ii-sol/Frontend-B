@@ -52,19 +52,12 @@ const Trading = () => {
       <Header type="none" />
       <StocksAbout />
       <ColumDiv>
-        {trade === 0 ? (
-          <InfoDiv>얼마나 살까요?</InfoDiv>
-        ) : (
-          <InfoDiv>얼마나 팔까요?</InfoDiv>
-        )}
+        {trade === 0 ? <InfoDiv>얼마나 살까요?</InfoDiv> : <InfoDiv>얼마나 팔까요?</InfoDiv>}
         <Amount>
           {normalizeNumber(displayedNumber)} <span>주</span>
         </Amount>
         <Div>주문금액 {normalizeNumber(getOrderAmount())}원</Div>
-        <Keypad
-          onNumberClick={handleNumberClick}
-          onBackspace={handleBackspace}
-        />
+        <Keypad onNumberClick={handleNumberClick} onBackspace={handleBackspace} />
         {trade === 0 ? (
           <S.BuyBtn $background="#FF5959" onClick={() => onTrade()}>
             구매하기

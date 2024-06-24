@@ -16,20 +16,32 @@ const HistoryListItem = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.allowance.data);
   const loading = useSelector((state) => state.allowance.loading);
-  const { year, month } = useSelector((state) => state.history);
-  const { status } = useSelector((state) => state.history);
+  const { year, month, status } = useSelector((state) => state.history);
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
 
   useEffect(() => {
-    dispatch(fetchAllowanceHistory({ year: year, month: month, csn: selectedChildSn }));
-  }, [dispatch, year, month]);
+    dispatch(fetchAllowanceHistory({ year, month, csn: selectedChildSn }));
+  }, [dispatch, year, month, selectedChildSn]);
+
+  const filterData = (data) => {
+    if (status === 0) {
+      return data;
+    } else if (status === 1) {
+      return data.filter((item) => item.type === "일시용돈");
+    } else if (status === 2) {
+      return data.filter((item) => item.type === "정기용돈");
+    }
+    return data;
+  };
+
+  const filteredData = filterData(data);
 
   const renderItem = (item) => {
-    if (item.status === 1) {
-      return <RequestCardP key={item.id} allowance={item.amount} img={CardImg} message={item.content} />;
-    } else if (item.status === 2) {
-      return <RegularAllowanceHistoryCard key={item.id} allowance={item.amount} />;
+    if (item.type === "일시용돈" && item.status === 4) {
+      return <RequestCardP key={item.id} allowance={item.amount} img={CardImg} message={item.content} createDate={item.createDate} />;
+    } else if (item.type === "정기용돈") {
+      return <RegularAllowanceHistoryCard key={item.id} allowance={item.amount} createDate={item.createDate} />;
     }
     return null;
   };
@@ -43,13 +55,13 @@ const HistoryListItem = () => {
           </LoadingState>
         ) : (
           <>
-            {data.length === 0 ? (
+            {filteredData.length === 0 ? (
               <EmptyState>
                 <Img src={EmptyImage} alt="No data" />
                 <EmptyText>용돈 내역이 없어요</EmptyText>
               </EmptyState>
             ) : (
-              <S.CardContainer>{data.map((item) => renderItem(item))}</S.CardContainer>
+              <S.CardContainer>{filteredData.map((item) => renderItem(item))}</S.CardContainer>
             )}
           </>
         )}
@@ -72,7 +84,7 @@ const EmptyState = styled.div`
 
 const Img = styled.img`
   ${tw`h-auto mb-4`}
-  width: 40%
+  width: 40%;
 `;
 
 const EmptyText = styled.div`

@@ -13,13 +13,16 @@ import RegularAllowanceCard from "~/components/Allowance/RegularAllowanceCard";
 import EmptyImage from "~/assets/img/common/empty.svg";
 
 const calculateDday = (createDate) => {
-  const threeDaysLater = new Date(createDate);
+  const [year, month, day, hours, minutes, seconds] = createDate;
+  const convertedCreateDate = new Date(year, month - 1, day, hours, minutes, seconds);
+
+  const threeDaysLater = new Date(convertedCreateDate);
   threeDaysLater.setDate(threeDaysLater.getDate() + 3); // createDate에서 3일 후의 날짜
 
   const today = new Date();
   const dday = differenceInDays(threeDaysLater, today); // 오늘 날짜와 endDate 사이의 일 수 차이 계산
 
-  return dday;
+  return dday + 1;
 };
 
 const Management = () => {
@@ -61,8 +64,13 @@ const Management = () => {
   };
 
   const handleDecisionClick = async (id, accept) => {
+    const message = accept ? "수락하시겠습니까?" : "거절하시겠습니까?";
+    const confirmDecision = window.confirm(message);
+    if (!confirmDecision) return;
+
     try {
       await createDecision(id, accept);
+      setRequestList(requestList.filter((request) => request.id !== id));
     } catch (error) {
       console.error("Error accept allowance request:", error);
     }

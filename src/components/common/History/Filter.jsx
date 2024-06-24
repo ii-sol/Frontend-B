@@ -32,14 +32,6 @@ const Filter = () => {
     } else if (location.pathname === "/allowance/history") {
       const newOptions = [
         { label: "전체", status: 0 },
-        { label: "나간 돈", status: 1 },
-        { label: "들어온 돈", status: 2 },
-      ];
-      setOptions(newOptions);
-      setSelectedOption(newOptions[0]);
-    } else if (location.pathname === "/allowance/history-parent") {
-      const newOptions = [
-        { label: "전체", status: 0 },
         { label: "조르기", status: 1 },
         { label: "정기용돈", status: 2 },
       ];
@@ -81,11 +73,7 @@ const Filter = () => {
   return (
     <Container>
       {options.map((option) => (
-        <Button
-          key={option.status}
-          selected={selectedOption?.status === option.status}
-          onClick={() => handleOptionClick(option)}
-        >
+        <Button key={option.status} selected={selectedOption?.status === option.status} onClick={() => handleOptionClick(option)}>
           {option.label}
         </Button>
       ))}

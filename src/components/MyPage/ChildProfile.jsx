@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 
-import profiles from "../../assets/data/profileImages";
 import { getCredibility } from "../../utils/getCredibility";
 
 const ChildProfile = ({ childInfo }) => {
@@ -12,17 +11,14 @@ const ChildProfile = ({ childInfo }) => {
     name: childInfo.name,
     birthDate: initialBirthDateString,
     phoneNum: childInfo.phoneNum,
-    profileId: childInfo.profileId,
+    profileSrc: childInfo.src,
     credibility: getCredibility(childInfo.score),
   });
-
-  const selectedProfile = profiles.find((profile) => profile.id === profileData.profileId);
-  const profileImageSrc = selectedProfile ? selectedProfile.src : profiles[0].src;
 
   return (
     <Container>
       <ProfileWrapper>
-        <ProfileImage src={profileImageSrc} alt="프로필 이미지" />
+        <ProfileImage src={profileData.profileSrc} alt="프로필 이미지" />
         <InfoWrapper>
           <Info>
             이름: <span>{profileData.name}</span>
