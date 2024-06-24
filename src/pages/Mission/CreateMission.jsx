@@ -75,18 +75,21 @@ const CreateMission = () => {
 
   const handleSubmit = async () => {
     if (requestData.dueDate && requestData.content && requestData.price) {
+      let finalDueDate = requestData.dueDate;
       if (typeof requestDueDate === "string") {
         if (requestDueDate === "완료일 없음") {
-          dispatch(setDueDate(""));
+          finalDueDate = "";
         } else {
           const [year, month, day] = requestDueDate.split(". ").map((part) => parseInt(part));
-          const dueDate = new Date(year, month - 1, day, 23, 59, 59).getTime();
-          dispatch(setDueDate(dueDate));
+          finalDueDate = new Date(year, month - 1, day, 23, 59, 59).getTime();
         }
       }
 
+      dispatch(setDueDate(finalDueDate));
+
       try {
-        const data = { childSn: requestData.childSn, parentsSn: requestData.parentSn, dueDate: requestData.dueDate, price: requestData.price, content: requestData.content };
+        const data = { childSn: requestData.childSn, parentsSn: requestData.parentSn, dueDate: finalDueDate, price: requestData.price, content: requestData.content };
+        console.log(data);
         await createMissionRequest(data);
         navigate("/mission/create/complete");
       } catch (error) {
