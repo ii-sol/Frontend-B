@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { useSelector } from "react-redux";
 import EmptyImage from "~/assets/img/common/empty.svg";
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 import { groupDataByDate } from "../../utils/groupDataByDate";
 
 const TradeHistoryList = () => {
@@ -226,9 +226,7 @@ const TradeHistoryList = () => {
   };
 
   const groupedData = groupDataByDate(data);
-  const sortedGroupedData = Object.keys(groupedData).sort(
-    (a, b) => new Date(b) - new Date(a)
-  );
+  const sortedGroupedData = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
 
   const isLastItem = (date, index) => {
     return index === groupedData[date].length - 1;
@@ -263,9 +261,7 @@ const TradeHistoryList = () => {
                   <RowDiv>
                     <S.ColumnDiv style={{ position: "relative" }}>
                       <Name>{d.name}</Name>
-                      <Code style={{ position: "absolute", top: "25px" }}>
-                        {d.code}
-                      </Code>
+                      <Code style={{ position: "absolute", top: "25px" }}>{d.code}</Code>
                     </S.ColumnDiv>
                     <DetailDiv>
                       <Div>{normalizeNumber(d.price)}</Div>

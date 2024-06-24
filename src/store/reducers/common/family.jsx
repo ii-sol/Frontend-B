@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  familyInfo: [],
+  childInfo: [],
 };
 
 const familySlice = createSlice({
   name: "family",
   initialState: initialState,
   reducers: {
-    setFamilyInfo(state, action) {
-      state.familyInfo = [...state.familyInfo, ...action.payload];
+    setChildInfo(state, action) {
+      state.childInfo = action.payload;
     },
     removeChildFromFamily(state, action) {
-      state.familyInfo = state.familyInfo.filter((_, index) => index !== action.payload);
+      state.childInfo = state.childInfo.filter((child) => child.id !== action.payload);
     },
   },
 });
 
-export const { setFamilyInfo } = familySlice.actions;
+export const { setChildInfo, removeChildFromFamily } = familySlice.actions;
 
 export default familySlice.reducer;
