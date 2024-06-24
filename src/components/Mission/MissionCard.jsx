@@ -1,44 +1,58 @@
 import React, { useState } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
+import { useSelector } from "react-redux";
 
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import MissionImage from "~/assets/img/common/happySol.svg";
 
 const MissionCard = ({ status, dday, mission, allowance }) => {
   const [isClicked, setIsClicked] = useState(false);
 
+  const psn = useSelector((state) => state.user.userInfo.sn);
+  const csn = useSelector((state) => state.user.selectedChildSn);
+
   const handleCardClick = () => {
     setIsClicked(!isClicked);
+  };
+
+  const handleRejectClick = async () => {
+    try {
+      await acceptMissionRequest({ id: id, childSn: csn, parentSn: psn, answer: false });
+      navigate("/mission");
+    } catch (error) {
+      console.error("Error rejecting the mission:", error);
+    }
+  };
+
+  const handleAcceptClick = async () => {
+    try {
+      await acceptMissionRequest({ id: id, childSn: csn, parentSn: psn, answer: true });
+      navigate("/mission");
+    } catch (error) {
+      console.error("Error completing the mission:", error);
+    }
   };
 
   return (
     <Container onClick={handleCardClick}>
       <Content>
-        {status && (
-          <StatusTag status={status}>
-            {status === "6" ? "다 했어요!" : status}
-          </StatusTag>
-        )}
-        {dday && (
-          <StatusTag dday={dday}>
-            {parseInt(dday, 10) === 0 ? "D-day" : `D-${dday}`}
-          </StatusTag>
-        )}
+        {status && <StatusTag status={status}>{status === 6 ? "다 했어요!" : status}</StatusTag>}
+        {dday && <StatusTag dday={dday}>{parseInt(dday, 10) === 0 ? "D-day" : `D-${dday}`}</StatusTag>}
         <Mission>{mission}</Mission>
         <Allowance>{normalizeNumber(allowance)}원</Allowance>
       </Content>
-      {status === "6" || status === "완료" ? (
-        <Img src={MissionImage} alt="아이콘" />
-      ) : (
-        <></>
-      )}
-      {status === "6" && isClicked && (
+      {status === 6 || status === "완료" ? <Img src={MissionImage} alt="아이콘" /> : <></>}
+      {status === 6 && isClicked && (
         <Overlay>
           <ButtonContainer>
-            <ActionButton text="거절">거절</ActionButton>
-            <ActionButton text="수락">수락</ActionButton>
+            <ActionButton text="거절" onClick={handleRejectClick}>
+              거절
+            </ActionButton>
+            <ActionButton text="수락" onClick={handleAcceptClick}>
+              수락
+            </ActionButton>
           </ButtonContainer>
         </Overlay>
       )}
@@ -79,18 +93,8 @@ const StatusTag = styled.div`
   padding: 4px 8px;
   margin: 3px 0px;
   border-radius: 5px;
-  color: ${({ status, dday }) =>
-    status === "취소" || status === "6" || dday === "0"
-      ? "#CC3535"
-      : status || dday
-      ? "#346BAC"
-      : "#000000"};
-  background-color: ${({ status, dday }) =>
-    status === "취소" || status === "6" || dday === "0"
-      ? "#FFDCDC"
-      : status || dday
-      ? "#D5E0F1"
-      : "#FFFFFF"};
+  color: ${({ status, dday }) => (status === "취소" || status === 6 || dday === "0" ? "#CC3535" : status || dday ? "#346BAC" : "#000000")};
+  background-color: ${({ status, dday }) => (status === "취소" || status === 6 || dday === "0" ? "#FFDCDC" : status || dday ? "#D5E0F1" : "#FFFFFF")};
 `;
 
 const Mission = styled.div`

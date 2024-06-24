@@ -8,13 +8,10 @@ import { FiEdit2 } from "react-icons/fi";
 import { FiSave } from "react-icons/fi";
 import { deleteChild } from "../../services/user";
 import removeChildFromFamily from "../../store/reducers/common/family";
-import {
-  fetchChildManagementInfo,
-  updateChildManagementInfo,
-} from "../../services/user";
+import { fetchChildManagementInfo, updateChildManagementInfo } from "../../services/user";
 import { setFormData } from "../../store/reducers/common/management";
 
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import Header from "~/components/common/Header";
 import ChildProfile from "~/components/MyPage/ChildProfile";
@@ -112,11 +109,7 @@ const ChildManagement = () => {
       <Header onLeftClick={handleLeftClick} title={"아이 관리"} right={""} />
 
       <S.StepWrapper>
-        {childInfo ? (
-          <ChildProfile childInfo={childInfo} />
-        ) : (
-          <LoadingPlaceholder>Loading...</LoadingPlaceholder>
-        )}
+        {childInfo ? <ChildProfile childInfo={childInfo} /> : <LoadingPlaceholder>Loading...</LoadingPlaceholder>}
         <Management>
           <S.Phrase>아이 관리</S.Phrase>
           {isEditing ? (
@@ -132,46 +125,19 @@ const ChildManagement = () => {
         <ManagementDetails>
           <DetailItem>
             <DetailLabel>기준금리</DetailLabel>
-            {isEditing ? (
-              <DetailInput
-                type="text"
-                name="baseRate"
-                value={formData.baseRate}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <DetailValue>{formData.baseRate} %</DetailValue>
-            )}
+            {isEditing ? <DetailInput type="text" name="baseRate" value={formData.baseRate} onChange={handleInputChange} /> : <DetailValue>{formData.baseRate} %</DetailValue>}
           </DetailItem>
           <DetailItem>
             <DetailLabel>투자상한액</DetailLabel>
             {isEditing ? (
-              <DetailInput
-                type="text"
-                name="investLimit"
-                value={formData.investLimit}
-                onChange={handleInputChange}
-              />
+              <DetailInput type="text" name="investLimit" value={formData.investLimit} onChange={handleInputChange} />
             ) : (
-              <DetailValue>
-                {normalizeNumber(formData.investLimit)} 원
-              </DetailValue>
+              <DetailValue>{normalizeNumber(formData.investLimit)} 원</DetailValue>
             )}
           </DetailItem>
           <DetailItem>
             <DetailLabel>대출상한액</DetailLabel>
-            {isEditing ? (
-              <DetailInput
-                type="text"
-                name="loanLimit"
-                value={formData.loanLimit}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <DetailValue>
-                {normalizeNumber(formData.loanLimit)} 원
-              </DetailValue>
-            )}
+            {isEditing ? <DetailInput type="text" name="loanLimit" value={formData.loanLimit} onChange={handleInputChange} /> : <DetailValue>{normalizeNumber(formData.loanLimit)} 원</DetailValue>}
           </DetailItem>
         </ManagementDetails>
         <DeleteButton onClick={handleDeleteClick}>아이 삭제</DeleteButton>

@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 
-import { normalizeNumber } from "../../utils/NormalizeNumber";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import Header from "~/components/common/Header";
 
@@ -57,23 +57,13 @@ const Registration = () => {
 
   return (
     <S.Container>
-      <Header
-        onLeftClick={handleLeftClick}
-        title={"용돈"}
-        right={"취소"}
-        onRightClick={handleRightClick}
-      />
+      <Header onLeftClick={handleLeftClick} title={"용돈"} right={"취소"} onRightClick={handleRightClick} />
       {step === 0 && (
         <StepWrapper>
           <div>
             <S.Phrase tw="text-[20px] ml-2">금액</S.Phrase>
             <StyledInputWrapper>
-              <StyledInput
-                type="text"
-                placeholder="매달 얼마나 보낼까요?"
-                value={amount === "" ? "" : normalizeNumber(amount)}
-                onChange={handleAmountChange}
-              />
+              <StyledInput type="text" placeholder="매달 얼마나 보낼까요?" value={amount === "" ? "" : normalizeNumber(amount)} onChange={handleAmountChange} />
               <StyledUnit>원</StyledUnit>
             </StyledInputWrapper>
             {error1 && <Error>{error1}</Error>}
@@ -81,12 +71,7 @@ const Registration = () => {
           <div>
             <S.Phrase tw="text-[20px] ml-2">기간</S.Phrase>
             <StyledInputWrapper>
-              <StyledInput
-                type="text"
-                placeholder="얼마 동안 보낼까요? (1~12)"
-                value={period}
-                onChange={handlePeriodChange}
-              />
+              <StyledInput type="text" placeholder="얼마 동안 보낼까요? (1~12)" value={period} onChange={handlePeriodChange} />
               <StyledUnit>개월</StyledUnit>
             </StyledInputWrapper>
             {error2 && <Error>{error2}</Error>}
@@ -103,9 +88,7 @@ const Registration = () => {
         </CompleteContainer>
       )}
       <S.ButtonWrapper>
-        <S.BottomBtn onClick={handleNext}>
-          {step === 0 ? "다음" : "보내기"}
-        </S.BottomBtn>
+        <S.BottomBtn onClick={handleNext}>{step === 0 ? "다음" : "보내기"}</S.BottomBtn>
       </S.ButtonWrapper>
     </S.Container>
   );
