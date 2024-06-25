@@ -5,13 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Indicator from "./Indicator";
 import CandleChart from "./CandleChart";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteMyStocks,
-  fetchStock,
-  postMyStocks,
-  setIsNew,
-  setTrade,
-} from "../../store/reducers/Invest/invest";
+import { deleteMyStocks, fetchStock, postMyStocks, setIsNew, setTrade } from "../../store/reducers/Invest/invest";
 import Chart from "./Chart";
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
@@ -25,9 +19,7 @@ const StocksDetail = ({ onDismiss }) => {
   const changePrice = useSelector((state) => state.invest.changePrice);
   const changeRate = useSelector((state) => state.invest.changeRate);
   const changeSign = useSelector((state) => state.invest.changeSign);
-  const tradableStockList = useSelector(
-    (state) => state.invest.tradableStockList
-  );
+  const tradableStockList = useSelector((state) => state.invest.tradableStockList);
   const isMyStock = useSelector((state) => state.invest.isMyStock);
 
   const isNew = useSelector((state) => state.invest.isNew);
@@ -77,11 +69,7 @@ const StocksDetail = ({ onDismiss }) => {
         <HeaderDiv>
           <StockDiv>{name}</StockDiv>
           <S.ColumnDiv style={{ color: color }}>
-<<<<<<< HEAD
-            <PriceDiv style={{ color: color }}>{normalizeNumber(price)}원</PriceDiv>
-=======
             <PriceDiv>{normalizeNumber(price)}원</PriceDiv>
->>>>>>> dev
             <PriceDiv>
               {sign}
               {normalizeNumber(changePrice)} {sign2}
@@ -96,17 +84,11 @@ const StocksDetail = ({ onDismiss }) => {
       <RowDiv $center="center" $top="20" $gap="20">
         <Btn
           onClick={() => {
-            !isOwnedStock
-              ? dispatch(postMyStocks({ csn: selectedChildSn, ticker: code }))
-              : dispatch(
-                  deleteMyStocks({ csn: selectedChildSn, ticker: code })
-                );
+            !isOwnedStock ? dispatch(postMyStocks({ csn: selectedChildSn, ticker: code })) : dispatch(deleteMyStocks({ csn: selectedChildSn, ticker: code }));
             onDismiss();
           }}
         >
-          {!isOwnedStock
-            ? "거래 가능 종목에 추가하기"
-            : "거래 가능 종목에서 삭제하기"}
+          {!isOwnedStock ? "거래 가능 종목에 추가하기" : "거래 가능 종목에서 삭제하기"}
         </Btn>
       </RowDiv>
     </Container>

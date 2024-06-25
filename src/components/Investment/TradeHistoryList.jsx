@@ -5,12 +5,8 @@ import * as S from "../../styles/GlobalStyles";
 import { useSelector } from "react-redux";
 import EmptyImage from "~/assets/img/common/empty.svg";
 import { normalizeNumber } from "../../utils/normalizeNumber";
-<<<<<<< HEAD
-import { groupDataByDate } from "../../utils/groupDataByDate";
-=======
 import { fetchInvestHistory } from "../../services/invest";
 import { groupDataByDatetwo } from "../../utils/groupDataByDatetwo";
->>>>>>> dev
 
 const TradeHistoryList = () => {
   const status = useSelector((state) => state.history.status);
@@ -52,15 +48,8 @@ const TradeHistoryList = () => {
     }
   };
 
-<<<<<<< HEAD
-  const groupedData = groupDataByDate(data);
-  const sortedGroupedData = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
-=======
   const groupedData = groupDataByDatetwo(data);
-  const sortedGroupedData = Object.keys(groupedData).sort(
-    (a, b) => new Date(b) - new Date(a)
-  );
->>>>>>> dev
+  const sortedGroupedData = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
 
   const isLastItem = (date, index) => {
     return index === groupedData[date].length - 1;
@@ -94,15 +83,8 @@ const TradeHistoryList = () => {
                   {renderBadge(d.tradingCode)}
                   <RowDiv>
                     <S.ColumnDiv style={{ position: "relative" }}>
-<<<<<<< HEAD
-                      <Name>{d.name}</Name>
-                      <Code style={{ position: "absolute", top: "25px" }}>{d.code}</Code>
-=======
                       <Name>{d.companyName}</Name>
-                      <Code style={{ position: "absolute", top: "25px" }}>
-                        {d.ticker}
-                      </Code>
->>>>>>> dev
+                      <Code style={{ position: "absolute", top: "25px" }}>{d.ticker}</Code>
                     </S.ColumnDiv>
                     <DetailDiv>
                       <Div>{normalizeNumber(d.stockPrice)}</Div>
