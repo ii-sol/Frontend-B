@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStock } from "../../store/reducers/Invest/invest";
+import {
+  fetchStock,
+  setPathVariable,
+} from "../../store/reducers/Invest/invest";
 import AreaChart from "./AreaChart";
 import CandleChart from "./CandleChart";
 import ToggleButton from "../common/ToggleButton";
@@ -14,6 +17,7 @@ const Chart = () => {
   const [chartType, setChartType] = useState("area");
 
   const handleClick = (chartType) => {
+    dispatch(setPathVariable(chartType));
     setSelected(chartType);
   };
 
@@ -62,6 +66,7 @@ const Container = styled.div`
     background: rgba(0, 55, 123, 0.5);
     border-radius: 4px;
     padding: 0px 2px 2px 2px;
+    z-index: 0;
   }
 `;
 

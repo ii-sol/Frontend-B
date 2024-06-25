@@ -3,25 +3,27 @@ import tw from "twin.macro";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const RequestCard = () => {
+const RequestCard = ({ data }) => {
   const navigate = useNavigate();
+  console.log(data);
+  const deadlineDate = new Date(data.createDate + 3 * 24 * 60 * 60 * 1000);
+  const currentDate = new Date();
+
+  const timeDiff = deadlineDate - currentDate;
+  const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+  const dDayString = daysRemaining === 0 ? "D-day" : `D-${daysRemaining}`;
   return (
-    <Container onClick={() => navigate("/invest/history/1")}>
+    <Container onClick={() => navigate(`/invest/history/${data.proposeId}`)}>
       <div>
-        <InfoDiv>
-          투자
-          <br /> 제안
-        </InfoDiv>
+        <InfoDiv>{data.tradingCode === 2 ? "매도" : "매수"}</InfoDiv>
       </div>
       <ColumnDiv>
-        <Name>삼성전자</Name>
-        <Div>100000원</Div>
-        <Div>3주</Div>
+        <Name>{data.companyName}</Name>
+        <Div>{data.quantity}주</Div>
       </ColumnDiv>
       <div tw="ml-auto">
-        <StatusTag $dday={3}>
-          {parseInt(3, 10) === 0 ? "D-day" : `D-3`}
-        </StatusTag>
+        <StatusTag $dday={daysRemaining}>{dDayString}</StatusTag>
       </div>
     </Container>
   );
