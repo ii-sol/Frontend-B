@@ -42,7 +42,14 @@ export const fetchOngoingMissions = async (sn) => {
 
 export const fetchMissionHistory = async (sn, year, month, status) => {
   try {
-    const response = await baseInstance.get(`/mission/${sn}/history?year=${year}&month=${month}&status=${status}`);
+    let response;
+    if (status === 0) {
+      response = await baseInstance.get(`/missions/${sn}/history?year=${year}&month=${month}`);
+    } else if (status === 1) {
+      response = await baseInstance.get(`/missions/${sn}/history?year=${year}&month=${month}&status=4`);
+    } else if (status === 2) {
+      response = await baseInstance.get(`/missions/${sn}/history?year=${year}&month=${month}&status=5`);
+    }
 
     return response.data.response;
   } catch (error) {

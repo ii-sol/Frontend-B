@@ -3,36 +3,36 @@ import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMissionHistory } from "../../store/reducers/Mission/mission";
+import { fetchMissionHistory } from "../../services/mission";
+import { setHistoryData } from "../../store/reducers/Mission/mission";
 import { PuffLoader } from "react-spinners";
 
 import MissionCard from "./MissionCard";
 
 import MissionImage from "~/assets/img/common/happySol.svg";
 import EmptyImage from "~/assets/img/common/empty.svg";
+import { useAsync } from "react-use";
 
 const MissionHistoryListItem = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.mission.historyData);
   const loading = useSelector((state) => state.mission.loading);
-  const { year, month } = useSelector((state) => state.history);
-  const { status } = useSelector((state) => state.history);
+  const { year, month, status } = useSelector((state) => state.history);
 
-  const sn = useSelector((state) => state.user.userInfo.sn);
+  const sn = useSelector((state) => state.user.selectedChildSn);
 
   useEffect(() => {
     const fetchHistory = async () => {
-      let params = { year: year, month: month, sn: sn };
-      if (status === 1) {
-        params.status = 4;
-      } else if (status === 2) {
-        params.status = 5;
+      try {
+        const responseData = await fetchMissionHistory(sn, year, month, status);
+        dispatch(setHistoryData(responseData));
+      } catch (error) {
+        console.error("Error fetching mission history:", error);
       }
-      dispatch(fetchMissionHistory(params));
     };
 
     fetchHistory();
-  }, [dispatch, year, month, status]);
+  }, [dispatch, year, month, status, sn]);
 
   return (
     <Container>
