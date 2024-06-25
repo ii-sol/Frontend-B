@@ -94,44 +94,24 @@ const Home = () => {
       <Wrapper>
         {selectedChildSn && isLoggedIn ? (
           <>
-            <div
-              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
-            >
+            <div style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}>
               {selectedChildName} 아이 <br />
               관리하기
             </div>
             <S.RowDiv style={{ gap: "20px" }}>
-              <img
-                src={mypage}
-                style={{ width: "42px" }}
-                onClick={() => navigate("/mypage")}
-              />
-              <img
-                src={noti}
-                style={{ width: "42px" }}
-                onClick={() => navigate("/notification")}
-              />
+              <img src={mypage} style={{ width: "42px" }} onClick={() => navigate("/mypage")} />
+              <img src={noti} style={{ width: "42px" }} onClick={() => navigate("/notification")} />
             </S.RowDiv>
           </>
         ) : isLoggedIn ? (
           <>
-            <div
-              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
-            >
+            <div style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}>
               아이를 <br />
               선택해주세요!
             </div>
             <S.RowDiv style={{ gap: "20px" }}>
-              <img
-                src={mypage}
-                style={{ width: "42px" }}
-                onClick={() => navigate("/mypage")}
-              />
-              <img
-                src={noti}
-                style={{ width: "42px" }}
-                onClick={() => navigate("/notification")}
-              />
+              <img src={mypage} style={{ width: "42px" }} onClick={() => navigate("/mypage")} />
+              <img src={noti} style={{ width: "42px" }} onClick={() => navigate("/notification")} />
             </S.RowDiv>
           </>
         ) : (
@@ -156,7 +136,6 @@ const Home = () => {
       ) : (
         <></>
       )}
-
       <S.CenterDiv>
         <Account />
       </S.CenterDiv>
@@ -242,8 +221,7 @@ const Wrapper = styled.div`
 
 const Btn = styled.div`
   position: relative;
-  width: ${(props) =>
-    props.$width === 1 ? "calc(57vw - 20px)" : "calc(43vw - 20px)"};
+  width: ${(props) => (props.$width === 1 ? "calc(57vw - 20px)" : "calc(43vw - 20px)")};
   height: 155px;
   border-radius: 15px;
   background: #ffffff;

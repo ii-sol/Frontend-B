@@ -41,22 +41,19 @@ const userSlice = createSlice({
     setSelectedChildSn(state, action) {
       state.selectedChildSn = action.payload;
     },
-
     setSelectedChildName(state, action) {
       state.selectedChildName = action.payload;
     },
     setClickedChildSn(state, action) {
       state.clickedChildSn = action.payload;
     },
+    removeChild(state, action) {
+      const snToRemove = action.payload;
+      state.userInfo.familyInfo = state.userInfo.familyInfo.filter((member) => member.sn !== snToRemove);
+    },
   },
-});
+}); 
 
-export const {
-  loginSuccess,
-  logout,
-  setSelectedChildSn,
-  setSelectedChildName,
-  setClickedChildSn,
-} = userSlice.actions;
+export const { loginSuccess, logout, setSelectedChildSn, setSelectedChildName, setClickedChildSn, removeChild } = userSlice.actions;
 
 export default userSlice.reducer;

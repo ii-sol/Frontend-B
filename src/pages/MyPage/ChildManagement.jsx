@@ -7,7 +7,8 @@ import * as S from "../../styles/GlobalStyles";
 import { FiEdit2 } from "react-icons/fi";
 import { FiSave } from "react-icons/fi";
 import { deleteChild } from "../../services/user";
-import removeChildFromFamily from "../../store/reducers/common/family";
+import { removeChildFromFamily } from "../../store/reducers/common/family";
+import { removeChild } from "../../store/reducers/Auth/user";
 import { fetchChildManagementInfo, updateChildManagementInfo } from "../../services/user";
 import { setFormData } from "../../store/reducers/common/management";
 
@@ -23,15 +24,14 @@ const ChildManagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const childInfo = useSelector((state) => state.family.familyInfo[id]);
+  const childInfo = useSelector((state) => state.family.childInfo[id]);
   const childSn = childInfo.sn;
-  const accessToken = useSelector((state) => state.user.accessToken);
   const formData = useSelector((state) => state.management.formData);
 
   useEffect(() => {
     const fetchChildManagement = async () => {
       try {
-        const data = await fetchChildManagementInfo(childSn, accessToken);
+        const data = await fetchChildManagementInfo(childSn);
         dispatch(
           setFormData({
             baseRate: data.baseRate,
@@ -45,7 +45,7 @@ const ChildManagement = () => {
     };
 
     fetchChildManagement();
-  }, [childSn, accessToken, dispatch]);
+  }, [childSn, dispatch]);
 
   const handleLeftClick = () => {
     navigate("/mypage");
@@ -65,7 +65,7 @@ const ChildManagement = () => {
         investLimit: formData.investLimit,
         loanLimit: formData.loanLimit,
       };
-      await updateChildManagementInfo(accessToken, newData);
+      await updateChildManagementInfo(newData);
       setIsEditing(false);
       alert("정보가 업데이트 되었습니다.");
     } catch (error) {
@@ -74,10 +74,17 @@ const ChildManagement = () => {
   };
 
   const handleDeleteClick = async () => {
+    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirmDelete) {
+      return;
+    }
+
     try {
-      await deleteChild(childSn, accessToken);
+      await deleteChild(childSn);
       dispatch(removeChildFromFamily(id));
-      alert("아이가 삭제에 성공했습니다.");
+      dispatch(removeChild(childSn));
+      alert("아이 삭제에 성공했습니다.");
+      navigate("/mypage");
     } catch (error) {
       console.error("아이 삭제 실패", error);
       alert("아이 삭제에 실패했습니다.");
