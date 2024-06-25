@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Investment/Header";
 import Account from "../../components/common/Account";
 import { styled } from "styled-components";
@@ -9,14 +9,33 @@ import RequestCard from "../../components/Investment/RequestCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPortfolio } from "../../store/reducers/Invest/portfolio";
+import {
+  fetchInvestAccount,
+  setAccountType,
+} from "../../store/reducers/Account/account";
+import { fetchLeftProposal } from "../../services/invest";
 
 const InvestMain = () => {
+  const dispatch = useDispatch();
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+  const accountType = useSelector((state) => state.account.accountType);
   const [isDonut, setIsDonut] = useState(true);
-  const [height, setHeight] = useState(0);
+  const [data, setData] = useState([]);
 
   const toggleShow = () => {
     setIsDonut(!isDonut);
   };
+
+  useEffect(() => {
+    dispatch(fetchPortfolio({ csn: selectedChildSn }));
+  }, []);
+
+  useEffect(() => {
+    dispatch(setAccountType(2));
+    dispatch(fetchInvestAccount({ csn: selectedChildSn }));
+  }, [accountType]);
 
   const sliderSettings = {
     dots: false,
@@ -27,20 +46,42 @@ const InvestMain = () => {
     arrows: true,
   };
 
+  useEffect(() => {
+    const fetchData = async (csn) => {
+      try {
+        const data = await fetchLeftProposal(csn);
+        console.log(data);
+        setData(data.response);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData(selectedChildSn);
+  }, []);
+
+  console.log(data);
+
   return (
     <S.Container>
       <Header />
       <CenterWrapper>
-        <Slider {...sliderSettings}>
-          <RequestCard />
-          <RequestCard />
-        </Slider>
+        {data.length !== 0 ? (
+          <Slider {...sliderSettings}>
+            {data.map((d) => (
+              <RequestCard data={d} key={d.proposeId} />
+            ))}
+          </Slider>
+        ) : (
+          <></>
+        )}
+
         <Page>
-          <Account accountNum={1} />
+          <Account />
           {isDonut ? (
-            <PortfolioDonut toggleShow={toggleShow} setHeight={setHeight} />
+            <PortfolioDonut toggleShow={toggleShow} />
           ) : (
-            <PortfolioList toggleShow={toggleShow} height={height} />
+            <PortfolioList toggleShow={toggleShow} />
           )}
         </Page>
       </CenterWrapper>

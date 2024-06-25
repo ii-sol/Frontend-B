@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoggedIn: false,
   userInfo: {
+    name: null,
     profileId: null,
     sn: null,
     familyInfo: [
@@ -16,6 +17,8 @@ const initialState = {
   accessToken: null,
   refreshToken: null,
   selectedChildSn: null,
+  selectedChildName: null,
+  clickedChildSn: null,
 };
 
 const userSlice = createSlice({
@@ -38,9 +41,22 @@ const userSlice = createSlice({
     setSelectedChildSn(state, action) {
       state.selectedChildSn = action.payload;
     },
+
+    setSelectedChildName(state, action) {
+      state.selectedChildName = action.payload;
+    },
+    setClickedChildSn(state, action) {
+      state.clickedChildSn = action.payload;
+    },
   },
 });
 
-export const { loginSuccess, logout, setSelectedChildSn } = userSlice.actions;
+export const {
+  loginSuccess,
+  logout,
+  setSelectedChildSn,
+  setSelectedChildName,
+  setClickedChildSn,
+} = userSlice.actions;
 
 export default userSlice.reducer;

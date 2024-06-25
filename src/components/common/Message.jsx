@@ -3,8 +3,7 @@ import tw from "twin.macro";
 import { styled } from "styled-components";
 import { FiXCircle } from "react-icons/fi";
 
-const Message = ({ placeholder, maxLength, onChange, info }) => {
-  console.log(info);
+const Message = ({ placeholder, maxLength, onChange, info, back, area }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleChange = (e) => {
@@ -27,7 +26,7 @@ const Message = ({ placeholder, maxLength, onChange, info }) => {
   const height = calculateHeight(maxLength);
 
   return (
-    <Container $height={height}>
+    <Container $height={height} $back={back}>
       {info && (
         <InfoContainer>
           {Object.entries(info).map(([key, value]) => (
@@ -45,6 +44,7 @@ const Message = ({ placeholder, maxLength, onChange, info }) => {
           onChange={handleChange}
           maxLength={maxLength}
           $height={height}
+          $area={area}
         />
         {inputValue.length > 0 && (
           <ClearButton onClick={handleClearInput} $textareaHeight={height - 60}>
@@ -67,7 +67,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #f4f9ff;
+  background-color: ${(props) => props.$back || "#f4f9ff"};
   border-radius: 15px;
   height: ${(props) => props.$height + 100}px;
 `;
@@ -105,7 +105,7 @@ const Wrapper = styled.div`
 const Textarea = styled.textarea`
   width: 100%;
   height: ${(props) => props.$height - 60}px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.$area || "#ffffff"};
   padding: 10px;
   border-radius: 15px;
   border: none;

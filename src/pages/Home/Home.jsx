@@ -25,22 +25,33 @@ import Profile5 from "~/assets/img/common/character/character_doremi.svg";
 import Profile6 from "~/assets/img/common/character/character_lulu.svg";
 import Profile7 from "~/assets/img/common/character/character_pli.svg";
 import Profile8 from "~/assets/img/common/character/character_lay.svg";
-import { setSelectedChildSn } from "../../store/reducers/Auth/user";
+import {
+  setSelectedChildName,
+  setSelectedChildSn,
+} from "../../store/reducers/Auth/user";
 import { fetchChildInfo } from "../../services/home";
 import { normalizeNumber } from "../../utils/normalizeNumber";
+import {
+  fetchMyAccount,
+  setAccountType,
+} from "../../store/reducers/Account/account";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = isLogin();
+  const accountType = useSelector((state) => state.account.accountType);
   const [userInfo, setUserInfo] = useState(null);
-  const [selectedChildName, setSelectedChildName] = useState("아이");
   let familyInfo;
   if (isLoggedIn) {
     familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
   }
   console.log(familyInfo, "familyInfo");
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+  const selectedChildName = useSelector(
+    (state) => state.user.selectedChildName
+  );
+
   const profiles = [
     { id: 1, src: Profile1 },
     { id: 2, src: Profile2 },
@@ -63,8 +74,20 @@ const Home = () => {
       setUserInfo(data.response);
     };
 
-    getChildInfo();
-  }, []);
+    if (selectedChildSn && isLoggedIn) {
+      getChildInfo();
+    }
+  }, [selectedChildSn, isLoggedIn]); // Added dependencies
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(setAccountType(1));
+      dispatch(fetchMyAccount());
+    } else {
+      dispatch(setAccountType(0));
+    }
+  }, [isLoggedIn, accountType]);
+  console.log(userInfo);
 
   return (
     <S.Container>
@@ -121,9 +144,10 @@ const Home = () => {
             <ChildDiv
               key={family.sn}
               onClick={() => {
-                setSelectedChildName(family.name);
+                dispatch(setSelectedChildName(family.name));
                 dispatch(setSelectedChildSn(family.sn));
               }}
+              $isClicked={selectedChildSn === family.sn}
             >
               <ChildImg src={getProfileSrc(family.profileId)} />
             </ChildDiv>
@@ -134,11 +158,7 @@ const Home = () => {
       )}
 
       <S.CenterDiv>
-        {isLoggedIn ? (
-          <Account accountNum={0}></Account>
-        ) : (
-          <Account accountNum={2}></Account>
-        )}
+        <Account />
       </S.CenterDiv>
       <RowDiv $isFirst>
         <Btn $width={1} onClick={() => navigate("/invest")}>
@@ -206,6 +226,8 @@ const ChildDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: ${(props) => (props.$isClicked ? 1 : 0.3)};
+  transition: box-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
 `;
 
 const ChildImg = styled.img`

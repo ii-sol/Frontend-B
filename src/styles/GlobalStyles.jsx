@@ -54,7 +54,6 @@ export const BuyBtn = styled.button`
 `;
 
 export const Badge = styled.div`
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,11 +91,10 @@ export const Phrase = styled.div`
 `;
 
 export const Question = styled.div`
-  ${tw`flex
-  text-xl
-  font-bold
-  justify-center
-  m-5`}
+  font-size: 23px;
+  text-align: center;
+  margin: 30px auto;
+  font-weight: 600;
 `;
 
 export const HistoryLink = styled.div`
@@ -174,4 +172,16 @@ export const rejectBtn = styled.button`
   color: #9b1d15;
   font-size: 20px;
   padding: 8px;
+`;
+
+export const TradeBadge = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ $back }) => ($back === 1 ? "#FF5959" : "#5987ff")};
+  color: white;
+  width: ${({ $width }) => $width};
+  height: ${({ $width }) => $width};
+  font-size: ${({ $size }) => $size || "25px"};
+  border-radius: 15px;
 `;

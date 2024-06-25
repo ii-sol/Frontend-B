@@ -1,168 +1,60 @@
 import React, { useEffect, useState } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EmptyImage from "~/assets/img/common/empty.svg";
 import SuggestHistoryListItem from "./SuggestHistoryListItem";
-import { groupDataByDate } from "../../utils/groupDataByDate";
+import { groupDataByDatetwo } from "../../utils/groupDataByDatetwo";
+import { fetchProposal } from "../../services/invest";
+import {
+  setMonth,
+  setStatus,
+  setYear,
+} from "../../store/reducers/common/history";
 
 const SuggestHistoryList = () => {
+  const dispatch = useDispatch();
   const status = useSelector((state) => state.history.status);
+  const year = useSelector((state) => state.history.year);
+  const month = useSelector((state) => state.history.month);
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    let updatedData;
-    if (status === 0) {
-      updatedData = [
-        {
-          proposeId: 0,
-          status: 0,
-          name: "삼성전자",
-          code: "005930",
-          quantity: 3,
-          trading: 1,
-          message:
-            "메세지 안녕하세요. 아버님 제가 이번에 기가 막힌 종목을 찾아왔는데 이 주식이야 말로 저희 집을 바로 세울 기업입니다. 이 기업 앞으로 어쩌고",
-          who: "엄마",
-          createdDate: "2024-05-10",
-        },
-        {
-          proposeId: 1,
-          status: 1,
-          name: "SK하이닉스",
-          code: "005930",
-          quantity: 5,
-          trading: 1,
-          message: "투자 제안 메세지",
-          who: "아빠",
-          createdDate: "2024-06-01",
-        },
-        {
-          proposeId: 2,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-05",
-        },
-        {
-          proposeId: 3,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-        {
-          proposeId: 4,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-        {
-          proposeId: 5,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-      ];
-    } else if (status === 1) {
-      updatedData = [
-        {
-          proposeId: 0,
-          status: 0,
-          name: "삼성전자",
-          code: "005930",
-          quantity: 3,
-          trading: 1,
-          message:
-            "메세지 안녕하세요. 아버님 제가 이번에 기가 막힌 종목을 찾아왔는데 이 주식이야 말로 저희 집을 바로 세울 기업입니다. 이 기업 앞으로 어쩌고",
-          who: "엄마",
-          createdDate: "2024-05-10",
-        },
-      ];
-    } else if (status === 2) {
-      updatedData = [
-        {
-          proposeId: 1,
-          status: 1,
-          name: "SK하이닉스",
-          code: "005930",
-          quantity: 5,
-          trading: 1,
-          message: "투자 제안 메세지",
-          who: "아빠",
-          createdDate: "2024-06-01",
-        },
-      ];
-    } else {
-      updatedData = [
-        {
-          proposeId: 2,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-05",
-        },
-        {
-          proposeId: 3,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-        {
-          proposeId: 4,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-        {
-          proposeId: 5,
-          status: 2,
-          name: "삼성물산",
-          code: "005930",
-          quantity: 5,
-          message: "종목 제안 메세지",
-          who: "엄마",
-          direction: 0,
-          createdDate: "2024-06-10",
-        },
-      ];
+  const fetchProposals = async () => {
+    try {
+      if (status === 0) {
+        const data = await fetchProposal(0, selectedChildSn, year, month);
+        setData(data.response);
+      } else if (status === 1) {
+        const [data1, data2] = await Promise.all([
+          fetchProposal(3, selectedChildSn, year, month),
+          fetchProposal(4, selectedChildSn, year, month),
+        ]);
+        setData([...data1.response, ...data2.response]);
+      } else if (status === 2) {
+        const data = await fetchProposal(1, selectedChildSn, year, month);
+        setData(data.response);
+      } else if (status === 3) {
+        const data = await fetchProposal(5, selectedChildSn, year, month);
+        setData(data.response);
+      }
+    } catch (err) {
+      console.error(err);
     }
-    setData(updatedData);
-  }, [status]);
+  };
+  console.log(data);
+  useEffect(() => {
+    const currentDate = new Date();
+    dispatch(setYear(currentDate.getFullYear()));
+    dispatch(setMonth(currentDate.getMonth() + 1));
+    dispatch(setStatus(0));
+  }, []);
 
-  const groupedData = groupDataByDate(data);
+  useEffect(() => {
+    fetchProposals();
+  }, [status, year, month]);
+
+  const groupedData = groupDataByDatetwo(data);
   const sortedGroupedData = Object.keys(groupedData).sort(
     (a, b) => new Date(b) - new Date(a)
   );
