@@ -19,7 +19,6 @@ import {
 import { searchStocks } from "../../services/invest";
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-//TODO : 관심 구분 링크 연결
 const StockList = () => {
   const isMyStocks = useSelector((state) => state.invest.isMyStock);
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
@@ -95,11 +94,6 @@ const StockList = () => {
       return () => container.removeEventListener("scroll", handleScroll);
     }
   }, [handleScroll]);
-
-  // useEffect(() => {
-  //   dispatch(fetchMyStocks({ csn: selectedChildSn }));
-  //   dispatch(setIsMyStock(tradableStockList.map((stock) => stock.ticker)));
-  // },[]),
 
   useEffect(() => {
     dispatch(fetchMyStocks({ csn: selectedChildSn }));

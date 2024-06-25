@@ -21,6 +21,10 @@ const sliderSettings = {
 };
 
 const Mission = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const [pendingMissions, setPendingMissions] = useState([]);
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
@@ -66,7 +70,9 @@ const Mission = () => {
 
         <Menu>
           <S.Phrase>진행 중</S.Phrase>
-          <S.HistoryLink onClick={handleHistoryClick}>지난 미션 &gt;</S.HistoryLink>
+          <S.HistoryLink onClick={handleHistoryClick}>
+            지난 미션 &gt;
+          </S.HistoryLink>
         </Menu>
         <S.CardContainer>
           <RegisterButton onClick={handleRequestClick}>

@@ -2,7 +2,6 @@ import React from "react";
 import { styled } from "styled-components";
 import { useSelector } from "react-redux";
 
-// TODO: 보유잔고, 주문 가능 수량(잔고 / price)
 const StocksAbout = () => {
   const name = useSelector((state) => state.invest.name);
   const price = useSelector((state) => state.invest.price);

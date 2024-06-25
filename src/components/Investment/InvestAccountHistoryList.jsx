@@ -2,24 +2,23 @@ import React, { useState, useEffect } from "react";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 
-import HistoryListItem from "~/components/Account/HistoryListItem";
-
 import EmptyImage from "~/assets/img/common/empty.svg";
-import { PuffLoader } from "react-spinners";
-import { useSelector } from "react-redux";
-import { fetchHistory } from "../../services/account";
 import { groupDataByDate } from "../../utils/groupDataByDate";
+import { useSelector } from "react-redux";
+import InvestAccHistoryListItem from "./InvestAccHistoryListItem";
+import { fetchChildHistory } from "../../services/account";
 
-const AccountHistoryListItem = () => {
+const InvestAccountHistoryList = () => {
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const year = useSelector((state) => state.history.year);
   const month = useSelector((state) => state.history.month);
   console.log(month);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (year, month, status) => {
+    const fetchData = async (csn, year, month, status) => {
       try {
-        const data = await fetchHistory(year, month, status);
+        const data = await fetchChildHistory(csn, year, month, status);
         setData(data.response);
         console.log(data);
       } catch (err) {
@@ -27,7 +26,7 @@ const AccountHistoryListItem = () => {
       }
     };
 
-    fetchData(year, month, 3);
+    fetchData(selectedChildSn, year, month, 2);
   }, [year, month]);
 
   const groupedData = groupDataByDate(data);
@@ -35,6 +34,7 @@ const AccountHistoryListItem = () => {
     (a, b) => new Date(b) - new Date(a)
   );
 
+  console.log(groupedData);
   return (
     <Container>
       <List>
@@ -52,7 +52,7 @@ const AccountHistoryListItem = () => {
                 .slice()
                 .reverse()
                 .map((item, index) => (
-                  <HistoryListItem key={index} data={item} />
+                  <InvestAccHistoryListItem key={index} data={item} />
                 ))}
             </DateGroup>
           ))
@@ -62,7 +62,7 @@ const AccountHistoryListItem = () => {
   );
 };
 
-export default AccountHistoryListItem;
+export default InvestAccountHistoryList;
 
 const Container = styled.div``;
 
@@ -94,4 +94,10 @@ const Img = styled.img`
 
 const EmptyText = styled.div`
   ${tw`text-2xl`}
+`;
+
+const CardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
 `;

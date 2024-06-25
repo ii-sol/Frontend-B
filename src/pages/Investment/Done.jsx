@@ -26,7 +26,8 @@ const Done = () => {
         <Box>
           {isNew ? (
             <Message>
-              <span style={{ fontWeight: "700" }}>{parent}</span> 님에게 <br /> 투자 제안서를 보냈습니다!
+              <span style={{ fontWeight: "700" }}>{parent}</span> 님에게 <br />{" "}
+              투자 제안서를 보냈습니다!
             </Message>
           ) : (
             <Message $trade={trade}>
@@ -37,14 +38,21 @@ const Done = () => {
               <span className="trade">{trade === 0 ? "구매 " : "판매 "}</span>
               완료했습니다.
               <br />
-              주문 단가 <span style={{ fontWeight: "700" }}>{normalizeNumber(price)}원 </span>
-              <br />총 <span style={{ fontWeight: "700" }}>{normalizeNumber(myAmount)}원</span>
+              주문 단가 &nbsp;&nbsp;
+              <span style={{ fontWeight: "700" }}>
+                {normalizeNumber(price)}원
+              </span>
+              <br />총{" "}
+              <span style={{ fontWeight: "700" }}>
+                {normalizeNumber(myAmount)}원
+              </span>
             </Message>
           )}
         </Box>
         {isNew ? (
           <div tw="text-sm mt-2">
-            <span tw="text-[#154B9B]"> 2024.05.31 금</span>까지 응답하지 않으면 취소돼요.
+            <span tw="text-[#154B9B]"> 2024.05.31 금</span>까지 응답하지 않으면
+            취소돼요.
           </div>
         ) : (
           <></>

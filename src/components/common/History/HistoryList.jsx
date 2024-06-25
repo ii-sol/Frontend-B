@@ -11,6 +11,7 @@ import MissionHistory from "../../Mission/MissionHistoryListItem";
 import LoanHistoryListItem from "../../../pages/Loan/LoanHistoryListItem";
 import SuggestHistory from "../../Investment/SuggestHistoryList";
 import TradeHistory from "../../Investment/TradeHistoryList";
+import InvestAccountHistoryList from "../../Investment/InvestAccountHistoryList";
 
 const HistoryList = () => {
   const location = useLocation();
@@ -30,6 +31,8 @@ const HistoryList = () => {
           <SuggestHistory />
         ) : location.pathname === "/invest/tradehistory" ? (
           <TradeHistory />
+        ) : location.pathname === "/invest/investhistory" ? (
+          <InvestAccountHistoryList />
         ) : (
           <></>
         )}

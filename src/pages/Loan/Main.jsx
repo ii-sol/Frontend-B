@@ -14,6 +14,9 @@ import EmptyImage from "~/assets/img/common/empty.svg";
 import { baseInstance } from "../../services/api.jsx";
 
 const Main = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
   const location = useLocation();
   const [isSelected, setIsSelected] = useState(false);

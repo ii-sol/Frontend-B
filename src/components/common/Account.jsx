@@ -54,15 +54,13 @@ const Account = () => {
           {accountType === 1 ? (
             <>
               <Btn onClick={() => navigate("/account/select")}>돈 보내기</Btn>
-              <Btn onClick={() => navigate("/allowance/history")}>
-                계좌 내역
-              </Btn>
+              <Btn onClick={() => navigate("/account/history")}>계좌 내역</Btn>
             </>
           ) : accountType === 2 ? (
             <>
               <Btn onClick={() => navigate("/invest/start")}>종목 추천</Btn>
-              <Btn onClick={() => navigate("/invest/tradehistory")}>
-                투자 내역
+              <Btn onClick={() => navigate("/invest/investhistory")}>
+                계좌 내역
               </Btn>
             </>
           ) : (

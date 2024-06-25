@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 
-//TODO: N/A null
 const Indicator = () => {
   const marketCapitalization = useSelector(
     (state) => state.invest.indi.marketCapitalization
@@ -31,7 +30,9 @@ const Indicator = () => {
         </BoxDiv>
         <BoxDiv>
           <AboutDiv>배당수익률</AboutDiv>
-          <ContentDiv>{dividendYield}</ContentDiv>
+          <ContentDiv>
+            {dividendYield == "N/A" ? "없음" : dividendYield}
+          </ContentDiv>
         </BoxDiv>
         <BoxDiv>
           <AboutDiv>PBR</AboutDiv>
@@ -41,7 +42,7 @@ const Indicator = () => {
       <RowDiv>
         <BoxDiv>
           <AboutDiv>PER</AboutDiv>
-          <ContentDiv>{per}</ContentDiv>
+          <ContentDiv>{per == "N/A" ? "적자" : per}</ContentDiv>
         </BoxDiv>
         <BoxDiv>
           <AboutDiv>ROE</AboutDiv>

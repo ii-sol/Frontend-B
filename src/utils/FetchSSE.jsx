@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { EventSourcePolyfill, NativeEventSource } from "event-source-polyfill";
 import "react-toastify/dist/ReactToastify.css";
 import { StyledToastContainer, Toast } from "./Toast";
-// import isLogin from "./isLogin";
 import { getCookie } from "../services/cookie";
 import isLogin from "./isLogin";
 
@@ -20,7 +19,7 @@ const FetchSSE = () => {
       try {
         const fetchSSE = async () => {
           eventSource.current = new EventSource(
-            `http://127.0.0.1:8080/notifications/subscribe`,
+            `http://127.0.0.1:8081/api/notifications/subscribe`,
             {
               headers: {
                 "Content-Type": "text/event-stream",

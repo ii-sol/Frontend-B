@@ -43,6 +43,8 @@ import SuggestionDetail from "../pages/Investment/SuggestionDetail";
 import TradeHistory from "../pages/Investment/TradeHistory";
 import StockList from "../pages/Investment/StockList";
 import AvailableInvest from "../pages/Investment/AvailableInvest";
+import PrivateRoute from "../utils/PrivateRoute";
+import InvestAccountHistory from "../pages/Investment/InvestAccountHistory";
 
 const MainRouter = createBrowserRouter([
   {
@@ -52,6 +54,16 @@ const MainRouter = createBrowserRouter([
       { path: "", element: <Home /> },
       { path: "signup", element: <Signup /> },
       { path: "login", element: <Login /> },
+    ],
+  },
+  {
+    path: "/",
+    element: (
+      <PrivateRoute>
+        <MainLayout />
+      </PrivateRoute>
+    ),
+    children: [
       { path: "notification", element: <Notification /> },
       {
         path: "mypage",
@@ -123,6 +135,7 @@ const MainRouter = createBrowserRouter([
           { path: "history", element: <InvestHistory /> },
           { path: "history/:id", element: <SuggestionDetail /> },
           { path: "tradehistory", element: <TradeHistory /> },
+          { path: "investhistory", element: <InvestAccountHistory /> },
         ],
       },
       {
