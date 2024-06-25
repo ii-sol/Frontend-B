@@ -1,158 +1,110 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as S from "../../styles/GlobalStyles";
 import Header from "../../components/Investment/Header";
 import { styled } from "styled-components";
 import search from "../../assets/img/Invest/search.svg";
 import filledStar from "../../assets/img/Invest/filledStar.svg";
 import blankStar from "../../assets/img/Invest/blankStar.svg";
-import { useDispatch } from "react-redux";
-import { setCode } from "../../store/reducers/Invest/invest";
 
-const StockListParent = () => {
+import { BottomSheet } from "react-spring-bottom-sheet";
+import "react-spring-bottom-sheet/dist/style.css";
+import StocksDetail from "../../components/Investment/StocksDetail";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchMyStocks,
+  setCode,
+  setIsMyStock,
+  setIsNew,
+} from "../../store/reducers/Invest/invest";
+import { searchStocks } from "../../services/invest";
+import { normalizeNumber } from "../../utils/normalizeNumber";
+
+//TODO : 관심 구분 링크 연결
+const StockList = () => {
+  const isMyStocks = useSelector((state) => state.invest.isMyStock);
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const handleDismiss = () => {
+    setOpen(false);
+  };
 
-  const searchResults = [
-    {
-      id: 0,
-      name: "삼성전자",
-      code: "005930",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 1,
-      name: "LG",
-      code: "003550",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 2,
-      name: "SK하이닉스",
-      code: "000660",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 3,
-      name: "현대차",
-      code: "005380",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 4,
-      name: "NAVER",
-      code: "035420",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 5,
-      name: "카카오",
-      code: "035720",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 6,
-      name: "기아",
-      code: "000270",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 7,
-      name: "삼성바이오로직스",
-      code: "207940",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 8,
-      name: "삼성물산",
-      code: "028260",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 9,
-      name: "LG화학",
-      code: "051910",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 10,
-      name: "POSCO",
-      code: "005490",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 11,
-      name: "KT&G",
-      code: "033780",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 12,
-      name: "LG전자",
-      code: "066570",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 13,
-      name: "SK텔레콤",
-      code: "017670",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 14,
-      name: "신한지주",
-      code: "055550",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 15,
-      name: "KB금융",
-      code: "105560",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 16,
-      name: "하나금융지주",
-      code: "086790",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 17,
-      name: "삼성에스디에스",
-      code: "018260",
-      market: "kospi",
-      isAdded: false,
-    },
-    {
-      id: 18,
-      name: "LG유플러스",
-      code: "032640",
-      market: "kospi",
-      isAdded: true,
-    },
-    {
-      id: 19,
-      name: "KT",
-      code: "030200",
-      market: "kospi",
-      isAdded: false,
-    },
-  ];
+  const tradableStockList = useSelector(
+    (state) => state.invest.tradableStockList
+  );
+
+  const [page, setPage] = useState(0);
+  const size = 20;
+  const [items, setItems] = useState([]);
+
+  const fetchStocks = async (csn, corp, page, size) => {
+    try {
+      let data;
+      if (corp.trim() === "") {
+        data = await searchStocks(csn, "", page, size);
+      } else {
+        data = await searchStocks(csn, "/" + corp, page, size);
+      }
+      console.log(data);
+      // setItems((prevItems) => [...prevItems, ...data.response]);
+      const filteredData = data.response.filter((item) => item.canTrading);
+      setItems((prevItems) => [...prevItems, ...filteredData]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  console.log(items);
+
+  const onChangeInput = (e) => {
+    const inputValue = e.target.value;
+    setItems([]);
+    setSearchInput(inputValue);
+    setPage(0);
+    setItems([]);
+  };
+
+  useEffect(() => {
+    if (searchInput.trim() === "") {
+      fetchStocks(selectedChildSn, searchInput, page, size);
+    } else {
+      const timer = setTimeout(() => {
+        fetchStocks(selectedChildSn, searchInput, page, size);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchInput, page]);
+
+  const containerRef = useRef(null);
+  const handleScroll = useCallback(() => {
+    if (
+      containerRef.current &&
+      containerRef.current.scrollTop + containerRef.current.clientHeight >=
+        containerRef.current.scrollHeight
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, [handleScroll]);
+
+  // useEffect(() => {
+  //   dispatch(fetchMyStocks({ csn: selectedChildSn }));
+  //   dispatch(setIsMyStock(tradableStockList.map((stock) => stock.ticker)));
+  // },[]),
+
+  useEffect(() => {
+    dispatch(fetchMyStocks({ csn: selectedChildSn }));
+    dispatch(setIsMyStock(tradableStockList.map((stock) => stock.ticker)));
+  }, [tradableStockList.length]);
 
   return (
     <S.Container>
@@ -160,38 +112,81 @@ const StockListParent = () => {
       <S.CenterDiv>
         <SearchWrapper>
           <Img src={search} />
-          <SearchInput placeholder="종목 이름" />
+          <SearchInput
+            type="text"
+            placeholder="종목명을 입력하세요!"
+            value={searchInput}
+            onChange={onChangeInput}
+          />
         </SearchWrapper>
-        <SearchResults>
-          {searchResults?.map((result) => (
-            <SearchResult
-              key={result.id}
-              onClick={() => {
-                dispatch(setCode(result.code));
-              }}
-            >
-              <StockDiv>
-                <StockName>{result.name}</StockName>
-                <RowDiv>
-                  <StockCode>{result.code}</StockCode>
-                  <StockIndex>
-                    {result.market === "kospi" ? "코스피" : "코스닥"}
-                  </StockIndex>
-                </RowDiv>
-              </StockDiv>
-              <StarImg
-                src={result.isAdded ? filledStar : blankStar}
-                alt={result.isAdded ? "filledstar" : "blankstar"}
+        <SearchResults ref={containerRef}>
+          {items.map((result, index) => (
+            <div key={index}>
+              <SearchResult
+                $isMyStock={result.myStock}
+                $myStocksArr={isMyStocks}
+                $nowStock={result.ticker}
+                onClick={() => {
+                  if (result.canTrading) {
+                    setOpen(true);
+                    dispatch(setCode(result.ticker));
+                    if (result.myStock) {
+                      dispatch(setIsNew(false));
+                    } else {
+                      dispatch(setIsNew(true));
+                    }
+                  }
+                }}
+              >
+                <StockDiv>
+                  <StockName>{result.companyName}</StockName>
+                  <RowDiv>
+                    <StockCode>{result.ticker}</StockCode>
+                  </RowDiv>
+                </StockDiv>
+                {result.canTrading ? (
+                  <S.RowDiv style={{ gap: 5 }}>
+                    <S.ColumnDiv>
+                      <PriceDiv $isPositive={result.changePrice}>
+                        {parseInt(result.currentPrice)}원
+                      </PriceDiv>
+                      <PriceDiv $isPositive={result.changePrice}>
+                        {result.changePrice > 0
+                          ? `▲ ${normalizeNumber(result.changePrice)}원`
+                          : result.changePrice < 0
+                          ? `▼ ${normalizeNumber(result.changePrice)}원`
+                          : `${normalizeNumber(result.changePrice)}원`}
+                        &nbsp;
+                        {result.changeRate > 0
+                          ? `(+${parseFloat(result.changeRate).toFixed(2)}%)`
+                          : `(${parseFloat(result.changeRate).toFixed(2)}%)`}
+                      </PriceDiv>
+                    </S.ColumnDiv>
+                  </S.RowDiv>
+                ) : (
+                  <></>
+                )}
+              </SearchResult>
+              <hr
+                style={{
+                  background: "#d9d9d9",
+                  height: "1px",
+                  border: 0,
+                  margin: "0px",
+                }}
               />
-            </SearchResult>
+            </div>
           ))}
+          <BottomSheet open={open} onDismiss={handleDismiss}>
+            <StocksDetail onDismiss={handleDismiss} />
+          </BottomSheet>
         </SearchResults>
       </S.CenterDiv>
     </S.Container>
   );
 };
 
-export default StockListParent;
+export default StockList;
 
 const SearchWrapper = styled.label`
   position: relative;
@@ -200,8 +195,6 @@ const SearchWrapper = styled.label`
   padding: 10px;
   height: 50px;
   background-color: #f3f3f3;
-  /* border-radius: 50px; */
-  margin-top: 10px;
 `;
 
 const Img = styled.img`
@@ -221,50 +214,39 @@ const SearchInput = styled.input`
 
 const SearchResults = styled.ul`
   width: 100%;
-  /* max-height: calc(100vh - 151px);
-  height: calc(100vh - 151px); */
+  max-height: calc(100vh - 158px);
+  height: calc(100vh - 158px);
   overflow: auto;
   padding-bottom: 5px;
-
-  background-color: #fafcff;
-  /* margin-top: 20px; */
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  background-color: white;
 `;
 
 const SearchResult = styled.li`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 10px;
   text-align: left;
   min-height: 60px;
-
   cursor: pointer;
-  /* &:hover {
-    background-color: #f0f0f0;
-  } */
-
-  &:nth-child(even) {
-    background-color: #e9f2ff99;
-  }
+  background-color: ${({ $myStocksArr, $nowStock, $isMyStock }) =>
+    $myStocksArr.includes($nowStock)
+      ? "#daecff"
+      : // : $isMyStock
+        // ? "#daecff"
+        "white"};
 `;
 
 const StockDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  width: 100%;
 `;
+
 const StockName = styled.div`
   color: #000;
   font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  word-break: break-all;
 `;
 
 const RowDiv = styled.div`
@@ -272,17 +254,18 @@ const RowDiv = styled.div`
   flex-direction: row;
   color: #8c8c8c;
   font-size: 12px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-`;
-
-const StarImg = styled.img`
-  width: 25px;
 `;
 
 const StockCode = styled.div`
   margin-right: 3px;
 `;
 
-const StockIndex = styled.div``;
+const StarImg = styled.img`
+  width: 25px;
+`;
+
+const PriceDiv = styled.div`
+  color: ${({ $isPositive }) =>
+    $isPositive > 0 ? "#EE3124" : $isPositive < 0 ? "#154B9B" : "#000000"};
+  text-align: right;
+`;

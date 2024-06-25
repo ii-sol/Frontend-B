@@ -7,11 +7,13 @@ import logger from "redux-logger";
 import historyReducer from "./reducers/common/history";
 import missionReducer from "./reducers/Mission/mission";
 import userReducer from "./reducers/Auth/user";
+import accountReducer from "./reducers/Account/account";
 import familyReducer from "./reducers/common/family";
 import managementReducer from "./reducers/common/management";
 import allowanceReducer from "./reducers/Allowance/allowance";
 import investReducer from "./reducers/Invest/invest";
 import portfolioReducer from "./reducers/Invest/portfolio";
+import suggestDetailReducer from "./reducers/Invest/suggestDetail";
 import notiReducer from "./reducers/Noti/notification";
 
 const rootPersistConfig = {
@@ -26,11 +28,13 @@ const rootReducer = persistReducer(
     history: historyReducer,
     mission: missionReducer,
     user: userReducer,
+    account: accountReducer,
     family: familyReducer,
     management: managementReducer,
     allowance: allowanceReducer,
     invest: investReducer,
     portfolio: portfolioReducer,
+    suggestDetail: suggestDetailReducer,
     noti: notiReducer,
   })
 );

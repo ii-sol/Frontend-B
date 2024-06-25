@@ -16,8 +16,8 @@ const Filter = () => {
       const newOptions = [
         { label: "전체", status: 0 },
         { label: "수락", status: 1 },
-        { label: "거절", status: 2 },
-        { label: "대기", status: 3 },
+        { label: "대기", status: 2 },
+        { label: "거절", status: 3 },
       ];
       setOptions(newOptions);
       setSelectedOption(newOptions[0]);
