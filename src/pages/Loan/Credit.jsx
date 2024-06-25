@@ -1,16 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import Header from "../../components/common/Header";
 import { MdArrowBackIos } from "react-icons/md";
 import credit from "../../assets/img/Loan/credit.svg";
+import { baseInstance } from "../../services/api";
+import { useSelector } from "react-redux";
 
 const CreditScoreInfo = () => {
   const navigate = useNavigate();
+  const [baseRate, setBaseRate] = useState(0); // 기본 금리
+  const [loanLimit, setLoanLimit] = useState(0); // 기본 대출 한도
+  const [investLimit, setInvestLimit] = useState(0); // 기본 투자 한도
+  const [score, setScore] = useState(0);
+  const [grad, setGrad] = useState("");
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
 
   const handleLeft = () => {
     navigate("/loan/main");
   };
+
+  useEffect(() => {
+    const limitBaseUrl = `/users/child-manage/${selectedChildSn}`;
+    const scoreBaseUrl = `/users/score/${selectedChildSn}`;
+
+    const fetchCredit = async () => {
+      try {
+        const [creditResponse, scoreResponse] = await Promise.all([
+          baseInstance.get(limitBaseUrl),
+          baseInstance.get(scoreBaseUrl),
+        ]);
+        console.log(score);
+
+        const baseRate = creditResponse.data.response.baseRate;
+        const loanLimit = creditResponse.data.response.loanLimit;
+        const investLimit = creditResponse.data.response.investLimit;
+        const fetchedScore = scoreResponse.data.response;
+
+        setBaseRate(baseRate);
+        setLoanLimit(loanLimit);
+        setInvestLimit(investLimit);
+        setScore(fetchedScore);
+
+        // 기준 금리와 상한 금액을 조정하는 로직
+        if (fetchedScore <= 19) {
+          setGrad("매우 낮음");
+          setBaseRate(Math.max(baseRate + 2, 0)); // 기준 금리보다 2% 높음, 음수가 되지 않도록 설정
+          setLoanLimit(Math.max(loanLimit - 100, 0)); // 기준 상한 금액보다 100만원 낮음, 음수가 되지 않도록 설정
+          setInvestLimit(Math.max(investLimit - 100, 0)); // 기준 상한 금액보다 100만원 낮음, 음수가 되지 않도록 설정
+        } else if (fetchedScore <= 39) {
+          setGrad("낮음");
+          setBaseRate(Math.max(baseRate + 1, 0)); // 기준 금리보다 1% 높음, 음수가 되지 않도록 설정
+          setLoanLimit(Math.max(loanLimit - 50, 0)); // 기준 상한 금액보다 50만원 낮음, 음수가 되지 않도록 설정
+          setInvestLimit(Math.max(investLimit - 50, 0)); // 기준 상한 금액보다 50만원 낮음, 음수가 되지 않도록 설정
+        } else if (fetchedScore <= 59) {
+          setGrad("보통");
+          setBaseRate(baseRate); // 기준 금리
+          setLoanLimit(loanLimit); // 기준 상한 금액
+          setInvestLimit(investLimit); // 기준 상한 금액
+        } else if (fetchedScore <= 79) {
+          setGrad("높음");
+          setBaseRate(Math.max(baseRate - 1, 0)); // 기준 금리보다 1% 낮음, 음수가 되지 않도록 설정
+          setLoanLimit(loanLimit + 50); // 기준 상한 금액보다 50만원 높음
+          setInvestLimit(investLimit + 50); // 기준 상한 금액보다 50만원 높음
+        } else if (fetchedScore <= 100) {
+          setGrad("매우 높음");
+          setBaseRate(Math.max(baseRate - 2, 0)); // 기준 금리보다 2% 낮음, 음수가 되지 않도록 설정
+          setLoanLimit(loanLimit + 100); // 기준 상한 금액보다 100만원 높음
+          setInvestLimit(investLimit + 100); // 기준 상한 금액보다 100만원 높음
+        }
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      }
+    };
+
+    fetchCredit();
+  }, []);
+
+  console.log(baseRate, investLimit, loanLimit);
 
   return (
     <>
@@ -23,13 +90,13 @@ const CreditScoreInfo = () => {
         <img src={credit} tw="mt-6 w-10/12" />
 
         <div tw="w-full mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-md text-center">
-          <h2 tw="text-2xl font-bold mb-2 text-gray-800 text-center">보통</h2>
+          <h2 tw="text-2xl font-bold mb-2 text-gray-800 text-center">{grad}</h2>
           <p tw="text-gray-700 leading-relaxed">
-            100만원까지 빌리기 요청을 할 수 있어요.
+            {loanLimit}만원까지 빌리기 요청을 할 수 있어요.
             <br />
-            금리 4.5%에 돈을 빌릴 수 있어요.
+            금리 {baseRate}%에 돈을 빌릴 수 있어요.
             <br />
-            100만원까지 투자할 수 있어요.
+            {investLimit}만원까지 투자할 수 있어요.
           </p>
         </div>
 
