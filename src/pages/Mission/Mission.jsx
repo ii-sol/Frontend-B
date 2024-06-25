@@ -130,9 +130,13 @@ const Mission = () => {
           <RegisterButton onClick={handleRequestClick}>
             <span tw="text-[#346BAC]">미션</span>요청하기
           </RegisterButton>
-          {sortedOngoingMissions.map((mission) => (
-            <MissionCard key={mission.id} id={mission.id} status={mission.status} dday={calculateMissionDday(mission.dueDate)} mission={mission.content} allowance={mission.price} />
-          ))}
+          {sortedOngoingMissions.map(
+            (mission) =>
+              mission.status === 3 ||
+              (mission.status === 6 && (
+                <MissionCard key={mission.id} id={mission.id} status={mission.status} dday={calculateMissionDday(mission.dueDate)} mission={mission.content} allowance={mission.price} />
+              ))
+          )}
         </S.CardContainer>
       </S.Container>
     </div>
