@@ -2,7 +2,7 @@ import { baseInstance } from "./api";
 
 export const fetchRegularAllowance = async (csn) => {
   try {
-    const response = await baseInstance.get(`/allowance/monthly?csn=${csn}`);
+    const response = await baseInstance.get(`/allowance/monthly/${csn}`);
 
     if (response.data.success) {
       return response.data.response;
@@ -67,9 +67,9 @@ export const createRegularAllowance = async (data) => {
   }
 };
 
-export const updateRegularAllowance = async (allowanceId, data) => {
+export const updateRegularAllowance = async (data) => {
   try {
-    const response = await baseInstance.post(`/allowance/regular/${allowanceId}`, data);
+    const response = await baseInstance.post(`/allowance/monthly/change`, data);
 
     if (response.data.success) {
       return response.data.response;
@@ -81,9 +81,9 @@ export const updateRegularAllowance = async (allowanceId, data) => {
   }
 };
 
-export const deleteRegularAllowance = async (allowanceId) => {
+export const deleteRegularAllowance = async (monthlyId, csn) => {
   try {
-    const response = await baseInstance.delete(`/allowance/monthly/${allowanceId}`);
+    const response = await baseInstance.delete(`allowance?monthlyId=${monthlyId}&csn=${csn}`);
 
     if (response.data.success) {
       return response.data.response;

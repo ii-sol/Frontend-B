@@ -1,25 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import { deleteRegularAllowance } from "../../services/allowance";
+import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const RegularAllowanceCard = ({ regularAllowance }) => {
+const RegularAllowanceCard = () => {
   const navigate = useNavigate();
+
+  const csn = useSelector((state) => state.user.selectedChildSn);
+  const regularAllowance = useSelector((state) => state.allowance.regularAllowance);
 
   const handleRegisterClick = () => {
     navigate("/allowance/registration");
   };
 
-  const handleUpdateClick = () => {
-    navigate("/allowance/update");
+  const handleUpdateClick = (id) => {
+    navigate("/allowance/update", { state: { id } });
   };
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = async (id) => {
     try {
-      await deleteRegularAllowance(allowanceId); //TODO: allowanceId 어떻게 가져옴?
+      await deleteRegularAllowance(id, csn);
       alert("정기 용돈이 성공적으로 삭제되었습니다.");
       navigate("/allowance");
     } catch (error) {
@@ -37,17 +41,17 @@ const RegularAllowanceCard = ({ regularAllowance }) => {
   }
 
   return (
-    <Container>
+    <Container key={regularAllowance.id}>
       <Content>
         <PeriodTag status={regularAllowance.period}>{regularAllowance.period}</PeriodTag>
         <Allowance>{normalizeNumber(regularAllowance.amount)}원</Allowance>
         <Period>
-          {regularAllowance.createDate}~{regularAllowance.dueDate}
+          {regularAllowance.createDate} ~ {regularAllowance.dueDate}
         </Period>
       </Content>
       <ButtonWrapper>
-        <Button onClick={handleUpdateClick}>변경하기</Button>
-        <Button onClick={handleDeleteClick}>해지하기</Button>
+        <Button onClick={() => handleUpdateClick(regularAllowance.id)}>변경하기</Button>
+        <Button onClick={() => handleDeleteClick(regularAllowance.id)}>해지하기</Button>
       </ButtonWrapper>
     </Container>
   );

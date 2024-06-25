@@ -38,8 +38,8 @@ const Registration = () => {
 
   const handleRightClick = () => {
     if (window.confirm("정말 취소하시겠습니까?")) {
-      dispatch(setInitialState());
-      navigate("/mission");
+      // dispatch(setInitialState());
+      navigate("/allowance");
     }
   };
 
@@ -71,6 +71,11 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
+      console.log({
+        childSerialNumber: selectedChildSn,
+        amount: parseInt(amount),
+        period: parseInt(period),
+      });
       await createRegularAllowance({
         childSerialNumber: selectedChildSn,
         amount: parseInt(amount),

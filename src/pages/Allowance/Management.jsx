@@ -4,8 +4,9 @@ import tw from "twin.macro";
 import { styled } from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchRegularAllowance, fetchAllowanceRequest, createDecision } from "../../services/allowance";
+import { setRegularAllowance } from "../../store/reducers/Allowance/allowance";
 import { format, differenceInDays } from "date-fns";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Header from "~/components/common/Header";
 import RequestCard from "~/components/Allowance/RequestCard";
@@ -26,17 +27,19 @@ const calculateDday = (createDate) => {
 };
 
 const Management = () => {
-  const [regularAllowance, setRegularAllowance] = useState(null);
+  // const [regularAllowance, setRegularAllowance] = useState(null);
   const [requestList, setRequestList] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+  const regularAllowance = useSelector((state) => state.allowance.regularAllowance);
 
   useEffect(() => {
     const fetchRegular = async () => {
       try {
         const regularAllowance = await fetchRegularAllowance(selectedChildSn);
-        setRegularAllowance(regularAllowance);
+        dispatch(setRegularAllowance(regularAllowance));
       } catch (error) {
         console.error("Error fetching regular allowance:", error);
       }

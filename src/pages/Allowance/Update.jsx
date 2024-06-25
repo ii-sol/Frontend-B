@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
@@ -17,30 +17,27 @@ const Update = () => {
   const [period, setPeriod] = useState("");
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
-  const [childName, setChildName] = useState("");
   const [allowanceDate, setAllowanceDate] = useState("");
+  const [requestData, setRequestData] = useState({
+    childSerialNumber: 0,
+    amount: 0,
+    period: 0,
+    idBeforeChange: 0,
+    dateBeforeChange: "",
+  });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = location.state;
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+  const selectedChildName = useSelector((state) => state.user.selectedChildName);
 
   useEffect(() => {
-    const fetchChildInfo = async () => {
-      try {
-        const data = await fetchUserInfo(selectedChildSn);
-        setChildName(data.name);
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    };
-
-    if (selectedChildSn) {
-      fetchChildInfo();
-    }
-
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
+
     setAllowanceDate(tomorrow.getDate());
   }, [selectedChildSn]);
 

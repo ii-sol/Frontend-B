@@ -5,6 +5,8 @@ const initialState = {
   data: [],
   loading: true,
   error: null,
+  regularAllowance: null,
+  requestList: [],
 };
 
 export const fetchAllowanceHistory = createAsyncThunk("allowance/fetchAllowanceHistory", async ({ year, month, csn }, thunkAPI) => {
@@ -19,7 +21,14 @@ export const fetchAllowanceHistory = createAsyncThunk("allowance/fetchAllowanceH
 const allowanceSlice = createSlice({
   name: "allowance",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setRegularAllowance(state, action) {
+      state.regularAllowance = action.payload;
+    },
+    setRequestList(state, action) {
+      state.requestList = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllowanceHistory.pending, (state) => {
@@ -36,5 +45,7 @@ const allowanceSlice = createSlice({
       });
   },
 });
+
+export const { setRegularAllowance } = allowanceSlice.actions;
 
 export default allowanceSlice.reducer;
