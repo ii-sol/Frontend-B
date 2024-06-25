@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchUserInfo } from "../../services/user";
-import { updateRegularAllowance } from "../../services/allowance";
+import { createRegularAllowance } from "../../services/allowance";
 import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
@@ -17,27 +17,15 @@ const Registration = () => {
   const [period, setPeriod] = useState("");
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
-  const [childName, setChildName] = useState("");
   const [allowanceDate, setAllowanceDate] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
+  const selectedChildName = useSelector((state) => state.user.selectedChildName);
 
   useEffect(() => {
-    const fetchChildInfo = async () => {
-      try {
-        const data = await fetchUserInfo(selectedChildSn);
-        setChildName(data.name);
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    };
-
-    if (selectedChildSn) {
-      fetchChildInfo();
-    }
-
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -83,8 +71,8 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
-      await updateRegularAllowance(allowanceId, {
-        //TODO: allowanceId 어떻게 가져옴?
+      await createRegularAllowance({
+        childSerialNumber: selectedChildSn,
         amount: parseInt(amount),
         period: parseInt(period),
       });
@@ -122,14 +110,14 @@ const Registration = () => {
       {step === 1 && (
         <CompleteContainer>
           <ResultWrapper>
-            <ResultPhrase>{childName} 님에게</ResultPhrase>
+            <ResultPhrase>{selectedChildName} 님에게</ResultPhrase>
             <ResultPhrase>
               <span tw="text-blue-800">{normalizeNumber(amount)}원</span>을
             </ResultPhrase>
             <ResultPhrase>
               <span tw="text-blue-800">{period}개월</span> 동안 매달 보낼게요
             </ResultPhrase>
-            <S.Phrase tw="mb-0">내일 1시에 첫 용돈이 보내집니다.</S.Phrase>
+            <S.Phrase tw="mb-0">지금 바로 첫 용돈이 보내집니다.</S.Phrase>
             <S.Phrase tw="m-0">
               매달 <span tw="text-blue-600">{allowanceDate}일</span>에 자동 이체됩니다.
             </S.Phrase>

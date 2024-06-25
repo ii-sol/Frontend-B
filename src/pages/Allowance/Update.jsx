@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchUserInfo } from "../../services/user";
-import { createRegularAllowance } from "../../services/allowance";
+import { updateRegularAllowance } from "../../services/allowance";
 import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
@@ -83,7 +83,8 @@ const Update = () => {
 
   const handleSubmit = async () => {
     try {
-      await createRegularAllowance(selectedChildSn, {
+      await updateRegularAllowance(allowanceId, {
+        //TODO: allowanceId 어떻게 가져옴?
         amount: parseInt(amount),
         period: parseInt(period),
       });

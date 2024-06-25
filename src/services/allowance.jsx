@@ -53,9 +53,9 @@ export const fetchAllowanceHistory = async (year, month, csn) => {
   }
 };
 
-export const createRegularAllowance = async (csn, data) => {
+export const createRegularAllowance = async (data) => {
   try {
-    const response = await baseInstance.post(`/allowance/regular/${csn}`, data);
+    const response = await baseInstance.post(`/allowance/monthly`, data);
 
     if (response.data.success) {
       return response.data.response;
