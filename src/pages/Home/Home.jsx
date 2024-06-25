@@ -25,16 +25,10 @@ import Profile5 from "~/assets/img/common/character/character_doremi.svg";
 import Profile6 from "~/assets/img/common/character/character_lulu.svg";
 import Profile7 from "~/assets/img/common/character/character_pli.svg";
 import Profile8 from "~/assets/img/common/character/character_lay.svg";
-import {
-  setSelectedChildName,
-  setSelectedChildSn,
-} from "../../store/reducers/Auth/user";
+import { setSelectedChildName, setSelectedChildSn } from "../../store/reducers/Auth/user";
 import { fetchChildInfo } from "../../services/home";
 import { normalizeNumber } from "../../utils/normalizeNumber";
-import {
-  fetchMyAccount,
-  setAccountType,
-} from "../../store/reducers/Account/account";
+import { fetchMyAccount, setAccountType } from "../../store/reducers/Account/account";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -48,9 +42,7 @@ const Home = () => {
   }
   console.log(familyInfo, "familyInfo");
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
-  const selectedChildName = useSelector(
-    (state) => state.user.selectedChildName
-  );
+  const selectedChildName = useSelector((state) => state.user.selectedChildName);
 
   const profiles = [
     { id: 1, src: Profile1 },
