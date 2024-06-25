@@ -8,9 +8,7 @@ import isLogin from "../../utils/isLogin";
 const Account = () => {
   const isLoggedIn = isLogin();
   const navigate = useNavigate();
-  const selectedChildName = useSelector(
-    (state) => state.user.selectedChildName
-  );
+  const selectedChildName = useSelector((state) => state.user.selectedChildName);
   const myName = useSelector((state) => state.user.userInfo?.name);
   const accountNum1 = useSelector((state) => state.account.accountNum1);
   const accountNum2 = useSelector((state) => state.account.accountNum2);
@@ -33,21 +31,10 @@ const Account = () => {
         ) : (
           <>
             <InfoWrapper>
-              <InfoDiv>
-                {accountType === 1
-                  ? `${myName}님의 계좌`
-                  : `${selectedChildName}의 투자 계좌`}
-              </InfoDiv>
-              <AccountDiv>
-                {accountType === 1 ? accountNum1 : accountNum2}
-              </AccountDiv>
+              <InfoDiv>{accountType === 1 ? `${myName}님의 계좌` : `${selectedChildName}의 투자 계좌`}</InfoDiv>
+              <AccountDiv>{accountType === 1 ? accountNum1 : accountNum2}</AccountDiv>
             </InfoWrapper>
-            <BalanceDiv>
-              {accountType === 1
-                ? normalizeNumber(balance1)
-                : normalizeNumber(balance2)}
-              원
-            </BalanceDiv>
+            <BalanceDiv>{accountType === 1 ? normalizeNumber(balance1) : normalizeNumber(balance2)}원</BalanceDiv>
           </>
         )}
         <ButtonWrapper>
@@ -81,8 +68,7 @@ const AccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 13px;
-  background: ${({ theme }) =>
-    theme.accountType === 2 ? "#FFF4BD" : "#ffffff"};
+  background: ${({ theme }) => (theme.accountType === 2 ? "#FFF4BD" : "#ffffff")};
   padding: 20px 26px;
   width: 305px;
   width: 100%;
@@ -139,7 +125,6 @@ const Btn = styled.button`
   height: 45px;
   border-radius: 15px;
   border: none;
-  background: ${({ theme }) =>
-    theme.accountType === 2 ? "#FFDD86" : "#e3efff"};
+  background: ${({ theme }) => (theme.accountType === 2 ? "#FFDD86" : "#e3efff")};
   font-size: 18px;
 `;

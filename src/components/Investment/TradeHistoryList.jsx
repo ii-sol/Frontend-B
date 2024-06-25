@@ -49,9 +49,7 @@ const TradeHistoryList = () => {
   };
 
   const groupedData = groupDataByDatetwo(data);
-  const sortedGroupedData = Object.keys(groupedData).sort(
-    (a, b) => new Date(b) - new Date(a)
-  );
+  const sortedGroupedData = Object.keys(groupedData).sort((a, b) => new Date(b) - new Date(a));
 
   const isLastItem = (date, index) => {
     return index === groupedData[date].length - 1;
@@ -86,9 +84,7 @@ const TradeHistoryList = () => {
                   <RowDiv>
                     <S.ColumnDiv style={{ position: "relative" }}>
                       <Name>{d.companyName}</Name>
-                      <Code style={{ position: "absolute", top: "25px" }}>
-                        {d.ticker}
-                      </Code>
+                      <Code style={{ position: "absolute", top: "25px" }}>{d.ticker}</Code>
                     </S.ColumnDiv>
                     <DetailDiv>
                       <Div>{normalizeNumber(d.stockPrice)}</Div>

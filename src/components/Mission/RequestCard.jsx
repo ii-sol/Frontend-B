@@ -9,9 +9,9 @@ import SendIcon from "~/assets/img/common/send.svg";
 const RequestCard = ({ status, name, content, dday, onClick }) => {
   return (
     <Container onClick={onClick}>
-      <Img src={status === "send" ? SendIcon : ReceiveIcon} alt="Message Icon" />
+      <Img src={status === 2 ? SendIcon : ReceiveIcon} alt="Message Icon" />
       <div>
-        <p>{status === "send" ? `To.${name}` : `From.${name}`}</p>
+        <p>{status === 2 ? `To.${name}` : `From.${name}`}</p>
         <p tw="font-bold">{content}</p>
       </div>
       {status === "receive" && (

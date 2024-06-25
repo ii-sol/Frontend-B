@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
@@ -6,6 +6,11 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import * as S from "../../styles/GlobalStyles";
+import { fetchOngoingMissions, fetchPendingMissions } from "../../services/mission";
+import { calculateMissionDday } from "../../utils/calculateMissionDday";
+import { useSelector, useDispatch } from "react-redux";
+import { setOngoingData } from "../../store/reducers/Mission/mission";
+import { format, differenceInDays } from "date-fns";
 
 import Header from "~/components/common/Header";
 import MissionCard from "../../components/Mission/MissionCard";
@@ -26,13 +31,44 @@ const Mission = () => {
   }, []);
   const [pendingMissions, setPendingMissions] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const childSn = useSelector((state) => state.user.selectedChildSn);
+  const familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
+  const ongoingMissions = useSelector((state) => state.mission.ongoingData);
 
   const handleLeftClick = () => {
     navigate("/");
   };
 
-  const handleReceiveRequestClick = () => {
-    navigate("/mission/request/receive/detail");
+  useEffect(() => {
+    const fetchMissions = async () => {
+      try {
+        const ongoingData = await fetchOngoingMissions(childSn);
+        dispatch(setOngoingData(ongoingData));
+
+        const pendingData = await fetchPendingMissions(childSn);
+
+        const mappedPendingMissions = pendingData.map((mission) => {
+          const child = familyInfo.find((member) => member.sn === mission.childSn);
+          return {
+            ...mission,
+            childName: child ? child.name : "미확인",
+          };
+        });
+        setPendingMissions(mappedPendingMissions.reverse());
+      } catch (error) {
+        console.error("Error fetching missions:", error);
+      }
+    };
+
+    fetchMissions();
+  }, [childSn, familyInfo.name, dispatch]);
+
+  const handleRequestProgress = (id, status, name) => {
+    if (status === 1) {
+      navigate(`/mission/request/receive/${id}`, { state: { name } });
+    }
   };
 
   const handleHistoryClick = () => {
@@ -43,29 +79,50 @@ const Mission = () => {
     navigate("/mission/create");
   };
 
+  const calculateDday = (createDate) => {
+    const threeDaysLater = new Date(createDate);
+    threeDaysLater.setDate(threeDaysLater.getDate() + 3); // createDate에서 3일 후의 날짜
+
+    const today = new Date();
+    const dday = differenceInDays(threeDaysLater, today); // 오늘 날짜와 endDate 사이의 일 수 차이 계산
+
+    return dday;
+  };
+
+  const sortedOngoingMissions = ongoingMissions
+    .map((mission) => ({
+      ...mission,
+      dday: calculateMissionDday(mission.dueDate),
+    }))
+    .sort((a, b) => {
+      if (a.status === 6 && b.status !== 6) return -1;
+      if (a.status !== 6 && b.status === 6) return 1;
+      return a.dday - b.dday;
+    });
+
   return (
     <div>
       <S.Container>
         <Header left={"<"} onLeftClick={handleLeftClick} title={"미션"} />
-        {/* TODO: dday = due_date - craete_date */}
         <Wrapper>
-          <Slider {...sliderSettings}>
-            {/* {requests
-                .filter((request) => request.status === 1)
-                .map((request) => (
-                  <RequestCard
-                    key={request.id}
-                    status={request.status}
-                    name={request.parentName}
-                    title={request.title}
-                    dday={calculateDday(request.createDate)}
-                    onClick={() => handleRequestProgress(request.id)}
-                  />
-                ))} */}
-            <RequestCard status="send" name="딸" content="심부름 다녀오기" dday="3" />
-            <RequestCard status="receive" name="아들" content="심부름 다녀오기" dday="0" onClick={handleReceiveRequestClick} />
-            <RequestCard status="send" name="아들" content="심부름 다녀오기" dday="3" />
-          </Slider>
+          {pendingMissions.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {pendingMissions.map((mission) => (
+                <RequestCard
+                  key={mission.id}
+                  status={mission.status}
+                  name={mission.childName}
+                  content={mission.content}
+                  dday={calculateDday(mission.createDate)}
+                  onClick={() => handleRequestProgress(mission.id, mission.status, mission.childName)}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <EmptyRequestContainer>
+              <span>대기 중인 미션이 없습니다.</span>
+            </EmptyRequestContainer>
+          )}
         </Wrapper>
 
         <Menu>
@@ -78,10 +135,13 @@ const Mission = () => {
           <RegisterButton onClick={handleRequestClick}>
             <span tw="text-[#346BAC]">미션</span>요청하기
           </RegisterButton>
-          <MissionCard status="6" mission="설거지하기" allowance="10000" />
-          <MissionCard dday="3" mission="설거지하기" allowance="10000" />
-          <MissionCard dday="0" mission="설거지하기" allowance="10000" />
-          <MissionCard dday="7" mission="설거지하기" allowance="10000" />
+          {sortedOngoingMissions.map(
+            (mission) =>
+              mission.status === 3 ||
+              (mission.status === 6 && (
+                <MissionCard key={mission.id} id={mission.id} status={mission.status} dday={calculateMissionDday(mission.dueDate)} mission={mission.content} allowance={mission.price} />
+              ))
+          )}
         </S.CardContainer>
       </S.Container>
     </div>
@@ -134,5 +194,17 @@ const Wrapper = styled.div`
   .slick-prev.slick-disabled:before,
   .slick-next.slick-disabled:before {
     opacity: 0.2;
+  }
+`;
+
+const EmptyRequestContainer = styled.div`
+  ${tw`flex items-center justify-center bg-[#E9F2FF] w-full h-[88px] rounded-2xl text-lg p-4 my-4`}
+
+  span {
+    ${tw`
+      text-lg
+      font-semibold
+      text-gray-600
+    `}
   }
 `;

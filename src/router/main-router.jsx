@@ -97,9 +97,9 @@ const MainRouter = createBrowserRouter([
             ],
           },
           {
-            path: "request/receive",
+            path: "request/receive/:id",
             children: [
-              { path: "detail", element: <MissionReceiveDetail /> },
+              { path: "", element: <MissionReceiveDetail /> },
               { path: "complete", element: <MissionReceivedComplete /> },
             ],
           },
