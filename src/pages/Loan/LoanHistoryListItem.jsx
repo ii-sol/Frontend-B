@@ -13,12 +13,13 @@ const LoanHistoryListItem = () => {
   const status = useSelector((state) => state.history.status);
   const year = useSelector((state) => state.history.year);
   const month = useSelector((state) => state.history.month);
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLoanData = async () => {
       try {
-        const response = await baseInstance.get("/loan");
+        const response = await baseInstance.get(`/loan/${selectedChildSn}`);
         const data = response.data;
 
         if (data.success) {

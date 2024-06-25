@@ -18,7 +18,9 @@ const Main = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [loans, setLoans] = useState([]);
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
-
+  const selectedChildName = useSelector(
+    (state) => state.user.selectedChildName
+  );
   useEffect(() => {
     const baseUrl = `/loan/${selectedChildSn}`;
     const fetchLoans = async () => {
@@ -111,7 +113,7 @@ const Main = () => {
               <>
                 <div tw="flex items-center justify-center text-center">
                   <p tw="text-lg text-white font-bold">
-                    현재 정우성의 신뢰도는?
+                    현재 {selectedChildName} 신뢰도는?
                   </p>
                 </div>
                 <p tw="text-4xl font-bold mt-2 text-white text-center">
@@ -121,7 +123,9 @@ const Main = () => {
             ) : (
               <>
                 <div tw="flex items-center justify-center text-center">
-                  <p tw="text-lg text-white font-bold">현재 정우성의 금리는?</p>
+                  <p tw="text-lg text-white font-bold">
+                    현재 {selectedChildName}의 금리는?
+                  </p>
                 </div>
                 <p tw="text-4xl font-bold mt-2 text-white text-center">4.5%</p>
               </>
