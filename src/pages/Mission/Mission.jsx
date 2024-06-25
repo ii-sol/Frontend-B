@@ -7,7 +7,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import * as S from "../../styles/GlobalStyles";
 import { fetchOngoingMissions, fetchPendingMissions } from "../../services/mission";
-import { useSelector } from "react-redux";
+import { calculateMissionDday } from "../../utils/calculateMissionDday";
+import { useSelector, useDispatch } from "react-redux";
+import { setOngoingData } from "../../store/reducers/Mission/mission";
+import { format, differenceInDays } from "date-fns";
 
 import Header from "~/components/common/Header";
 import MissionCard from "../../components/Mission/MissionCard";
@@ -23,42 +26,45 @@ const sliderSettings = {
 };
 
 const Mission = () => {
-  const [ongoingMissions, setOngoingMissions] = useState([]);
   const [pendingMissions, setPendingMissions] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const sn = useSelector((state) => state.user.userInfo.sn);
+  const childSn = useSelector((state) => state.user.selectedChildSn);
+  const familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
+  const ongoingMissions = useSelector((state) => state.mission.ongoingData);
 
   const handleLeftClick = () => {
     navigate("/");
   };
 
   useEffect(() => {
-    const fetchOngoing = async () => {
+    const fetchMissions = async () => {
       try {
-        const data = await fetchOngoingMissions(sn);
-        setOngoingMissions(data);
+        const ongoingData = await fetchOngoingMissions(childSn);
+        dispatch(setOngoingData(ongoingData));
+
+        const pendingData = await fetchPendingMissions(childSn);
+
+        const mappedPendingMissions = pendingData.map((mission) => {
+          const child = familyInfo.find((member) => member.sn === mission.childSn);
+          return {
+            ...mission,
+            childName: child ? child.name : "미확인",
+          };
+        });
+        setPendingMissions(mappedPendingMissions.reverse());
       } catch (error) {
-        console.error("Error fetching ongoing missions:", error);
+        console.error("Error fetching missions:", error);
       }
     };
 
-    const fetchPending = async () => {
-      try {
-        const data = await fetchPendingMissions(sn);
-        setPendingMissions(data);
-      } catch (error) {
-        console.error("Error fetching pending missions:", error);
-      }
-    };
+    fetchMissions();
+  }, [childSn, familyInfo.name, dispatch]);
 
-    fetchOngoing();
-    fetchPending();
-  }, [sn]);
-
-  const handleRequestProgress = (id, status) => {
-    if (status === 2) {
-      navigate(`/mission/request/receive/${id}`);
+  const handleRequestProgress = (id, status, name) => {
+    if (status === 1) {
+      navigate(`/mission/request/receive/${id}`, { state: { name } });
     }
   };
 
@@ -80,6 +86,17 @@ const Mission = () => {
     return dday;
   };
 
+  const sortedOngoingMissions = ongoingMissions
+    .map((mission) => ({
+      ...mission,
+      dday: calculateMissionDday(mission.createDate),
+    }))
+    .sort((a, b) => {
+      if (a.status === 6 && b.status !== 6) return -1;
+      if (a.status !== 6 && b.status === 6) return 1;
+      return a.dday - b.dday;
+    });
+
   return (
     <div>
       <S.Container>
@@ -91,10 +108,10 @@ const Mission = () => {
                 <RequestCard
                   key={mission.id}
                   status={mission.status}
-                  name={mission.parentName} //TODO: 보낸 사람 이름 넣어야 함
+                  name={mission.childName}
                   content={mission.content}
                   dday={calculateDday(mission.createDate)}
-                  onClick={() => handleRequestProgress(mission.id, mission.status)}
+                  onClick={() => handleRequestProgress(mission.id, mission.status, mission.childName)}
                 />
               ))}
             </Slider>
@@ -113,12 +130,9 @@ const Mission = () => {
           <RegisterButton onClick={handleRequestClick}>
             <span tw="text-[#346BAC]">미션</span>요청하기
           </RegisterButton>
-          {ongoingMissions.map((mission) => (
-            <MissionCard key={mission.id} id={mission.id} status={mission.status} dday={calculateDday(mission.createDate)} mission={mission.content} allowance={mission.price} />
+          {sortedOngoingMissions.map((mission) => (
+            <MissionCard key={mission.id} id={mission.id} status={mission.status} dday={calculateMissionDday(mission.dueDate)} mission={mission.content} allowance={mission.price} />
           ))}
-          <MissionCard status={6} mission="설거지하기" allowance="10000" />
-          <MissionCard dday="3" mission="설거지하기" allowance="10000" />
-          <MissionCard dday="0" mission="설거지하기" allowance="10000" />
         </S.CardContainer>
       </S.Container>
     </div>
