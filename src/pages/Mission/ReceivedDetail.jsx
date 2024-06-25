@@ -30,7 +30,6 @@ const ReceivedDetail = () => {
     const fetchData = async () => {
       try {
         const data = await fetchMissionDetail(id);
-        console.log(data);
 
         if (data) {
           const dueDate = new Date(data.dueDate);

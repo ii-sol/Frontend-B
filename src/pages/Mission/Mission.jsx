@@ -89,7 +89,7 @@ const Mission = () => {
   const sortedOngoingMissions = ongoingMissions
     .map((mission) => ({
       ...mission,
-      dday: calculateMissionDday(mission.createDate),
+      dday: calculateMissionDday(mission.dueDate),
     }))
     .sort((a, b) => {
       if (a.status === 6 && b.status !== 6) return -1;
