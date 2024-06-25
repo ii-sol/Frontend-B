@@ -75,7 +75,7 @@ const Home = () => {
       setUserInfo(data.response);
     };
 
-    if (selectedChildSn && isLoggedIn) {
+    if (familyInfo?.length != 0 && selectedChildSn && isLoggedIn) {
       getChildInfo();
     }
   }, [selectedChildSn, isLoggedIn]);
@@ -100,13 +100,35 @@ const Home = () => {
   return (
     <S.Container>
       <Wrapper>
-        {selectedChildSn && isLoggedIn ? (
+        {selectedChildSn && familyInfo?.length != 0 && isLoggedIn ? (
           <>
             <div
               style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
             >
               {selectedChildName} 아이 <br />
               관리하기
+            </div>
+            <S.RowDiv style={{ gap: "20px" }}>
+              <img
+                src={mypage}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/mypage")}
+              />
+              <img
+                src={noti}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/notification")}
+              />
+            </S.RowDiv>
+          </>
+        ) : selectedChildSn && isLoggedIn ? (
+          <>
+            <div
+              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
+            >
+              연결된 아이가
+              <br />
+              없습니다.
             </div>
             <S.RowDiv style={{ gap: "20px" }}>
               <img
@@ -194,30 +216,34 @@ const Home = () => {
           <Img src={loan} $bottom={10} $right={10} $imgwidth={90} />
         </Btn>
       </RowDiv>
-      <ColumnDiv>
-        <BottomDiv>
-          <BImg src={one} />
-          <Div>
-            {selectedChildName}님의 금리는 <br />
-            {userInfo?.baseRate}%입니다.
-          </Div>
-        </BottomDiv>
-        <BottomDiv>
-          <BImg src={two} />
-          <Div>
-            {selectedChildName}님의 대출 상한선은 <br />
-            {normalizeNumber(userInfo?.loanLimit)}원입니다.
-          </Div>
-        </BottomDiv>
-        <BottomDiv $isLast>
-          <BImg src={three} />
-          <Div>
-            {selectedChildName}님의 투자 상한선은
-            <br />
-            {normalizeNumber(userInfo?.investLimit)}원입니다.
-          </Div>
-        </BottomDiv>
-      </ColumnDiv>
+      {selectedChildSn && familyInfo?.length != 0 && isLoggedIn ? (
+        <ColumnDiv>
+          <BottomDiv>
+            <BImg src={one} />
+            <Div>
+              {selectedChildName}님의 금리는 <br />
+              {userInfo?.baseRate}%입니다.
+            </Div>
+          </BottomDiv>
+          <BottomDiv>
+            <BImg src={two} />
+            <Div>
+              {selectedChildName}님의 대출 상한선은 <br />
+              {normalizeNumber(userInfo?.loanLimit)}만원입니다.
+            </Div>
+          </BottomDiv>
+          <BottomDiv $isLast>
+            <BImg src={three} />
+            <Div>
+              {selectedChildName}님의 투자 상한선은
+              <br />
+              {normalizeNumber(userInfo?.investLimit)}만원입니다.
+            </Div>
+          </BottomDiv>
+        </ColumnDiv>
+      ) : (
+        <></>
+      )}
     </S.Container>
   );
 };

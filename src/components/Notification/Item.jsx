@@ -17,11 +17,6 @@ const Item = ({ data }) => {
     data.functionCode
   );
 
-  const createDate = new Date(data.createDate);
-  const timeString = `${createDate.getHours()}:${(
-    "0" + createDate.getMinutes()
-  ).slice(-2)}`;
-
   const onDelete = (nsn) => {
     if (ref.current) {
       ref.current.style.transform = "translateX(0px)";
@@ -31,11 +26,14 @@ const Item = ({ data }) => {
     dispatch(deleteNoti(nsn)).then(() => {
       if (ref.current) {
         setTimeout(() => {
-          ref.current.style.transition = "transform 800ms";
+          ref.current.style.transition = "transform 1000ms";
         }, 0);
       }
     });
   };
+
+  const hour = String(data.createDate[3]).padStart(2, "0");
+  const minute = String(data.createDate[4]).padStart(2, "0");
 
   return (
     <RowDivs>
@@ -55,7 +53,9 @@ const Item = ({ data }) => {
         <ColumnDiv>
           <RowDiv>
             <Div>{functionText}</Div>
-            <Div>{timeString}</Div>
+            <Div>
+              {hour}:{minute}
+            </Div>
           </RowDiv>
           <Content>{data.messageCode}</Content>
         </ColumnDiv>

@@ -14,6 +14,9 @@ import { baseInstance } from "../../services/api.jsx";
 import { useSelector } from "react-redux";
 
 const Main = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
   const [isSelected, setIsSelected] = useState(false);
   const [loans, setLoans] = useState([]);

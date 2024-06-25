@@ -106,7 +106,8 @@ const Container = styled.div`
 
 const RowDiv = styled.div`
   display: flex;
-  justify-content: ${(props) => (props.$center ? props.$center : "space-between")};
+  justify-content: ${(props) =>
+    props.$center ? props.$center : "space-between"};
   align-items: center;
   margin-top: ${(props) => (props.$top ? props.$top : "10")}px;
   gap: ${(props) => (props.$gap ? props.$gap : "10")}px;
@@ -137,7 +138,7 @@ const Btn = styled.button`
   background-color: #cde1ff;
   color: #154b9b;
   border-radius: 15px;
-  height: 48px;
+  height: 40px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 400;
 `;

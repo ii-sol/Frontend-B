@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
@@ -9,6 +9,9 @@ import RequestCard from "~/components/Allowance/RequestCard";
 import RegularAllowanceCard from "~/components/Allowance/RegularAllowanceCard";
 
 const Management = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
 
   const handleLeftClick = () => {
@@ -24,9 +27,17 @@ const Management = () => {
       <Header onLeftClick={handleLeftClick} title={"용돈"} right={""} />
       <Menu>
         <S.Phrase>정기용돈</S.Phrase>
-        <S.HistoryLink onClick={handleHistoryClick}>지난 용돈 &gt;</S.HistoryLink>
+        <S.HistoryLink onClick={handleHistoryClick}>
+          지난 용돈 &gt;
+        </S.HistoryLink>
       </Menu>
-      <RegularAllowanceCard period="1개월" allowance="100000" startDate={"2024.05.12"} endDate={"2024.06.12"} role={"parent"} />
+      <RegularAllowanceCard
+        period="1개월"
+        allowance="100000"
+        startDate={"2024.05.12"}
+        endDate={"2024.06.12"}
+        role={"parent"}
+      />
       <Menu>
         <S.Phrase>용돈 조르기</S.Phrase>
       </Menu>

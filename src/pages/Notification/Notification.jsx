@@ -10,6 +10,9 @@ import CheckDeleteNoti from "../../components/common/Alert/CheckDeleteNoti";
 import { BottomSheet } from "react-spring-bottom-sheet";
 
 const Notification = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
   const handleLeftClick = () => {
     navigate("/");

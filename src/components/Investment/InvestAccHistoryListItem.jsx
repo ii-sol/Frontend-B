@@ -4,66 +4,55 @@ import { styled } from "styled-components";
 import { useSelector } from "react-redux";
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const HistoryListItem = ({ data }) => {
-  const myName = useSelector((state) => state.user.userInfo.name);
-  let amount;
-  let anotherName;
+const InvestAccHistoryListItem = ({ data }) => {
+  let trade;
   let balance;
-  if (myName == data.senderName) {
-    amount = data.amount * -1;
-    balance = data.senderBalance;
-    anotherName = data.recieverName;
-  } else {
-    amount = data.amount;
+
+  if ("stock" == data.senderName) {
+    trade = 1;
     balance = data.receiverBalance;
-    anotherName = data.senderName;
+  } else {
+    trade = 2;
+    balance = data.senderBalance;
   }
 
-  const renderAmount = (amount) => {
-    if (amount > 0) {
+  const renderAmount = (code) => {
+    if (code == 5) {
       return (
-        <ItemAmount color="#FF4848">+{normalizeNumber(amount)}</ItemAmount>
+        <ItemAmount color="#FF4848">{normalizeNumber(data.amount)}</ItemAmount>
       );
-    } else if (amount < 0) {
-      return <ItemAmount color="#5A74FF">{normalizeNumber(amount)}</ItemAmount>;
     } else {
-      return <ItemAmount>{normalizeNumber(amount)}</ItemAmount>;
+      return (
+        <ItemAmount color="#5A74FF">{normalizeNumber(data.amount)}</ItemAmount>
+      );
     }
   };
+  console.log(data);
 
   const renderMessage = (messageCode) => {
     switch (messageCode) {
-      case 1:
-        return "이체";
-      case 2:
-        return "용돈 조르기";
-      case 3:
-        return "미션 완료";
-      case 4:
-        return "대출금";
+      case 5:
+        return "구매";
+      case 6:
+        return "판매";
       default:
         return "알 수 없는 코드";
     }
   };
-
   return (
     <Container>
       <Wrapper>
         <ItemContent>{renderMessage(data.messageCode)}</ItemContent>
-        <ItemName>
-          {amount > 0 ? "From. " : "To. "}
-          {anotherName}
-        </ItemName>
       </Wrapper>
       <AmountContainer>
-        {renderAmount(amount)}
+        {renderAmount(data.messageCode)}
         <Balance>남은 돈: {normalizeNumber(balance)}원</Balance>
       </AmountContainer>
     </Container>
   );
 };
 
-export default HistoryListItem;
+export default InvestAccHistoryListItem;
 
 const Container = styled.li`
   ${tw`flex justify-between items-center mb-5 border-b border-gray-200`}
