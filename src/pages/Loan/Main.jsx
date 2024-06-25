@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Slider from "react-slick";
 import tw from "twin.macro";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MdArrowBackIos } from "react-icons/md";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoanCard from "../../components/Loan/LoanCard.jsx";
 import RequestCard from "../../components/Loan/RequestCard.jsx";
 import Header from "../../components/common/Header.jsx";
 import { styled } from "styled-components";
 import EmptyImage from "~/assets/img/common/empty.svg";
 import { baseInstance } from "../../services/api.jsx";
+import { useSelector } from "react-redux";
 
 const Main = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isSelected, setIsSelected] = useState(false);
   const [loans, setLoans] = useState([]);
+  const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
 
   useEffect(() => {
-    const baseUrl = "/loan";
+    const baseUrl = `/loan/${selectedChildSn}`;
     const fetchLoans = async () => {
       try {
         const response = await baseInstance.get(baseUrl);
         setLoans(response.data.response || []); // response.data.response 사용
+        console.log(loans);
       } catch (error) {
         console.error("Failed to fetch loans", error);
       }
@@ -134,7 +135,7 @@ const Main = () => {
                   <RequestCard
                     key={loan.id}
                     status={loan.status}
-                    name={loan.parentName}
+                    name={loan.childName}
                     title={loan.title}
                     dday={calculateDday(loan.createDate)}
                     onClick={() => handleRequestProgress(loan.id)}
