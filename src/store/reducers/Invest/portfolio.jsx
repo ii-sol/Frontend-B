@@ -11,8 +11,9 @@ const initialState = {
 
 export const fetchPortfolio = createAsyncThunk(
   "invest/fetchPortfolio",
-  async (data, thunkAPI) => {
-    const response = await reqFetchPortfolio();
+  async ({ csn }, thunkAPI) => {
+    const response = await reqFetchPortfolio(csn);
+    console.log("csn", csn);
     console.log(response);
     return response;
   }

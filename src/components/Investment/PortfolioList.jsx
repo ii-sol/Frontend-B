@@ -1,27 +1,56 @@
 import React from "react";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
+import { useSelector } from "react-redux";
+import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const PortfolioList = ({ toggleShow, height }) => {
+const PortfolioList = ({ toggleShow }) => {
+  const investTradeList = useSelector(
+    (state) => state.portfolio.investTradeList
+  );
+
+  const selectedChildName = useSelector(
+    (state) => state.user.selectedChildName
+  );
+
   return (
-    <Container $height={height}>
+    <Container>
       <ColumnDiv>
-        <InfoDiv>My증권계좌 포트폴리오</InfoDiv>
+        <InfoDiv>{selectedChildName}의 포트폴리오</InfoDiv>
         <SwitchBtn onClick={toggleShow}>그래프 보기</SwitchBtn>
-        <Box $height={height}>
-          <Wrapper>
-            <StockDiv>
-              <StockName>삼성전자</StockName>
-              <StockQuantity>1주</StockQuantity>
-            </StockDiv>
-            <HoldingDiv>
-              <EvaluationAmount>1521000원</EvaluationAmount>
-              <RowDiv>
-                <Profit>- 152,721</Profit>
-                <Profit>&nbsp;(0.5%)</Profit>
-              </RowDiv>
-            </HoldingDiv>
-          </Wrapper>
+        <Box>
+          {investTradeList.map((trade, index) => (
+            <Wrapper
+              key={trade.companyName}
+              $isPositive={trade.profitAnsLossAmount}
+            >
+              <StockDiv>
+                <StockName>{trade.companyName}</StockName>
+                <StockQuantity>{trade.quantity}주</StockQuantity>
+              </StockDiv>
+              <HoldingDiv $isPositive={trade.profitAnsLossAmount}>
+                <EvaluationAmount>
+                  {normalizeNumber(trade.evaluationAmount)}원
+                </EvaluationAmount>
+                <RowDiv>
+                  <Profit>
+                    {trade.profitAnsLossAmount > 0
+                      ? `▲ ${normalizeNumber(trade.profitAnsLossAmount)}원`
+                      : trade.profitAnsLossAmount < 0
+                      ? `▼ ${normalizeNumber(trade.profitAnsLossAmount)}원`
+                      : `${normalizeNumber(trade.profitAnsLossAmount)}원`}
+                  </Profit>
+
+                  <Profit>
+                    &nbsp;
+                    {trade.profit > 0
+                      ? `(+${trade.profit.toFixed(2)}%)`
+                      : `(${trade.profit.toFixed(2)}%)`}
+                  </Profit>
+                </RowDiv>
+              </HoldingDiv>
+            </Wrapper>
+          ))}
         </Box>
       </ColumnDiv>
     </Container>
@@ -36,7 +65,7 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   max-width: 400px;
-  height: ${(props) => props.$height}px;
+  height: calc(100vh - 325px);
   background-color: #ebf5ff;
   border-radius: 15px;
 `;
@@ -50,7 +79,7 @@ const ColumnDiv = styled.div`
 `;
 
 const InfoDiv = styled.div`
-  font-size: 17px;
+  font-size: 18px;
 `;
 
 const Box = styled.div`
@@ -58,50 +87,56 @@ const Box = styled.div`
   flex-direction: column;
   overflow-y: auto;
   margin-top: 20px;
-  height: ${(props) => props.$height - 70}px;
+  height: calc(100vh - 425px);
 `;
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #dceeff;
+  background-color: ${({ $isPositive }) =>
+    $isPositive > 0 ? "#FFE6F1" : $isPositive < 0 ? "#d2e9ff" : "#ebebeb"};
   border-radius: 15px;
   padding: 15px;
-  height: 80px;
+  height: 90px;
   margin-top: 10px;
 `;
 
 const StockDiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
   flex: 1;
 `;
 
 const StockName = styled.div`
-  font-size: 20px;
+  font-size: 25px;
+  font-weight: 600;
 `;
 
 const StockQuantity = styled.div`
-  font-size: 17px;
+  font-size: 16px;
 `;
 
 const HoldingDiv = styled.div`
   display: flex;
   flex-direction: column;
-  color: #154b9b;
-  gap: 5px;
+  color: ${({ $isPositive }) =>
+    $isPositive > 0 ? "#EE3124" : $isPositive < 0 ? "#154B9B" : "#000000"};
+  /* color: #154b9b; */
+  gap: 3px;
   flex: 1;
   text-align: right;
 `;
 
 const EvaluationAmount = styled.div`
   font-size: 20px;
+  font-weight: 600;
 `;
 
 const RowDiv = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
 `;
 
@@ -116,8 +151,7 @@ const SwitchBtn = styled.button`
   right: 20px;
   border-radius: 15px;
   background: #c5dbff;
-  width: 100px;
+  width: 105px;
   height: 40px;
-
-  font-size: 15px;
+  font-size: 18px;
 `;

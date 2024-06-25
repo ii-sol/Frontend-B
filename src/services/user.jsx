@@ -63,13 +63,9 @@ export const updateUserInfo = async (accessToken, newData) => {
   }
 };
 
-export const deleteChild = async (accessToken, childSn) => {
+export const deleteChild = async (childSn) => {
   try {
-    const response = await baseInstance.delete(`/users/${childSn}`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    });
+    const response = await baseInstance.delete(`/users/${childSn}`);
     return response.data.response;
   } catch (error) {
     throw error;
@@ -90,13 +86,9 @@ export const fetchChildManagementInfo = async (childSn, accessToken) => {
   }
 };
 
-export const updateChildManagementInfo = async (accessToken, newData) => {
+export const updateChildManagementInfo = async (newData) => {
   try {
-    const response = await baseInstance.put(`/users/child-manage`, newData, {
-      headers: {
-        Authorization: accessToken,
-      },
-    });
+    const response = await baseInstance.put(`/users/child-manage`, newData);
 
     return response.data.response;
   } catch (error) {

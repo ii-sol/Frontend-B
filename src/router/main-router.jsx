@@ -42,6 +42,7 @@ import InvestHistory from "../pages/Investment/InvestHistory";
 import SuggestionDetail from "../pages/Investment/SuggestionDetail";
 import TradeHistory from "../pages/Investment/TradeHistory";
 import StockList from "../pages/Investment/StockList";
+import AvailableInvest from "../pages/Investment/AvailableInvest";
 
 const MainRouter = createBrowserRouter([
   {
@@ -117,6 +118,7 @@ const MainRouter = createBrowserRouter([
         path: "invest",
         children: [
           { path: "", element: <InvestMain /> },
+          { path: "start", element: <AvailableInvest /> },
           { path: "stocklist", element: <StockList /> },
           { path: "history", element: <InvestHistory /> },
           { path: "history/:id", element: <SuggestionDetail /> },
