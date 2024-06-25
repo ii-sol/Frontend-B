@@ -18,17 +18,10 @@ const Update = () => {
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
   const [allowanceDate, setAllowanceDate] = useState("");
-  const [requestData, setRequestData] = useState({
-    childSerialNumber: 0,
-    amount: 0,
-    period: 0,
-    idBeforeChange: 0,
-    dateBeforeChange: "",
-  });
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = location.state;
+  const { id, createDate } = location.state;
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const selectedChildName = useSelector((state) => state.user.selectedChildName);
@@ -80,10 +73,12 @@ const Update = () => {
 
   const handleSubmit = async () => {
     try {
-      await updateRegularAllowance(allowanceId, {
-        //TODO: allowanceId 어떻게 가져옴?
+      await updateRegularAllowance({
+        childSerialNumber:selectedChildSn,
         amount: parseInt(amount),
         period: parseInt(period),
+        idBeforeChange: id,
+        dateBeforeChange: `${createDate}T13:00:00`
       });
       alert("정기 용돈이 성공적으로 변경되었습니다.");
       navigate("/allowance");

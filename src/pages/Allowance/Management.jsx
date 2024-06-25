@@ -27,7 +27,6 @@ const calculateDday = (createDate) => {
 };
 
 const Management = () => {
-  // const [regularAllowance, setRegularAllowance] = useState(null);
   const [requestList, setRequestList] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -86,7 +85,7 @@ const Management = () => {
         <S.Phrase>정기용돈</S.Phrase>
         <S.HistoryLink onClick={handleHistoryClick}>지난 용돈 &gt;</S.HistoryLink>
       </Menu>
-      <RegularAllowanceCard regularAllowance={regularAllowance} />
+      <RegularAllowanceCard />
       <Menu>
         <S.Phrase>용돈 조르기</S.Phrase>
       </Menu>

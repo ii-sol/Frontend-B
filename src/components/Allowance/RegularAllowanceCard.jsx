@@ -13,19 +13,28 @@ const RegularAllowanceCard = () => {
   const csn = useSelector((state) => state.user.selectedChildSn);
   const regularAllowance = useSelector((state) => state.allowance.regularAllowance);
 
+  useEffect(() => {
+    if (regularAllowance && regularAllowance.length > 0) {
+      startDate = `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`;
+    }
+  }, [regularAllowance]);
+
   const handleRegisterClick = () => {
     navigate("/allowance/registration");
   };
 
-  const handleUpdateClick = (id) => {
-    navigate("/allowance/update", { state: { id } });
+  const handleUpdateClick = (id, createDate) => {
+    navigate("/allowance/update", { state: { id, createDate } });
   };
 
   const handleDeleteClick = async (id) => {
     try {
       await deleteRegularAllowance(id, csn);
+      dispatch(deleteRegularAllowance());
       alert("정기 용돈이 성공적으로 삭제되었습니다.");
       navigate("/allowance");
+
+      
     } catch (error) {
       console.error("Error creating regular allowance:", error);
       alert("정기 용돈 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -40,18 +49,20 @@ const RegularAllowanceCard = () => {
     );
   }
 
+  const startDate = `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`;
+
   return (
-    <Container key={regularAllowance.id}>
+    <Container key={regularAllowance[0].id}>
       <Content>
-        <PeriodTag status={regularAllowance.period}>{regularAllowance.period}</PeriodTag>
-        <Allowance>{normalizeNumber(regularAllowance.amount)}원</Allowance>
+        <PeriodTag status={regularAllowance[0].period}>{regularAllowance[0].period}개월</PeriodTag>
+        <Allowance>{normalizeNumber(regularAllowance[0].amount)}원</Allowance>
         <Period>
-          {regularAllowance.createDate} ~ {regularAllowance.dueDate}
+          {regularAllowance[0].createDate[0]}.{regularAllowance[0].createDate[1]}.{regularAllowance[0].createDate[2]} ~ {regularAllowance[0].dueDate[0]}.{regularAllowance[0].dueDate[1]}.{regularAllowance[0].dueDate[2]}
         </Period>
       </Content>
       <ButtonWrapper>
-        <Button onClick={() => handleUpdateClick(regularAllowance.id)}>변경하기</Button>
-        <Button onClick={() => handleDeleteClick(regularAllowance.id)}>해지하기</Button>
+        <Button onClick={() => handleUpdateClick(regularAllowance[0].id, startDate)}>변경하기 {regularAllowance[0].createDate[0]}</Button> {/* `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`) */}
+        <Button onClick={() => handleDeleteClick(regularAllowance[0].id)}>해지하기</Button>
       </ButtonWrapper>
     </Container>
   );
