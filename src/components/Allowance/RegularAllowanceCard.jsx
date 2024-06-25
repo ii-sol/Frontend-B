@@ -13,19 +13,19 @@ const RegularAllowanceCard = () => {
   const csn = useSelector((state) => state.user.selectedChildSn);
   const regularAllowance = useSelector((state) => state.allowance.regularAllowance);
 
-  useEffect(() => {
-    if (regularAllowance && regularAllowance.length > 0) {
-      startDate = `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`;
-    }
-  }, [regularAllowance]);
+  // useEffect(() => {
+  //   if (regularAllowance && regularAllowance.length > 0) {
+  //     startDate = `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`;
+  //   }
+  // }, [regularAllowance]);
 
   const handleRegisterClick = () => {
     navigate("/allowance/registration");
   };
 
-  const handleUpdateClick = (id, createDate) => {
-    navigate("/allowance/update", { state: { id, createDate } });
-  };
+  // const handleUpdateClick = (id, createDate) => {
+  //   navigate("/allowance/update", { state: { id, createDate } });
+  // };
 
   const handleDeleteClick = async (id) => {
     try {
@@ -61,7 +61,8 @@ const RegularAllowanceCard = () => {
         </Period>
       </Content>
       <ButtonWrapper>
-        <Button onClick={() => handleUpdateClick(regularAllowance[0].id, startDate)}>변경하기 {regularAllowance[0].createDate[0]}</Button> {/* `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`) */}
+        {/* <Button onClick={() => handleUpdateClick(regularAllowance[0].id, startDate)}>변경하기 {regularAllowance[0].createDate[0]}</Button> `${regularAllowance[0].createDate[0]}-${regularAllowance[0].createDate[1]}-${regularAllowance[0].createDate[2]}`) */}
+        <Button>변경하기</Button> 
         <Button onClick={() => handleDeleteClick(regularAllowance[0].id)}>해지하기</Button>
       </ButtonWrapper>
     </Container>

@@ -71,11 +71,6 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log({
-        childSerialNumber: selectedChildSn,
-        amount: parseInt(amount),
-        period: parseInt(period),
-      });
       await createRegularAllowance({
         childSerialNumber: selectedChildSn,
         amount: parseInt(amount),
