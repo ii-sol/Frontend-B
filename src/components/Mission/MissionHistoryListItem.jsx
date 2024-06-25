@@ -11,7 +11,6 @@ import MissionCard from "./MissionCard";
 
 import MissionImage from "~/assets/img/common/happySol.svg";
 import EmptyImage from "~/assets/img/common/empty.svg";
-import { useAsync } from "react-use";
 
 const MissionHistoryListItem = () => {
   const dispatch = useDispatch();
@@ -51,7 +50,12 @@ const MissionHistoryListItem = () => {
             ) : (
               <S.CardContainer>
                 {data.map((item) => (
-                  <MissionCard key={item.id} status={item.status} mission={item.content} allowance={item.allowance} />
+                  <MissionCard
+                    key={item.id}
+                    status={item.status}
+                    mission={item.content}
+                    allowance={item.allowance}
+                  />
                 ))}
               </S.CardContainer>
             )}

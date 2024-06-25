@@ -83,7 +83,9 @@ const Management = () => {
       <Header onLeftClick={handleLeftClick} title={"용돈"} right={""} />
       <Menu>
         <S.Phrase>정기용돈</S.Phrase>
-        <S.HistoryLink onClick={handleHistoryClick}>지난 용돈 &gt;</S.HistoryLink>
+        <S.HistoryLink onClick={handleHistoryClick}>
+          지난 용돈 &gt;
+        </S.HistoryLink>
       </Menu>
       <RegularAllowanceCard />
       <Menu>

@@ -6,10 +6,14 @@ import {
 
 const initialState = {
   accountNum1: null,
-  balance1: null, // 내 계좌
+  balance1: null, // 용돈
   accountNum2: null,
-  balance2: null, // 아이 투자계좌
+  balance2: null, // 투자
   accountType: 0,
+
+  receiverAccountNum: null,
+  amounts: null,
+  status: 1,
 };
 
 export const fetchMyAccount = createAsyncThunk(
@@ -23,8 +27,8 @@ export const fetchMyAccount = createAsyncThunk(
 
 export const fetchInvestAccount = createAsyncThunk(
   "account/fetchInvestAccount",
-  async ({ csn }, thunkAPI) => {
-    const response = await reqFetchInvestAccount(csn);
+  async (data, thunkAPI) => {
+    const response = await reqFetchInvestAccount();
     console.log("gd", response);
     return response;
   }
@@ -36,6 +40,15 @@ const accountSlice = createSlice({
   reducers: {
     setAccountType(state, action) {
       state.accountType = action.payload;
+    },
+    setReceiverAccountNum(state, action) {
+      state.receiverAccountNum = action.payload;
+    },
+    setAmounts(state, action) {
+      state.amounts = action.payload;
+    },
+    setStatus(state, action) {
+      state.status = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -57,6 +70,7 @@ const accountSlice = createSlice({
   },
 });
 
-export const { setAccountType } = accountSlice.actions;
+export const { setAccountType, setReceiverAccountNum, setAmounts, setStatus } =
+  accountSlice.actions;
 
 export default accountSlice.reducer;

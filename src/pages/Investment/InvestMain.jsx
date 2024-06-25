@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import PortfolioDonut from "../../components/Investment/PortfolioDonut";
 import PortfolioList from "../../components/Investment/PortfolioList";
 import * as S from "../../styles/GlobalStyles";
+import tw from "twin.macro";
 import RequestCard from "../../components/Investment/RequestCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -16,14 +17,19 @@ import {
   setAccountType,
 } from "../../store/reducers/Account/account";
 import { fetchLeftProposal } from "../../services/invest";
+import { useNavigate } from "react-router-dom";
 
 const InvestMain = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const accountType = useSelector((state) => state.account.accountType);
   const [isDonut, setIsDonut] = useState(true);
   const [data, setData] = useState([]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const toggleShow = () => {
     setIsDonut(!isDonut);
   };
@@ -78,6 +84,11 @@ const InvestMain = () => {
 
         <Page>
           <Account />
+          <Menu>
+            <S.HistoryLink onClick={() => navigate("/invest/tradehistory")}>
+              투자 내역 &gt;
+            </S.HistoryLink>
+          </Menu>
           {isDonut ? (
             <PortfolioDonut toggleShow={toggleShow} />
           ) : (
@@ -120,4 +131,12 @@ const Page = styled.div`
   flex-direction: column;
   gap: 20px;
   align-items: center;
+`;
+
+const Menu = styled.div`
+  ${tw`
+  items-center
+  `}
+
+  margin-left:auto;
 `;

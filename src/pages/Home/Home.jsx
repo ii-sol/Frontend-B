@@ -25,10 +25,16 @@ import Profile5 from "~/assets/img/common/character/character_doremi.svg";
 import Profile6 from "~/assets/img/common/character/character_lulu.svg";
 import Profile7 from "~/assets/img/common/character/character_pli.svg";
 import Profile8 from "~/assets/img/common/character/character_lay.svg";
-import { setSelectedChildName, setSelectedChildSn } from "../../store/reducers/Auth/user";
+import {
+  setSelectedChildName,
+  setSelectedChildSn,
+} from "../../store/reducers/Auth/user";
 import { fetchChildInfo } from "../../services/home";
 import { normalizeNumber } from "../../utils/normalizeNumber";
-import { fetchMyAccount, setAccountType } from "../../store/reducers/Account/account";
+import {
+  fetchMyAccount,
+  setAccountType,
+} from "../../store/reducers/Account/account";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -36,13 +42,16 @@ const Home = () => {
   const isLoggedIn = isLogin();
   const accountType = useSelector((state) => state.account.accountType);
   const [userInfo, setUserInfo] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
   let familyInfo;
   if (isLoggedIn) {
     familyInfo = useSelector((state) => state.user.userInfo.familyInfo);
   }
   console.log(familyInfo, "familyInfo");
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
-  const selectedChildName = useSelector((state) => state.user.selectedChildName);
+  const selectedChildName = useSelector(
+    (state) => state.user.selectedChildName
+  );
 
   const profiles = [
     { id: 1, src: Profile1 },
@@ -66,10 +75,10 @@ const Home = () => {
       setUserInfo(data.response);
     };
 
-    if (selectedChildSn && isLoggedIn) {
+    if (familyInfo?.length != 0 && selectedChildSn && isLoggedIn) {
       getChildInfo();
     }
-  }, [selectedChildSn, isLoggedIn]); // Added dependencies
+  }, [selectedChildSn, isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -79,31 +88,80 @@ const Home = () => {
       dispatch(setAccountType(0));
     }
   }, [isLoggedIn, accountType]);
-  console.log(userInfo);
+
+  const handleNavigation = (path) => {
+    if (selectedChildSn) {
+      navigate(path);
+    } else {
+      setErrorMessage("아이를 선택해주세요!"); // Set error message
+    }
+  };
 
   return (
     <S.Container>
       <Wrapper>
-        {selectedChildSn && isLoggedIn ? (
+        {selectedChildSn && familyInfo?.length != 0 && isLoggedIn ? (
           <>
-            <div style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}>
+            <div
+              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
+            >
               {selectedChildName} 아이 <br />
               관리하기
             </div>
             <S.RowDiv style={{ gap: "20px" }}>
-              <img src={mypage} style={{ width: "42px" }} onClick={() => navigate("/mypage")} />
-              <img src={noti} style={{ width: "42px" }} onClick={() => navigate("/notification")} />
+              <img
+                src={mypage}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/mypage")}
+              />
+              <img
+                src={noti}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/notification")}
+              />
+            </S.RowDiv>
+          </>
+        ) : selectedChildSn && isLoggedIn ? (
+          <>
+            <div
+              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
+            >
+              연결된 아이가
+              <br />
+              없습니다.
+            </div>
+            <S.RowDiv style={{ gap: "20px" }}>
+              <img
+                src={mypage}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/mypage")}
+              />
+              <img
+                src={noti}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/notification")}
+              />
             </S.RowDiv>
           </>
         ) : isLoggedIn ? (
           <>
-            <div style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}>
+            <div
+              style={{ color: "#404040", fontSize: "25px", fontWeight: "700" }}
+            >
               아이를 <br />
               선택해주세요!
             </div>
             <S.RowDiv style={{ gap: "20px" }}>
-              <img src={mypage} style={{ width: "42px" }} onClick={() => navigate("/mypage")} />
-              <img src={noti} style={{ width: "42px" }} onClick={() => navigate("/notification")} />
+              <img
+                src={mypage}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/mypage")}
+              />
+              <img
+                src={noti}
+                style={{ width: "42px" }}
+                onClick={() => navigate("/notification")}
+              />
             </S.RowDiv>
           </>
         ) : (
@@ -118,6 +176,7 @@ const Home = () => {
               onClick={() => {
                 dispatch(setSelectedChildName(family.name));
                 dispatch(setSelectedChildSn(family.sn));
+                setErrorMessage(""); // Clear error message when a child is selected
               }}
               $isClicked={selectedChildSn === family.sn}
             >
@@ -128,15 +187,17 @@ const Home = () => {
       ) : (
         <></>
       )}
+      {errorMessage && <ErrorDiv>{errorMessage}</ErrorDiv>}{" "}
+      {/* Display error message */}
       <S.CenterDiv>
         <Account />
       </S.CenterDiv>
       <RowDiv $isFirst>
-        <Btn $width={1} onClick={() => navigate("/invest")}>
+        <Btn $width={1} onClick={() => handleNavigation("/invest")}>
           투자관리
           <Img src={invest} $right={10} $imgwidth={140} />
         </Btn>
-        <Btn $width={2} onClick={() => navigate("/allowance")}>
+        <Btn $width={2} onClick={() => handleNavigation("/allowance")}>
           용돈
           <br />
           관리
@@ -144,41 +205,45 @@ const Home = () => {
         </Btn>
       </RowDiv>
       <RowDiv>
-        <Btn $width={2} onClick={() => navigate("/mission")}>
+        <Btn $width={2} onClick={() => handleNavigation("/mission")}>
           미션
           <br />
           관리
           <Img src={mission} $bottom={10} $right={5} $imgwidth={90} />
         </Btn>
-        <Btn $width={1} onClick={() => navigate("/loan/main")}>
+        <Btn $width={1} onClick={() => handleNavigation("/loan/main")}>
           대출관리
           <Img src={loan} $bottom={10} $right={10} $imgwidth={90} />
         </Btn>
       </RowDiv>
-      <ColumnDiv>
-        <BottomDiv>
-          <BImg src={one} />
-          <Div>
-            {selectedChildName}님의 금리는 <br />
-            {userInfo?.baseRate}%입니다.
-          </Div>
-        </BottomDiv>
-        <BottomDiv>
-          <BImg src={two} />
-          <Div>
-            {selectedChildName}님의 대출 상한선은 <br />
-            {normalizeNumber(userInfo?.loanLimit)}원입니다.
-          </Div>
-        </BottomDiv>
-        <BottomDiv $isLast>
-          <BImg src={three} />
-          <Div>
-            {selectedChildName}님의 투자 상한선은
-            <br />
-            {normalizeNumber(userInfo?.investLimit)}원입니다.
-          </Div>
-        </BottomDiv>
-      </ColumnDiv>
+      {selectedChildSn && familyInfo?.length != 0 && isLoggedIn ? (
+        <ColumnDiv>
+          <BottomDiv>
+            <BImg src={one} />
+            <Div>
+              {selectedChildName}님의 금리는 <br />
+              {userInfo?.baseRate}%입니다.
+            </Div>
+          </BottomDiv>
+          <BottomDiv>
+            <BImg src={two} />
+            <Div>
+              {selectedChildName}님의 대출 상한선은 <br />
+              {normalizeNumber(userInfo?.loanLimit)}만원입니다.
+            </Div>
+          </BottomDiv>
+          <BottomDiv $isLast>
+            <BImg src={three} />
+            <Div>
+              {selectedChildName}님의 투자 상한선은
+              <br />
+              {normalizeNumber(userInfo?.investLimit)}만원입니다.
+            </Div>
+          </BottomDiv>
+        </ColumnDiv>
+      ) : (
+        <></>
+      )}
     </S.Container>
   );
 };
@@ -188,7 +253,6 @@ export default Home;
 const ChildWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-  /* gap: 5px; */
   gap: calc((100vw - 360px) / 4);
   padding-bottom: 30px;
 `;
@@ -213,7 +277,8 @@ const Wrapper = styled.div`
 
 const Btn = styled.div`
   position: relative;
-  width: ${(props) => (props.$width === 1 ? "calc(57vw - 20px)" : "calc(43vw - 20px)")};
+  width: ${(props) =>
+    props.$width === 1 ? "calc(57vw - 20px)" : "calc(43vw - 20px)"};
   height: 155px;
   border-radius: 15px;
   background: #ffffff;
@@ -257,4 +322,11 @@ const Div = styled.div`
   margin-left: 20px;
   font-size: 20px;
   font-weight: 600;
+`;
+
+const ErrorDiv = styled.div`
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
 `;

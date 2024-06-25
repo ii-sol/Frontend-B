@@ -16,9 +16,10 @@ import { useLocation } from "react-router-dom";
 import CheckDenyProposal from "../common/Alert/CheckDenyProposal";
 import { fetchProposalDetail } from "../../services/invest";
 
-//TODO: 거절 메시지 추가
-//TODO: 대기면 거절 수락 상단에 버튼 추가
 const SuggestionDetail = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const dispatch = useDispatch();
   const location = useLocation();
   const display = useSelector((state) => state.suggestDetail.display);
@@ -138,12 +139,27 @@ const SuggestionDetail = () => {
                 fontWeight: "600",
                 fontSize: "22px",
                 marginBottom: "5px",
+                color: "#4c0065",
               }}
             >
               아이의 제안 메시지
             </Div>
-            <Div>{data.requestProposal.message}</Div>
-            <Div style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Div
+              style={{
+                fontWeight: "400",
+                fontSize: "18px",
+                marginBottom: "5px",
+              }}
+            >
+              {data.requestProposal.message}
+            </Div>
+            <Div
+              style={{
+                textAlign: "right",
+                marginTop: "20px",
+                marginBottom: "20px",
+              }}
+            >
               {formattedDate1}
             </Div>
             {data.requestProposal.status === 5 ? (
@@ -153,12 +169,27 @@ const SuggestionDetail = () => {
                     fontWeight: "600",
                     fontSize: "22px",
                     marginBottom: "5px",
+                    color: "#4c0065",
                   }}
                 >
                   나의 거절 메시지
                 </Div>
-                <Div>{data.responseProposal?.message}</Div>
-                <Div style={{ textAlign: "right", marginBottom: "20px" }}>
+                <Div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "18px",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {data.responseProposal?.message}
+                </Div>
+                <Div
+                  style={{
+                    textAlign: "right",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                >
                   {formattedDate2}
                 </Div>
               </>

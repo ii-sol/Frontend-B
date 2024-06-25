@@ -10,7 +10,6 @@ import { normalizeNumber } from "../../utils/normalizeNumber";
 import { useDispatch, useSelector } from "react-redux";
 import { setMyAmount, setQuantity } from "../../store/reducers/Invest/invest";
 
-//TODO: 매수주문증거금이 부족합니다. alert, 0주는 안됨
 const Trading = () => {
   const dispatch = useDispatch();
   const isNew = useSelector((state) => state.invest.isNew);
@@ -52,12 +51,19 @@ const Trading = () => {
       <Header type="none" />
       <StocksAbout />
       <ColumDiv>
-        {trade === 0 ? <InfoDiv>얼마나 살까요?</InfoDiv> : <InfoDiv>얼마나 팔까요?</InfoDiv>}
+        {trade === 0 ? (
+          <InfoDiv>얼마나 살까요?</InfoDiv>
+        ) : (
+          <InfoDiv>얼마나 팔까요?</InfoDiv>
+        )}
         <Amount>
           {normalizeNumber(displayedNumber)} <span>주</span>
         </Amount>
         <Div>주문금액 {normalizeNumber(getOrderAmount())}원</Div>
-        <Keypad onNumberClick={handleNumberClick} onBackspace={handleBackspace} />
+        <Keypad
+          onNumberClick={handleNumberClick}
+          onBackspace={handleBackspace}
+        />
         {trade === 0 ? (
           <S.BuyBtn $background="#FF5959" onClick={() => onTrade()}>
             구매하기
