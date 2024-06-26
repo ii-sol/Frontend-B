@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import { styled } from "styled-components";
 import { deleteRegularAllowance } from "../../services/allowance";
+import { removeRegularAllowance } from '../../store/reducers/Allowance/allowance';
 import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
@@ -30,7 +31,7 @@ const RegularAllowanceCard = () => {
   const handleDeleteClick = async (id) => {
     try {
       await deleteRegularAllowance(id, csn);
-      dispatch(deleteRegularAllowance());
+      // dispatch(removeRegularAllowance());
       alert("정기 용돈이 성공적으로 삭제되었습니다.");
       navigate("/allowance");
 

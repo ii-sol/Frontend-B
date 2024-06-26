@@ -25,7 +25,7 @@ const allowanceSlice = createSlice({
     setRegularAllowance(state, action) {
       state.regularAllowance = action.payload;
     },
-    deleteRegularAllowance(state, action) {
+    removeRegularAllowance(state, action) {
       state.regularAllowance = [];
     },
     setRequestList(state, action) {
@@ -49,6 +49,6 @@ const allowanceSlice = createSlice({
   },
 });
 
-export const { setRegularAllowance } = allowanceSlice.actions;
+export const { setRegularAllowance, removeRegularAllowance } = allowanceSlice.actions;
 
 export default allowanceSlice.reducer;
