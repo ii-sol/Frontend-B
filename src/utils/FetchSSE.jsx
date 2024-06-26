@@ -44,7 +44,7 @@ const FetchSSE = () => {
             console.log("Connection opened", event);
           };
         };
-        fetchSSE();
+        // fetchSSE();
       } catch (error) {
         throw error;
       }
