@@ -27,8 +27,8 @@ export const fetchMyAccount = createAsyncThunk(
 
 export const fetchInvestAccount = createAsyncThunk(
   "account/fetchInvestAccount",
-  async (data, thunkAPI) => {
-    const response = await reqFetchInvestAccount();
+  async ({ csn }, thunkAPI) => {
+    const response = await reqFetchInvestAccount(csn);
     console.log("gd", response);
     return response;
   }

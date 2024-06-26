@@ -97,6 +97,10 @@ const Home = () => {
     }
   };
 
+  const handleRestrictedNavigation = () => {
+    alert("연결된 아이가 없으므로 이용 불가능합니다");
+  };
+
   return (
     <S.Container>
       <Wrapper>
@@ -193,11 +197,25 @@ const Home = () => {
         <Account />
       </S.CenterDiv>
       <RowDiv $isFirst>
-        <Btn $width={1} onClick={() => handleNavigation("/invest")}>
+        <Btn
+          $width={1}
+          onClick={() =>
+            familyInfo?.length != 0
+              ? handleNavigation("/invest")
+              : handleRestrictedNavigation()
+          }
+        >
           투자관리
           <Img src={invest} $right={10} $imgwidth={140} />
         </Btn>
-        <Btn $width={2} onClick={() => handleNavigation("/allowance")}>
+        <Btn
+          $width={2}
+          onClick={() =>
+            familyInfo?.length != 0
+              ? handleNavigation("/allowance")
+              : handleRestrictedNavigation()
+          }
+        >
           용돈
           <br />
           관리
@@ -205,13 +223,27 @@ const Home = () => {
         </Btn>
       </RowDiv>
       <RowDiv>
-        <Btn $width={2} onClick={() => handleNavigation("/mission")}>
+        <Btn
+          $width={2}
+          onClick={() =>
+            familyInfo?.length != 0
+              ? handleNavigation("/mission")
+              : handleRestrictedNavigation()
+          }
+        >
           미션
           <br />
           관리
           <Img src={mission} $bottom={10} $right={5} $imgwidth={90} />
         </Btn>
-        <Btn $width={1} onClick={() => handleNavigation("/loan/main")}>
+        <Btn
+          $width={1}
+          onClick={() =>
+            familyInfo?.length != 0
+              ? handleNavigation("/loan/main")
+              : handleRestrictedNavigation()
+          }
+        >
           대출관리
           <Img src={loan} $bottom={10} $right={10} $imgwidth={90} />
         </Btn>

@@ -40,6 +40,7 @@ const InvestMain = () => {
 
   useEffect(() => {
     dispatch(setAccountType(2));
+    console.log("fetchInvestAccount", selectedChildSn);
     dispatch(fetchInvestAccount({ csn: selectedChildSn }));
   }, [accountType]);
 
