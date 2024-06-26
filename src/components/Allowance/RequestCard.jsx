@@ -4,9 +4,7 @@ import { styled } from "styled-components";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const RequestCardParent = ({ dday, allowance, message }) => {
-  // TODO: dday 계산 로직
-
+const RequestCardParent = ({ id, dday, allowance, message, onClick }) => {
   return (
     <Container>
       <Content>
@@ -15,8 +13,8 @@ const RequestCardParent = ({ dday, allowance, message }) => {
         <Message>{message}</Message>
       </Content>
       <ButtonWrapper>
-        <Button>수락</Button>
-        <Button>거절</Button>
+        <Button onClick={() => onClick(id, true)}>수락</Button>
+        <Button onClick={() => onClick(id, false)}>거절</Button>
       </ButtonWrapper>
     </Container>
   );

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
 import styled from "styled-components";
 import * as S from "../../styles/GlobalStyles";
 import { fetchUserInfo } from "../../services/user";
-import { createRegularAllowance } from "../../services/allowance";
+import { updateRegularAllowance } from "../../services/allowance";
 import { useSelector, useDispatch } from "react-redux";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
 import Header from "~/components/common/Header";
 
-const Registration = () => {
+const Update = () => {
   const [step, setStep] = useState(0);
   const [amount, setAmount] = useState("");
   const [period, setPeriod] = useState("");
@@ -20,7 +20,8 @@ const Registration = () => {
   const [allowanceDate, setAllowanceDate] = useState("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const { id, createDate } = location.state;
 
   const selectedChildSn = useSelector((state) => state.user.selectedChildSn);
   const selectedChildName = useSelector((state) => state.user.selectedChildName);
@@ -29,6 +30,7 @@ const Registration = () => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
+
     setAllowanceDate(tomorrow.getDate());
   }, [selectedChildSn]);
 
@@ -38,8 +40,8 @@ const Registration = () => {
 
   const handleRightClick = () => {
     if (window.confirm("정말 취소하시겠습니까?")) {
-      // dispatch(setInitialState());
-      navigate("/allowance");
+      dispatch(setInitialState());
+      navigate("/mission");
     }
   };
 
@@ -71,16 +73,18 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
-      await createRegularAllowance({
-        childSerialNumber: selectedChildSn,
+      await updateRegularAllowance({
+        childSerialNumber:selectedChildSn,
         amount: parseInt(amount),
         period: parseInt(period),
+        idBeforeChange: id,
+        dateBeforeChange: `${createDate}T13:00:00`
       });
-      alert("정기 용돈이 성공적으로 등록되었습니다.");
+      alert("정기 용돈이 성공적으로 변경되었습니다.");
       navigate("/allowance");
     } catch (error) {
       console.error("Error creating regular allowance:", error);
-      alert("정기 용돈 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      alert("정기 용돈 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -110,14 +114,13 @@ const Registration = () => {
       {step === 1 && (
         <CompleteContainer>
           <ResultWrapper>
-            <ResultPhrase>{selectedChildName} 님에게</ResultPhrase>
             <ResultPhrase>
               <span tw="text-blue-800">{normalizeNumber(amount)}원</span>을
             </ResultPhrase>
             <ResultPhrase>
               <span tw="text-blue-800">{period}개월</span> 동안 매달 보낼게요
             </ResultPhrase>
-            <S.Phrase tw="mb-0">지금 바로 첫 용돈이 보내집니다.</S.Phrase>
+            <S.Phrase tw="mb-0">내일 1시에 첫 용돈이 보내집니다.</S.Phrase>
             <S.Phrase tw="m-0">
               매달 <span tw="text-blue-600">{allowanceDate}일</span>에 자동 이체됩니다.
             </S.Phrase>
@@ -129,7 +132,7 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Update;
 
 const StepWrapper = styled.div`
   ${tw`flex flex-col gap-10`}

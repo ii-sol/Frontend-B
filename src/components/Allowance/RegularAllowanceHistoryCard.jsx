@@ -4,12 +4,15 @@ import { styled } from "styled-components";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const RegularAllowanceHistoryCard = ({ allowance }) => {
+const RegularAllowanceHistoryCard = ({ allowance, createDate }) => {
   return (
     <Container>
       <Content>
         <Status>정기용돈</Status>
         <Allowance>{normalizeNumber(allowance)}원</Allowance>
+        <CreateDate>
+          {createDate[0]}-{createDate[1]}-{createDate[2]}
+        </CreateDate>
       </Content>
     </Container>
   );
@@ -49,5 +52,10 @@ const Status = styled.div`
 const Allowance = styled.div`
   color: #154b9b;
   font-size: 15px;
+  font-weight: 700;
+`;
+
+const CreateDate = styled.div`
+  font-size: 11px;
   font-weight: 700;
 `;

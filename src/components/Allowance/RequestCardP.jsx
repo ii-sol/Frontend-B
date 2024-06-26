@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 
 import { normalizeNumber } from "../../utils/normalizeNumber";
 
-const RequestCardP = ({ dday, receiver, allowance, img, message }) => {
+const RequestCardP = ({ dday, receiver, allowance, img, message, createDate }) => {
   return (
     <Container>
       <Content>
@@ -12,6 +12,9 @@ const RequestCardP = ({ dday, receiver, allowance, img, message }) => {
         <Receiver>{receiver}</Receiver>
         <Allowance>{normalizeNumber(allowance)}원</Allowance>
         <Message>{message}</Message>
+        <CreateDate>
+          {createDate[0]}-{createDate[1]}-{createDate[2]}
+        </CreateDate>
       </Content>
       <Img src={img} alt="아이콘" />
     </Container>
@@ -77,13 +80,7 @@ const Img = styled.img`
   height: auto;
 `;
 
-const Delete = styled.button`
-  position: absolute;
-  bottom: 12px;
-  right: 20px;
-  width: 56px;
-  height: auto;
-  border-radius: 5px;
-  border: 1px solid #e5e5e5;
-  background: #f4f9ff;
+const CreateDate = styled.div`
+  font-size: 11px;
+  font-weight: 700;
 `;
