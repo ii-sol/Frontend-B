@@ -26,6 +26,7 @@ import Profile6 from "~/assets/img/common/character/character_lulu.svg";
 import Profile7 from "~/assets/img/common/character/character_pli.svg";
 import Profile8 from "~/assets/img/common/character/character_lay.svg";
 import {
+  fetchFamilyInfo,
   setSelectedChildName,
   setSelectedChildSn,
 } from "../../store/reducers/Auth/user";
@@ -68,7 +69,7 @@ const Home = () => {
     const profile = profiles.find((p) => p.id === profileId);
     return profile ? profile.src : null;
   };
-
+  console.log(userInfo);
   useEffect(() => {
     const getChildInfo = async () => {
       const data = await fetchChildInfo(selectedChildSn);
@@ -88,6 +89,12 @@ const Home = () => {
       dispatch(setAccountType(0));
     }
   }, [isLoggedIn, accountType]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchFamilyInfo());
+    }
+  }, []);
 
   const handleNavigation = (path) => {
     if (selectedChildSn) {

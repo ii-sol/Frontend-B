@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchFamilyInfo as reqFetchFamilyInfo } from "../../../services/user";
 const initialState = {
   isLoggedIn: false,
   userInfo: {
@@ -20,6 +20,15 @@ const initialState = {
   selectedChildName: null,
   clickedChildSn: null,
 };
+
+export const fetchFamilyInfo = createAsyncThunk(
+  "user/fetchFamilyInfo",
+  async (data, thunkAPI) => {
+    const response = await reqFetchFamilyInfo();
+    console.log(response);
+    return response;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -49,11 +58,33 @@ const userSlice = createSlice({
     },
     removeChild(state, action) {
       const snToRemove = action.payload;
-      state.userInfo.familyInfo = state.userInfo.familyInfo.filter((member) => member.sn !== snToRemove);
+      state.userInfo.familyInfo = state.userInfo.familyInfo.filter(
+        (member) => member.sn !== snToRemove
+      );
     },
   },
-}); 
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFamilyInfo.fulfilled, (state, action) => {
+        state.loading = "fulfilled";
+        state.userInfo.familyInfo = action.payload.response;
+      })
+      .addCase(fetchFamilyInfo.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(fetchFamilyInfo.rejected, (state) => {
+        state.loading = "rejected";
+      });
+  },
+});
 
-export const { loginSuccess, logout, setSelectedChildSn, setSelectedChildName, setClickedChildSn, removeChild } = userSlice.actions;
+export const {
+  loginSuccess,
+  logout,
+  setSelectedChildSn,
+  setSelectedChildName,
+  setClickedChildSn,
+  removeChild,
+} = userSlice.actions;
 
 export default userSlice.reducer;

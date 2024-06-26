@@ -95,3 +95,14 @@ export const updateChildManagementInfo = async (newData) => {
     throw error;
   }
 };
+
+export const fetchFamilyInfo = async () => {
+  const baseUrl = `/users/my-family`;
+  try {
+    const response = await baseInstance.get(baseUrl);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
